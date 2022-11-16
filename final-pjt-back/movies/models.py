@@ -5,7 +5,7 @@ class Movie(models.Model):
     audlt = models.BooleanField()
     backdrop_path = models.CharField(max_length=200)
     overview = models.TextField()
-    popularity = models.IntegerField()
+    popularity = models.FloatField()
     poster_path = models.CharField(max_length=200)
     release_date = models.DateField()
     runtime = models.IntegerField()
