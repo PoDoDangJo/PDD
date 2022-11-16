@@ -2,9 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.review_list),
-    path('review/<int:review_pk>/', views.review_detail),
+    path('', views.movie_list),
+    path('movie/<int:movie_pk>/', views.movie_detail),
     path('comments/', views.comment_list),
     path('comments/<int:comment_pk>/', views.comment_detail),
-    path('review/<int:review_pk>/comments/', views.comment_create),
+    path('movie/<int:movie_pk>/comments/', views.comment_create),
 ]
