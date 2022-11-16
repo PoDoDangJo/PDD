@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'drf_spectacular',
+    # personal installation
+    'django_dump_load_utf8',
     # default installation
     'django.contrib.admin',
     'django.contrib.auth',
