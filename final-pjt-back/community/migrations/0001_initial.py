@@ -13,18 +13,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Movie',
+            name='Review',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('audlt', models.BooleanField()),
-                ('backdrop_path', models.CharField(max_length=200)),
-                ('overview', models.TextField()),
-                ('popularity', models.FloatField()),
-                ('poster_path', models.CharField(max_length=200)),
-                ('release_date', models.DateField()),
-                ('runtime', models.IntegerField()),
                 ('title', models.CharField(max_length=100)),
-                ('vote_average', models.FloatField()),
+                ('movie_title', models.CharField(max_length=150)),
+                ('content', models.TextField()),
+                ('rank', models.IntegerField()),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('user_id', models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
@@ -34,7 +32,7 @@ class Migration(migrations.Migration):
                 ('content', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('movie', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='movies.movie')),
+                ('review', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='community.review')),
             ],
         ),
     ]
