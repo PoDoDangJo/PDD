@@ -93,7 +93,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
 
-# CORS_ALLOW_CREDENTIALS = True  # 모두허용
+CORS_ALLOW_CREDENTIALS = True  # 모두허용
 
 ROOT_URLCONF = 'pdd_api.urls'
 

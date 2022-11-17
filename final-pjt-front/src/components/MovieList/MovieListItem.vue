@@ -1,5 +1,5 @@
 <template>
-  <span class="movie-card" @click="modal_toggle">
+  <span class="movie-card" @click="openModal">
     <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
     <h3 class="movie-title">{{ movie?.title }}</h3>
   </span>
@@ -17,8 +17,8 @@ export default {
   },
   computed: {},
   methods: {
-    modal_toggle() {
-      this.$store.dispatch('modal_toggle', this.movie.id)
+    openModal() {
+      this.$store.dispatch('openModal', this.movie.id)
     },
   }
 };
