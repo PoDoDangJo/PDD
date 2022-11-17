@@ -58,7 +58,9 @@ export default {
   min-height: 14em;
   overflow-x: visible;
   flex-wrap: nowrap;
-  padding: 0px 3.125em;
   transform: translate3d(0em, 0px, 0px);
+  scroll-snap-type: y mandatory;
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(300px);
 }
 </style>

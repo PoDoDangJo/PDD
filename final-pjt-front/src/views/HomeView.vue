@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MovieSlider/>
+    <MovieSlider />
     <MovieList :msg="'최근 개봉 영화'" />
     <MovieList :msg="'인기 영화'" />
     <MovieList :msg="'추천 영화'" />
@@ -17,13 +17,9 @@ export default {
     MovieSlider,
     MovieList,
   },
-  computed: {
-
-  },
-  methods: {
-  },
+  computed: {},
+  methods: {},
 };
 </script>
 
-<style>
-</style>
+<style></style>

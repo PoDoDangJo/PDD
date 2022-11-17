@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <!-- 모달창 --> 
-    <DetailModal v-if="modalStatus.isActive" :movie="modalStatus.movie"/>
+    <!-- 모달창 -->
+    <DetailModal v-if="modalStatus.isActive" :movie="modalStatus.movie" />
     <TheHeader />
     <main>
       <router-view />
@@ -17,12 +17,12 @@ export default {
   name: "App",
   components: {
     TheHeader,
-    DetailModal
+    DetailModal,
   },
   computed: {
     modalStatus() {
-      return this.$store.state.modalStatus
-    }
+      return this.$store.state.modalStatus;
+    },
   },
   methods: {
     // 영화 데이터 가져오는 함수
@@ -31,8 +31,8 @@ export default {
     },
     // 모달창 끄기 위한 토글
     modal_toggle() {
-      this.$store.dispatch('modal_toggle', this.modalStatus.id)
-    }
+      this.$store.dispatch("modal_toggle", this.modalStatus.id);
+    },
   },
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
