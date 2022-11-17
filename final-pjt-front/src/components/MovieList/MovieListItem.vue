@@ -1,9 +1,7 @@
 <template>
-  <span class="movie-card">
-    <router-link :to="{ name: 'DetailView', params: { id: movie?.id } }">
-      <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
-      <h3 class="movie-title">{{ movie?.title }}</h3>
-    </router-link>
+  <span class="movie-card" @click="modal_toggle">
+    <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
+    <h3 class="movie-title">{{ movie?.title }}</h3>
   </span>
 </template>
 
@@ -13,7 +11,16 @@ export default {
   props: {
     movie: Object,
   },
+  data() {
+    return {
+    }
+  },
   computed: {},
+  methods: {
+    modal_toggle() {
+      this.$store.dispatch('modal_toggle', this.movie.id)
+    },
+  }
 };
 </script>
 
@@ -24,6 +31,14 @@ export default {
   scroll-snap-align: start;
   cursor: pointer;
   margin-right: 0.5em;
+  /* animation */
+  transition: transform .5s;
+}
+
+/* hover */
+.movie-card:hover {
+  transform: scale(1.3);
+  z-index: 2;
 }
 
 .movie-backdrop {
