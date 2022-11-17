@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <!-- 모달창 --> 
+    <DetailModal v-if="modalStatus.isActive" :movie="modalStatus.movie"/>
     <TheHeader />
     <main>
       <router-view />
@@ -9,33 +11,28 @@
 
 <script>
 import TheHeader from "@/components/TheHeader/TheHeader";
+import DetailModal from "@/components/DetailModal/DetailModal";
 
 export default {
   name: "App",
   components: {
     TheHeader,
+    DetailModal
+  },
+  computed: {
+    modalStatus() {
+      return this.$store.state.modalStatus
+    }
   },
   methods: {
     // 영화 데이터 가져오는 함수
     getMovies() {
       this.$store.dispatch("getMovies");
     },
-    scroll() {
-      // 무한 스크롤
-      window.onscroll = () => {
-        let bottomOfWindow =
-          Math.max(
-            window.pageYOffset,
-            document.documentElement.scrollTop,
-            document.body.scrollTop
-          ) +
-            window.innerHeight ===
-          document.documentElement.offsetHeight;
-        if (bottomOfWindow) {
-          this.scrolledToBottom += 1;
-        }
-      };
-    },
+    // 모달창 끄기 위한 토글
+    modal_toggle() {
+      this.$store.dispatch('modal_toggle', this.modalStatus.id)
+    }
   },
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
@@ -45,8 +42,16 @@ export default {
 </script>
 
 <style>
+#app {
+}
+
+/* 스크롤바 안보이게 */
+::-webkit-scrollbar {
+  display: none;
+}
+
 a {
   text-decoration: none;
-  color: #141414;
+  color: aliceblue;
 }
 </style>
