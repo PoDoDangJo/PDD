@@ -1,11 +1,7 @@
 <template>
   <div id="app">
-    <!-- 모달창 -->
-    <div class="modal__background" v-if="modalStatus.isActive" @click="modal_toggle">
-      <div class="modal__box" @click="modal_toggle">
-        <img class="modal__poster" :src="modalStatus.movie.poster_path" alt="">
-      </div>
-    </div>
+    <!-- 모달창 --> 
+    <DetailModal v-if="modalStatus.isActive" :movie="modalStatus.movie"/>
     <TheHeader />
     <main>
       <router-view />
@@ -15,11 +11,13 @@
 
 <script>
 import TheHeader from "@/components/TheHeader/TheHeader";
+import DetailModal from "@/components/DetailModal/DetailModal";
 
 export default {
   name: "App",
   components: {
     TheHeader,
+    DetailModal
   },
   computed: {
     modalStatus() {
@@ -45,7 +43,6 @@ export default {
 
 <style>
 #app {
-
 }
 
 /* 스크롤바 안보이게 */
@@ -53,30 +50,8 @@ export default {
   display: none;
 }
 
-.modal__background {
-  flex: 0 0;
-  z-index: 2;
-  background-color: rgb(0, 0, 0, 50%);
-  height: 800px;
-}
-
-.modal__box {
-  position: absolute;
-  top: calc(50vh - 100px); left: calc(50vw - 200px);
-  background-color: white;
-  display: flex; justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  width: 400px;
-  height: 200px;
-}
-
-.modal__poster {
-  height: 200px;
-}
-
 a {
   text-decoration: none;
-  color: #141414;
+  color: aliceblue;
 }
 </style>
