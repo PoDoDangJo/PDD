@@ -5,12 +5,8 @@
 npm install
 ```
 
-## install Bootstrap
-```
-npm install vue bootstrap bootstrap-vue
-```
-
 ## install Axios
+
 ```
 npm install axios
 ```
