@@ -1,23 +1,29 @@
 <template>
   <div>
-    <img class="backImages" src="@/assets/images/Hobbit.jpg" alt="">  
+    <img class="backImages" src="@/assets/images/black-panther.webp" alt="" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'MovieSlider',
+  name: "MovieSlider",
   computed: {
     backImages() {
-      return this.$store.getters.backImages
-    }
-  }
-}
+      return this.$store.getters.backImages;
+    },
+  },
+};
 </script>
 
 <style>
-.backImages{
+.backImages {
+  left: 0;
+  top: 0;
+  float: left;
   object-fit: cover;
-  width: 1920px;
+  width: 100%;
+  min-width: 500px;
+  background: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0));
 }
 </style>
