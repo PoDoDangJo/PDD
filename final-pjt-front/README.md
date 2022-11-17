@@ -11,6 +11,13 @@ npm install
 npm install axios
 ```
 
+
+## install vuex-persistedstate
+
+```
+npm install vuex-persistedstate
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
