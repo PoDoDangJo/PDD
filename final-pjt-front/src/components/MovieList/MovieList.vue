@@ -59,8 +59,6 @@ export default {
   overflow-x: visible;
   flex-wrap: nowrap;
   transform: translate3d(0em, 0px, 0px);
-  scroll-snap-type: y mandatory;
-  scroll-snap-type: mandatory;
-  scroll-snap-points-y: repeat(300px);
+  scroll-margin: inherit;
 }
 </style>

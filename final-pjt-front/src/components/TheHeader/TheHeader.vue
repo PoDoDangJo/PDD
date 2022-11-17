@@ -43,6 +43,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(to bottom, #000 20%, rgba(0, 0, 0, 0) 100%);
 }
 
 .logo {
