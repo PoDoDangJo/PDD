@@ -1,7 +1,7 @@
 <template>
   <header>
     <router-link :to="{ name: 'HomeView' }">
-      <img class="logo" src="@/assets/images/logo.png" alt="logo">
+      <img class="logo" src="@/assets/icons/logo.png" alt="logo" />
     </router-link>
     <nav class="navbar">
       <div class="navbar" v-if="!isLogin">
@@ -21,26 +21,44 @@ export default {
   name: "TheHeader",
   computed: {
     isLogin() {
-      return this.$store.getters.isLogin
-    }
+      return this.$store.getters.isLogin;
+    },
   },
   methods: {
     logOut() {
-      this.$store.dispatch('logOut')
-    }
+      this.$store.dispatch("logOut");
+    },
   },
 };
 </script>
 
 <style>
 header {
+  position: fixed;
+  width: 100%;
+  height: 6vw;
+  min-height: 40px;
+  max-height: 60px;
+  z-index: 5;
   display: flex;
   justify-content: space-between;
-  margin: 10px 5vw;
+  align-items: center;
+  background: linear-gradient(to bottom, #000 20%, rgba(0, 0, 0, 0) 100%);
 }
 
 .logo {
-  height: 30px;
+  height: 3vw;
+  min-height: 20px;
+  max-height: 35px;
+  margin-left: 2vw;
+  display: flex;
+  align-items: center;
+  will-change: transform;
+  transition: 1s;
+}
+
+.logo:hover {
+  transform: rotate(720deg);
 }
 
 .navbar {
@@ -50,5 +68,10 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: 2vw;
+}
+
+button {
+  all: unset;
 }
 </style>

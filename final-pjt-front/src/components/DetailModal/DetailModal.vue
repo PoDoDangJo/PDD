@@ -1,30 +1,30 @@
 <template>
   <div class="modal">
-    <div class="overlay" @click="closeModal">
-    </div>
+    <div class="overlay" @click="closeModal"></div>
     <div class="modal-card">
-      <img class="modal-card-poster" :src="movie.poster_path" alt="">
+      <img class="modal-card-poster" :src="movie.poster_path" alt="" />
       <p class="modal-card-overview">{{ movie?.overview }}</p>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'DetailModal',
-    props: {
-      movie: Object,
+export default {
+  name: "DetailModal",
+  props: {
+    movie: Object,
+  },
+  methods: {
+    closeModal() {
+      this.$store.dispatch("closeModal");
     },
-    methods: {
-      closeModal() {
-        this.$store.dispatch('closeModal')
-      }
-    },
-  }
+  },
+};
 </script>
 
 <style>
-.modal, overlay {
+.modal,
+overlay {
   width: 100%;
   height: 100%;
   position: fixed;

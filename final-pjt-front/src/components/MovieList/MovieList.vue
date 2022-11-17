@@ -58,7 +58,7 @@ export default {
   min-height: 14em;
   overflow-x: visible;
   flex-wrap: nowrap;
-  padding: 0px 3.125em;
   transform: translate3d(0em, 0px, 0px);
+  scroll-margin: inherit;
 }
 </style>

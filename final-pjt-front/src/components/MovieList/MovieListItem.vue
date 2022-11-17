@@ -12,27 +12,25 @@ export default {
     movie: Object,
   },
   data() {
-    return {
-    }
+    return {};
   },
   computed: {},
   methods: {
     openModal() {
-      this.$store.dispatch('openModal', this.movie.id)
+      this.$store.dispatch("openModal", this.movie.id);
     },
-  }
+  },
 };
 </script>
 
 <style>
 .movie-card {
-  flex: 0 0 18.625rem;
-  width: 18.625em;
+  width: 500vw;
   scroll-snap-align: start;
   cursor: pointer;
-  margin-right: 0.5em;
+  margin-right: 1vw;
   /* animation */
-  transition: transform .5s;
+  transition: transform 0.5s;
 }
 
 /* hover */
