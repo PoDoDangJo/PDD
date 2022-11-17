@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Log In</h1>
+    <!-- <SpiderMan/> -->
     <form @submit.prevent="logIn">
       <input type="text" id="username" v-model="username"><br>
       <input type="password" id="password" v-model="password"><br>
@@ -10,10 +11,12 @@
 </template>
 
 <script>
+// import SpiderMan from '@/components/3D/SpiderMan'
+
 export default {
   name: 'LoginView',
   components: {
-
+    // SpiderMan,
   },
   data() {
     return {
