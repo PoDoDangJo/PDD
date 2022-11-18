@@ -1,3 +1,4 @@
+@@ -0,0 +1,171 @@
 <template>
   <div class="modal">
     <div class="overlay" @click="closeSignUpModal"></div>

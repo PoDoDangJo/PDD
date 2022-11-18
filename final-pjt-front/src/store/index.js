@@ -5,7 +5,6 @@ import createPersistedState from 'vuex-persistedstate'
 // import router from '../router'
 
 import axios from 'axios'
-
 // import Modules
 // import accounts from './modules/accounts'
 // import articles from './modules/articles'
