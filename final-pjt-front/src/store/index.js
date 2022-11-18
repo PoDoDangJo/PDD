@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import axios from 'axios'
-import router from '../router'
-
 import createPersistedState from 'vuex-persistedstate'
+// import router from '../router'
+
+import axios from 'axios'
+// import Modules
+// import accounts from './modules/accounts'
+// import articles from './modules/articles'
+// import movies from './modules/movies'
 
 Vue.use(Vuex)
 
@@ -39,8 +43,10 @@ export default new Vuex.Store({
     },
     SAVE_TOKEN(state, token) {
       state.token = token
+      // 로그인 성공시 로그인 모달 닫기
+      state.loginModalStatus = false
       // sign up && log in 시 홈으로
-      router.push({ name: 'HomeView' })
+      // router.push({ name: 'HomeView' })
     },
     LOG_OUT(state) {
       state.token = null
@@ -114,6 +120,7 @@ export default new Vuex.Store({
         context.commit('SAVE_TOKEN', response.data.key)
       })
       .catch((error) => {
+        context.commit('TOKEN_ERROR', )
         console.log(error)
       })
     },
@@ -132,6 +139,7 @@ export default new Vuex.Store({
         context.commit('SAVE_TOKEN', response.data.key)
       })
       .catch((error) => {
+        context.commit('TOKEN_ERROR')
         console.log(error)
       })
     },
