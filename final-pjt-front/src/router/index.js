@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import HomeView from '@/views/HomeView'
-import ArticleView from '@/views/ArticleView'
-import NotFound404View from "@/views/NotFound404View";
+import CommunityView from '@/views/CommunityView'
+import NotFound404View from '@/views/NotFound404View'
 
 Vue.use(VueRouter)
 
@@ -14,9 +14,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/articles',
-    name: 'ArticleView',
-    component: ArticleView
+    path: '/community',
+    name: 'CommunityView',
+    component: CommunityView
   },
   {
     path: "/404",

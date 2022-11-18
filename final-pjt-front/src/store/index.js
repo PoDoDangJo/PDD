@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 
 // Use Local Storage
 import createPersistedState from 'vuex-persistedstate'
-import router from '../router'
 
 import axios from 'axios'
 
