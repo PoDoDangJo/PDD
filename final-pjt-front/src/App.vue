@@ -51,9 +51,6 @@ export default {
 </script>
 
 <style>
-#app {
-}
-
 /* 스크롤바 안보이게 */
 ::-webkit-scrollbar {
   display: none;
