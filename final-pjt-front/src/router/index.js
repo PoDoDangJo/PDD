@@ -2,10 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import HomeView from '@/views/HomeView'
-
-import LoginView from '@/views/accounts/LoginView'
-import SignUpView from '@/views/accounts/SignUpView'
-import ProfileView from '@/views/accounts/ProfileView'
+import ArticleView from '@/views/ArticleView'
+import NotFound404View from "@/views/NotFound404View";
 
 Vue.use(VueRouter)
 
@@ -16,19 +14,18 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/login',
-    name: 'LoginView',
-    component: LoginView
+    path: '/articles',
+    name: 'ArticleView',
+    component: ArticleView
   },
   {
-    path: '/signup',
-    name: 'SignUpView',
-    component: SignUpView
+    path: "/404",
+    name: "NotFound",
+    component: NotFound404View,
   },
   {
-    path: '/profile',
-    name: 'ProfileView',
-    component: ProfileView
+    path: "*",
+    redirect: "/404",
   },
 ]
 

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TheHeader />
     <MovieSlider />
     <MovieList :msg="'최근 개봉 영화'" />
     <MovieList :msg="'인기 영화'" />
@@ -8,12 +9,15 @@
 </template>
 
 <script>
-import MovieSlider from "@/components/MovieList/MovieSlider";
-import MovieList from "@/components/MovieList/MovieList";
+import TheHeader from "@/components/TheHeader/TheHeader";
+
+import MovieSlider from "@/components/TheMovie/MovieSlider";
+import MovieList from "@/components/TheMovie/MovieList";
 
 export default {
   name: "HomeView",
   components: {
+    TheHeader,
     MovieSlider,
     MovieList,
   },

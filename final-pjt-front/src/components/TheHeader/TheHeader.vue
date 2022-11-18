@@ -1,40 +1,61 @@
 <template>
-  <header>
-    <router-link :to="{ name: 'HomeView' }">
-      <img class="logo" src="@/assets/icons/logo.png" alt="logo" />
-    </router-link>
+  <header class="header__black">
     <nav class="navbar">
-      <div class="navbar" v-if="!isLogin">
-        <router-link :to="{ name: 'LoginView' }">Login</router-link>
-        <router-link :to="{ name: 'SignUpView' }">Sign up</router-link>
+      <router-link :to="{ name: 'HomeView' }">
+        <img class="logo" src="@/assets/icons/logo.png" alt="logo" />
+      </router-link>
+      <!-- Token이 있는 경우 -->
+      <div class="article__nav" v-if="isLogin">
+        <router-link :to="{ name: 'ArticleView' }" class="nav__text"
+          >게시판</router-link
+        >
       </div>
-      <div class="navbar" v-else>
-        <router-link :to="{ name: 'ProfileView' }">Profile</router-link>
-        <button @click="logOut">Log out</button>
+    </nav>
+    <nav class="navbar">
+      <!-- Token이 없을 경우 -->
+      <div class="nav__text__box" v-if="!isLogin">
+        <button class="nav__text" @click="openLogInModal">로그인</button>
+        <button class="nav__text" @click="openSignUpModal">회원가입</button>
       </div>
+      <!-- Token이 있는 경우 -->
+      <ul class="nav__text__box" v-else>
+        <button class="nav__text" @click="openProfileModal">프로필</button>
+        <button class="nav__text" @click="logOut">로그아웃</button>
+      </ul>
     </nav>
   </header>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "TheHeader",
+  components: {},
+  data() {
+    return {};
+  },
   computed: {
-    isLogin() {
-      return this.$store.getters.isLogin;
-    },
+    ...mapGetters(["isLogin"]),
   },
   methods: {
-    logOut() {
-      this.$store.dispatch("logOut");
-    },
+    ...mapActions([
+      "openLogInModal",
+      "openSignUpModal",
+      "openProfileModal",
+      "logOut",
+    ]),
   },
 };
 </script>
 
-<style>
-header {
+<style scoped>
+ul {
+  padding: 0;
+}
+.header__black {
   position: fixed;
+  top: 0px;
   width: 100%;
   height: 6vw;
   min-height: 40px;
@@ -43,35 +64,51 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to bottom, #000 20%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, #141414 10%, rgba(0, 0, 0, 0) 100%);
 }
 
 .logo {
   height: 3vw;
   min-height: 20px;
   max-height: 35px;
-  margin-left: 2vw;
+  margin-left: 3vw;
   display: flex;
   align-items: center;
   will-change: transform;
   transition: 1s;
 }
 
-.logo:hover {
+.logo:active {
   transform: rotate(720deg);
 }
 
 .navbar {
-  width: 7vw;
-  min-width: 110px;
-  max-width: 130px;
+  display: flex;
+  margin-right: 3vw;
+}
+
+.article__nav {
+  display: flex;
+  align-items: center;
+  margin-left: 2vw;
+}
+
+.nav__text__box {
+  width: 8vw;
+  min-width: 120px;
+  max-width: 150px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 2vw;
+}
+
+.nav__text {
+  text-shadow: 1px 1px 2px#141414;
+  font-size: calc(16px + 0.1vw);
 }
 
 button {
   all: unset;
+  text-align: center;
 }
 </style>
