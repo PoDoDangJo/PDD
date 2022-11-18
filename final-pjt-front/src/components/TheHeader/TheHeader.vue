@@ -6,7 +6,7 @@
       </router-link>
       <!-- Token이 있는 경우 -->
       <div class="article__nav" v-if="isLogin">
-        <router-link :to="{ name: 'ArticleView' }" class="nav__text"
+        <router-link :to="{ name: 'CommunityView' }" class="nav__text"
           >게시판</router-link
         >
       </div>
@@ -68,9 +68,9 @@ ul {
 }
 
 .logo {
-  height: 3vw;
-  min-height: 20px;
-  max-height: 35px;
+  height: 2vw;
+  min-height: 15px;
+  max-height: 25px;
   margin-left: 3vw;
   display: flex;
   align-items: center;
@@ -78,8 +78,8 @@ ul {
   transition: 1s;
 }
 
-.logo:active {
-  transform: rotate(720deg);
+.logo:hover {
+  transform: scale(1.3);
 }
 
 .navbar {

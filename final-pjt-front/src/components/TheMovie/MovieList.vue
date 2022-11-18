@@ -36,11 +36,8 @@ export default {
 
 <style>
 .movie-category {
-  padding: 0px 1.875em;
-}
-
-.slider {
-  width: 100%;
+  padding: 0px 2vw;
+  font-size: calc(16px + 1vw);
 }
 
 .slide {
@@ -53,12 +50,9 @@ export default {
 }
 
 .movie-list {
-  width: 100%;
+  margin-left: 2vw;
+  width: 300%;
   display: flex;
-  min-height: 14em;
-  overflow-x: visible;
-  flex-wrap: nowrap;
   transform: translate3d(0em, 0px, 0px);
-  scroll-margin: inherit;
 }
 </style>
