@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "ArticleView",
+  name: "CommunityView",
 };
 </script>
 
