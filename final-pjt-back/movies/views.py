@@ -4,8 +4,8 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-from .serializers import MovieListSerializer, MovieSerializer, CommentSerializer
-from .models import Movie, Comment
+from .serializers import MovieListSerializer, MovieSerializer, MovieCommentSerializer
+from .models import Movie, MovieComment
 
 
 @api_view(['GET', 'POST'])
@@ -42,39 +42,38 @@ def movie_detail(request, movie_pk):
 
 
 @api_view(['GET'])
-def comment_list(request):
+def moviecomment_list(request):
     if request.method == 'GET':
-        # comments = Comment.objects.all()
-        comment = get_list_or_404(Comment)
-        serializer = CommentSerializer(comment, many=True)
+        moviecomment = get_list_or_404(MovieComment)
+        serializer = MovieCommentSerializer(moviecomment, many=True)
         return Response(serializer.data)
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
-def comment_detail(request, comment_pk):
-    # comment = Comment.objects.get(pk=comment_pk)
-    comment = get_object_or_404(Comment, pk=comment_pk)
+def moviecomment_detail(request, comment_pk):
+    # moviecomment = Comment.objects.get(pk=comment_pk)
+    moviecomment = get_object_or_404(MovieComment, pk=comment_pk)
 
     if request.method == 'GET':
-        serializer = CommentSerializer(comment)
+        serializer = MovieCommentSerializer(moviecomment)
         return Response(serializer.data)
 
     elif request.method == 'DELETE':
-        comment.delete()
+        moviecomment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
-        serializer = CommentSerializer(comment, data=request.data)  # POST와 차이
+        serializer = MovieCommentSerializer(moviecomment, data=request.data)  # POST와 차이
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
 
 
 @api_view(['POST'])
-def comment_create(request, movie_pk):
+def moviecomment_create(request, movie_pk):
     # movie = Movie.objects.get(pk=movie_pk)
     movie = get_object_or_404(Movie, pk=movie_pk)
-    serializer = CommentSerializer(data=request.data)  # request.POST 말고
+    serializer = MovieCommentSerializer(data=request.data)  # request.POST 말고
     if serializer.is_valid(raise_exception=True):
-        serializer.save(movie=movie)  # commit=False말고 이렇게
+        serializer.save(user=request.user, movie=movie)  # commit=False말고 이렇게
         return Response(serializer.data, status=status.HTTP_201_CREATED)

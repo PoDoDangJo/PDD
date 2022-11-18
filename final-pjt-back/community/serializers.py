@@ -5,18 +5,14 @@ from .models import Review, Comment
 class ReviewListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = (
-            'id',
-            'title',
-            'content',
-        )
+        fields = ('id', 'title', 'content',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('review',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
+        read_only_fields = ('review', 'user',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -26,3 +22,4 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+        read_only_fields = ('review', 'user',)

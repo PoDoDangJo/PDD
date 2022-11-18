@@ -1,9 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-
 from django.shortcuts import get_object_or_404, get_list_or_404
-
+from django.http import JsonResponse
 from .serializers import ReviewListSerializer, ReviewSerializer, CommentSerializer
 from .models import Review, Comment
 
@@ -18,7 +17,7 @@ def review_list(request):
     elif request.method == 'POST':
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(user_id=request.user.pk)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -72,9 +71,26 @@ def comment_detail(request, comment_pk):
 
 @api_view(['POST'])
 def comment_create(request, review_pk):
-    # review = Review.objects.get(pk=review_pk)
     review = get_object_or_404(Review, pk=review_pk)
     serializer = CommentSerializer(data=request.data)  # request.POST 말고
     if serializer.is_valid(raise_exception=True):
-        serializer.save(review=review)  # commit=False말고 이렇게
+        serializer.save(user=request.user, review=review)  # commit=False말고 이렇게
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def likes(request, review_pk):
+    if request.user.is_authenticated:
+        review = get_object_or_404(Review, pk=review_pk)
+        if review.like_users.filter(pk=request.user.pk).exists():
+            review.like_users.remove(request.user)
+            is_liked = False
+        else:
+            review.like_users.add(request.user)
+            is_liked = True
+        context = {
+            'is_liked': is_liked,
+        }
+        return JsonResponse(context)
+    context = {}
+    return JsonResponse(context)

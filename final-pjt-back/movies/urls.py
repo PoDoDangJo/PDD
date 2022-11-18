@@ -4,10 +4,10 @@ from . import views
 
 urlpatterns = [
     path('', views.movie_list),
-    path('movie/<int:movie_pk>/', views.movie_detail),
-    path('comments/', views.comment_list),
-    path('comments/<int:comment_pk>/', views.comment_detail),
-    path('movie/<int:movie_pk>/comments/', views.comment_create),
+    path('movies/<int:movie_pk>/', views.movie_detail),
+    path('moviecomments/', views.moviecomment_list),
+    path('moviecomments/<int:moviecomment_pk>/', views.moviecomment_detail),
+    path('movies/<int:movie_pk>/moviecomments/', views.moviecomment_create),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]
