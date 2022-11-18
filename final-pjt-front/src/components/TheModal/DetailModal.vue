@@ -1,6 +1,7 @@
 <template>
   <div class="modal">
-    <div class="overlay" @click="closeModal"></div>
+    <div class="overlay" @click="closeDetailModal"></div>
+
     <div class="modal-card">
       <img class="modal-card-poster" :src="movie.poster_path" alt="" />
       <p class="modal-card-overview">{{ movie?.overview }}</p>
@@ -15,14 +16,14 @@ export default {
     movie: Object,
   },
   methods: {
-    closeModal() {
-      this.$store.dispatch("closeModal");
+    closeDetailModal() {
+      this.$store.dispatch("closeDetailModal");
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .modal,
 overlay {
   width: 100%;
@@ -52,7 +53,6 @@ overlay {
   background-color: #141414;
   min-height: 500px;
   z-index: 10;
-  opacity: 1;
 }
 
 .modal-card-poster {

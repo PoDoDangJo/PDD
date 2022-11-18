@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import MovieListItem from "@/components/MovieList/MovieListItem";
+import MovieListItem from "@/components/TheMovie/MovieListItem";
 
 export default {
   name: "MovieList",
