@@ -7,6 +7,7 @@
       v-if="detailModalStatus.isActive"
       :movie="detailModalStatus.movie"
     />
+    <!-- 메인 -->
     <main :class="{ main: detailModalStatus.isActive }">
       <router-view />
     </main>
