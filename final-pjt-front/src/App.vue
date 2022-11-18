@@ -1,29 +1,37 @@
 <template>
   <div id="app">
     <!-- 모달창 -->
-    <DetailModal v-if="modalStatus.isActive" :movie="modalStatus.movie" />
-    <TheHeader />
-    <main>
+    <SignUpModal v-if="signUpModalStatus" />
+    <LogInModal v-if="loginModalStatus" />
+    <DetailModal
+      v-if="detailModalStatus.isActive"
+      :movie="detailModalStatus.movie"
+    />
+    <main :class="{ main: detailModalStatus.isActive }">
       <router-view />
     </main>
   </div>
 </template>
 
 <script>
-import TheHeader from "@/components/TheHeader/TheHeader";
-import DetailModal from "@/components/DetailModal/DetailModal";
+import SignUpModal from "@/components/TheModal/SignUpModal";
+import LogInModal from "@/components/TheModal/LogInModal";
+import DetailModal from "@/components/TheModal/DetailModal";
+
+import { mapState } from "vuex";
 
 export default {
   name: "App",
   components: {
-    TheHeader,
+    SignUpModal,
+    LogInModal,
     DetailModal,
   },
-  computed: {
-    modalStatus() {
-      return this.$store.state.modalStatus;
-    },
-  },
+  computed: mapState({
+    detailModalStatus: (state) => state.detailModalStatus,
+    loginModalStatus: (state) => state.loginModalStatus,
+    signUpModalStatus: (state) => state.signUpModalStatus,
+  }),
   methods: {
     // 영화 데이터 가져오는 함수
     getMovies() {
@@ -31,7 +39,7 @@ export default {
     },
     // 모달창 끄기 위한 토글
     modal_toggle() {
-      this.$store.dispatch("modal_toggle", this.modalStatus.id);
+      this.$store.dispatch("modal_toggle");
     },
   },
   created() {
@@ -48,6 +56,12 @@ export default {
 /* 스크롤바 안보이게 */
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* 모달창 실행시 1초에 걸쳐 blur */
+.main {
+  transition: filter 1s;
+  filter: blur(0.5rem);
 }
 
 a {
