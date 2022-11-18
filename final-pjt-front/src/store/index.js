@@ -55,7 +55,7 @@ export default new Vuex.Store({
       // 로그인 성공시 로그인 모달 닫기
       state.loginModalStatus = false
       // sign up && log in 시 홈으로
-      router.push({ name: 'HomeView' })
+      // router.push({ name: 'HomeView' })
     },
     LOG_OUT(state) {
       state.token = null
@@ -129,6 +129,7 @@ export default new Vuex.Store({
         context.commit('SAVE_TOKEN', response.data.key)
       })
       .catch((error) => {
+        context.commit('TOKEN_ERROR', )
         console.log(error)
       })
     },
@@ -153,6 +154,7 @@ export default new Vuex.Store({
         context.commit('SAVE_TOKEN', response.data.key)
       })
       .catch((error) => {
+        context.commit('TOKEN_ERROR')
         console.log(error)
       })
     },

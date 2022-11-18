@@ -1,6 +1,7 @@
 <template>
   <div class="modal">
     <div class="overlay" @click="closeDetailModal"></div>
+
     <div class="modal-card">
       <img class="modal-card-poster" :src="movie.poster_path" alt="" />
       <p class="modal-card-overview">{{ movie?.overview }}</p>
