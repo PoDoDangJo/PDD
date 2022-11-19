@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- 모달창 -->
+    <ReviewModal v-if="createReviewModalStatus" />
     <SignUpModal v-if="signUpModalStatus" />
     <LogInModal v-if="loginModalStatus" />
     <DetailModal
@@ -8,13 +9,14 @@
       :movie="detailModalStatus.movie"
     />
     <!-- 메인 -->
-    <main :class="{ main: detailModalStatus.isActive }">
+    <main :class="{ main: isModal }">
       <router-view />
     </main>
   </div>
 </template>
 
 <script>
+import ReviewModal from "@/components/TheModal/ReviewModal";
 import SignUpModal from "@/components/TheModal/SignUpModal";
 import LogInModal from "@/components/TheModal/LogInModal";
 import DetailModal from "@/components/TheModal/DetailModal";
@@ -27,11 +29,14 @@ export default {
     SignUpModal,
     LogInModal,
     DetailModal,
+    ReviewModal,
   },
   computed: mapState({
+    isModal: (state) => state.isModal,
     detailModalStatus: (state) => state.detailModalStatus,
     loginModalStatus: (state) => state.loginModalStatus,
     signUpModalStatus: (state) => state.signUpModalStatus,
+    createReviewModalStatus: (state) => state.createReviewModalStatus,
   }),
   methods: {
     // 영화 데이터 가져오는 함수
