@@ -33,7 +33,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('movie',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
+        read_only_fields = ('movie_id', 'user_id', 'like_movie_comment')  # 유효성 검사에서 빼서 읽기전용필드로 만들기
 
 
 class MovieSerializer(serializers.ModelSerializer):

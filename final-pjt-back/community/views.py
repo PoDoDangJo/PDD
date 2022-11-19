@@ -17,7 +17,12 @@ def review_list(request):
     elif request.method == 'POST':
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(user_id=request.user.pk)
+            serializer.save(user_id=request.user)
+            print('ㅇㅅㅇ')
+            print(request)
+            print(request.data)
+            print(request.user)
+            print('ㅇㅁㅇ')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -74,7 +79,7 @@ def comment_create(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     serializer = CommentSerializer(data=request.data)  # request.POST 말고
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user, review=review)  # commit=False말고 이렇게
+        serializer.save(user_id=request.user, review_id=review)  # commit=False말고 이렇게
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -87,6 +92,23 @@ def likes(request, review_pk):
             is_liked = False
         else:
             review.like_users.add(request.user)
+            is_liked = True
+        context = {
+            'is_liked': is_liked,
+        }
+        return JsonResponse(context)
+    context = {}
+    return JsonResponse(context)
+
+@api_view(['POST'])
+def comment_like(request, comment_pk):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        if comment.like_users.filter(pk=request.user.pk).exists():
+            comment.like_users.remove(request.user)
+            is_liked = False
+        else:
+            comment.like_users.add(request.user)
             is_liked = True
         context = {
             'is_liked': is_liked,

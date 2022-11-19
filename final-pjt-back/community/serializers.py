@@ -12,7 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('review', 'user',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
+        read_only_fields = ('review_id', 'user_id',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -22,4 +22,4 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
-        read_only_fields = ('review', 'user',)
+        read_only_fields = ('user_id',)

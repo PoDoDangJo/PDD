@@ -15,11 +15,7 @@ from .models import *
 @api_view(['GET', 'POST'])
 def movie_list(request):
     if request.method == 'GET':
-        print('ㅇㅂㅇ')
         movie = get_list_or_404(Movie)
-        print('ㅇㅅㅇ')
-        print(movie)
-        print('ㅇㅁㅇ')
         serializer = MovieListSerializer(movie, many=True)
         return Response(serializer.data)
 
@@ -32,7 +28,6 @@ def movie_list(request):
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def movie_detail(request, movie_pk):
-    # movie = Movie.objects.get(pk=movie_pk)  # get특성상 중간에 퍼지면 404가 아니라 500을 줌, 끝까지 못가기 때문 -> get_object_oir_404 이런식으로해결가능
     movie = get_object_or_404(Movie, pk=movie_pk)
     if request.method == 'GET':
         serializer = MovieSerializer(movie)
@@ -52,7 +47,6 @@ def movie_detail(request, movie_pk):
 @api_view(['GET'])
 def comment_list(request):
     if request.method == 'GET':
-        # comments = Comment.objects.all()
         comment = get_list_or_404(Comment)
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
@@ -60,7 +54,6 @@ def comment_list(request):
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def comment_detail(request, comment_pk):
-    # comment = Comment.objects.get(pk=comment_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
 
     if request.method == 'GET':
@@ -83,10 +76,44 @@ def comment_create(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(movie=movie)
+        serializer.save(user_id=request.user, movie_id=movie)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['POST'])
+def movie_likes(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        if movie.like_users.filter(pk=request.user.pk).exists():
+            movie.like_users.remove(request.user)
+            is_liked = False
+        else:
+            movie.like_users.add(request.user)
+            is_liked = True
+        context = {
+            'is_liked': is_liked,
+        }
+        return JsonResponse(context)
+    context = {}
+    return JsonResponse(context)
+
+
+@api_view(['POST'])
+def comment_likes(request, comment_pk):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        if comment.like_users.filter(pk=request.user.pk).exists():
+            comment.like_users.remove(request.user)
+            is_liked = False
+        else:
+            comment.like_users.add(request.user)
+            is_liked = True
+        context = {
+            'is_liked': is_liked,
+        }
+        return JsonResponse(context)
+    context = {}
+    return JsonResponse(context)
 
 ############################################################################################
 
@@ -256,9 +283,7 @@ def data(request):
             
             # 비슷한 영화 api
             request_url_similar= f'{BASE_URL}/{movie_id}/similar?api_key={TMDB_API_KEY}&language=ko-KR&page=1'
-            # print("비슷한 영화! 간드아!")
             movie_similars = requests.get(request_url_similar).json()
-            # 비슷한 영화 id
             similar_movies = []
             for similar in movie_similars.get('results'):
                 if not similar.get('release_date'):
