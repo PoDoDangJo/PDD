@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 // Use Local Storage
 import createPersistedState from 'vuex-persistedstate'
+import router from '../router/index'
 
 import axios from 'axios'
 
@@ -23,10 +24,14 @@ export default new Vuex.Store({
     loginModalStatus: false,
     signUpModalStatus: false,
     token: null,
+    inCommunity: null,
   },
   getters: {
     isLogin(state) {
       return state.token ? true : false
+    },
+    inTheCommunity(state) {
+      return state.inCommunity ? true : false
     },
     Movie_Last_1(state) {
       return state.allMovies.slice(0, 5)
@@ -67,6 +72,10 @@ export default new Vuex.Store({
       localStorage.removeItem('token')
 
       location.reload
+    },
+    GO_TO_COMMUNITY(state) {
+      router.push({ name: 'CommunityView' })
+      state.inCommunity = true
     }
   },
   actions: {
@@ -168,6 +177,9 @@ export default new Vuex.Store({
     },
     logOut(context) {
       context.commit('LOG_OUT')
+    },
+    goToCommunity(context) {
+      context.commit('GO_TO_COMMUNITY')
     }
   },
   modules: { 
