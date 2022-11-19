@@ -1,13 +1,13 @@
 <template>
   <div class="modal" id="modal-container">
-    <div class="overlay" @click="closeDetailModal"></div>
+    <div class="overlay" @click="closeCreateReviewModal"></div>
 
     <div class="modal-card">
       <div>
-        <h1 class="modal-card-title">{{ movie?.title }}</h1>
-        <img class="modal-card-back-drop" :src="movie.backdrop_path" alt="" />
+        <h1 class="modal-card-title">{{}}</h1>
+        <img class="modal-card-back-drop" src="" alt="" />
       </div>
-      <p class="modal-card-overview">{{ movie?.overview }}</p>
+      <p class="modal-card-overview">{{}}</p>
     </div>
   </div>
 </template>
@@ -15,12 +15,9 @@
 <script>
 export default {
   name: "DetailModal",
-  props: {
-    movie: Object,
-  },
   methods: {
-    closeDetailModal() {
-      this.$store.dispatch("closeDetailModal");
+    closeCreateReviewModal() {
+      this.$store.dispatch("closeCreateReviewModal");
     },
   },
 };
@@ -78,8 +75,6 @@ overlay {
     rgba(0, 0, 0, 1) 65%,
     rgba(0, 0, 0, 0) 100%
   );
-
-  filter: grayscale(1);
 }
 
 .modal-card-title {
@@ -116,23 +111,12 @@ overlay {
 }
 
 .modal-card-overview {
-  position: absolute;
-  top: calc(50px + 10vw);
   margin: 1vw;
   font-size: calc(4px + 0.7vw);
   text-align: justify;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-
-.modal-card-overview:active {
-  transform: display, 1s;
-  overflow: scroll;
-  text-overflow: ellipsis;
-  display: flex;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
