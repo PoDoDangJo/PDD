@@ -4,11 +4,13 @@
       <router-link :to="{ name: 'HomeView' }">
         <img class="logo" src="@/assets/icons/logo.png" alt="logo" />
       </router-link>
+
       <!-- Token이 있는 경우 -->
       <div class="article__nav" v-if="isLogin">
-        <router-link :to="{ name: 'CommunityView' }" class="nav__text"
-          >게시판</router-link
-        >
+        <button class="nav__text" v-if="!inCommunity" @click="goToCommunity">
+          게시판
+        </button>
+        <button class="nav__text" v-else>게시글 작성</button>
       </div>
     </nav>
     <div>
@@ -42,7 +44,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["isLogin"]),
+    ...mapGetters(["isLogin", "inTheCommunity"]),
   },
   methods: {
     ...mapActions([
@@ -50,6 +52,7 @@ export default {
       "openSignUpModal",
       "openProfileModal",
       "logOut",
+      "goToCommunity",
     ]),
   },
 };
