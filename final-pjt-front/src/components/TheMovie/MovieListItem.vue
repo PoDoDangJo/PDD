@@ -1,8 +1,7 @@
 <template>
-  <span class="movie-card" @click="openDetailModal">
+  <div class="movie-card" @click="openDetailModal">
     <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
-    <h3 class="movie-title">{{ movie?.title }}</h3>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -27,10 +26,12 @@ export default {
 
 <style>
 .movie-card {
-  width: 500vw;
+  width: calc(100px + 10vw);
+  min-width: 200px;
+  max-width: 300px;
   scroll-snap-align: start;
   cursor: pointer;
-  margin-right: 1vw;
+  margin-right: calc(1px + 2vw);
   /* animation */
   transition: transform 0.5s;
   background-color: #141414;
@@ -46,14 +47,7 @@ export default {
 .movie-backdrop {
   position: relative;
   width: 100%;
-  height: 10.375em;
-  border-radius: 0.25em;
-  margin-bottom: 0.25em;
+  border-radius: 1%;
   overflow: hidden;
-}
-
-.movie-title {
-  margin: 0px;
-  padding-right: 50px;
 }
 </style>

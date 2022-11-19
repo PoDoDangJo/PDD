@@ -52,8 +52,8 @@ export default {
 
 <style>
 #app {
+  scroll-behavior: smooth;
 }
-
 /* 스크롤바 안보이게 */
 ::-webkit-scrollbar {
   display: none;
@@ -65,8 +65,14 @@ export default {
   filter: blur(0.5rem);
 }
 
+/* a 태그 밑줄 색 제거 */
 a {
   text-decoration: none;
   color: aliceblue;
+}
+
+/* input 태그 선택 테두리 제거 */
+input:focus {
+  outline: none;
 }
 </style>

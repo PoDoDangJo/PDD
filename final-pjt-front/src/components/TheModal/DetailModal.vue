@@ -1,9 +1,12 @@
 <template>
-  <div class="modal">
+  <div class="modal" id="modal-container">
     <div class="overlay" @click="closeDetailModal"></div>
 
     <div class="modal-card">
-      <img class="modal-card-poster" :src="movie.poster_path" alt="" />
+      <div>
+        <h1 class="modal-card-title">{{ movie?.title }}</h1>
+        <img class="modal-card-back-drop" :src="movie.backdrop_path" alt="" />
+      </div>
       <p class="modal-card-overview">{{ movie?.overview }}</p>
     </div>
   </div>
@@ -47,29 +50,77 @@ overlay {
 
 .modal-card {
   position: relative;
-  max-width: 50%;
+  width: 40%;
+
+  /* same */
+  min-width: 200px;
+  max-width: 500px;
   margin: 30px auto;
-  padding: 20px;
   background-color: #141414;
   min-height: 500px;
   z-index: 10;
+  border-radius: 5px;
 }
 
-.modal-card-poster {
-  width: 36vw;
-  height: 50vw;
-  min-width: 72px;
-  min-height: 100px;
-  max-width: 360px;
-  max-height: 500px;
+.modal-card-back-drop {
   position: relative;
-  left: 1vw;
-  top: 1vw;
+  width: 100%;
+
+  /* same */
+  min-width: 200px;
+  left: 0;
+  top: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.modal-card-title {
+  position: fixed;
+  z-index: 2;
+
+  margin: 1vw;
+  font-size: calc(12px + 1vw);
+  text-shadow: 1vw 1vw 1vw #141414;
+
+  cursor: default;
+
+  border-radius: 5px;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
+.modal-card-title:hover {
+  background-position: 100% 0;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+  color: linear-gradient(
+    to right,
+    #a261f5,
+    #614af2,
+    #a261f5,
+    #dddcfb,
+    #a261f5,
+    #614af2,
+    #a261f5
+  );
 }
 
 .modal-card-overview {
-  position: relative;
   margin: 1vw;
-  text-align: start;
+  font-size: calc(4px + 0.7vw);
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>
