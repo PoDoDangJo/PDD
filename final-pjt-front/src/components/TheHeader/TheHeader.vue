@@ -7,10 +7,16 @@
 
       <!-- Token이 있는 경우 -->
       <div class="article__nav" v-if="isLogin">
-        <button class="nav__text" v-if="!inCommunity" @click="goToCommunity">
-          게시판
-        </button>
-        <button class="nav__text" v-else>게시글 작성</button>
+        <div v-if="!isCommunity">
+          <router-link :to="{ name: 'CommunityView' }" class="nav__text">
+            게시판
+          </router-link>
+        </div>
+        <div v-else>
+          <button class="nav__text" @click="openCreateReviewModal">
+            게시글 작성
+          </button>
+        </div>
       </div>
     </nav>
     <div>
@@ -40,11 +46,8 @@ export default {
   components: {
     SearchBar,
   },
-  data() {
-    return {};
-  },
   computed: {
-    ...mapGetters(["isLogin", "inTheCommunity"]),
+    ...mapGetters(["isLogin", "isCommunity"]),
   },
   methods: {
     ...mapActions([
@@ -52,7 +55,7 @@ export default {
       "openSignUpModal",
       "openProfileModal",
       "logOut",
-      "goToCommunity",
+      "openCreateReviewModal",
     ]),
   },
 };

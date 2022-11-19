@@ -58,6 +58,6 @@ export default {
     // params : query(찾을 데이터 명)
     //          title, content, nickname 취사 선택
     //          값이 있는지 없는지만 구분
-    articleSearch: () => HOST + REVIEW + "search",
+    // articleSearch: () => HOST + REVIEW + "search",
   },
 };

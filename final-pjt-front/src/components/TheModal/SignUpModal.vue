@@ -29,9 +29,7 @@
           v-model="password2"
           required
         />
-        <button class="btn__hover btn__color" type="submit" @click="signUp">
-          회원가입
-        </button>
+        <button class="btn__hover btn__color" type="submit">회원가입</button>
       </form>
     </div>
   </div>
@@ -54,16 +52,12 @@ export default {
     signUp() {
       // 비밀번호 확인이 될 경우
       if (this.password1 == this.password2) {
-        if (this.password1.length() < 8) {
-          const payload = {
-            username: this.username,
-            password1: this.password1,
-            password2: this.password2,
-          };
-          this.$store.dispatch("signUp", payload);
-        } else {
-          alert("비밀번호는 8글자 이상의 문자와 숫자의 조합을 사용해 주세요.");
-        }
+        const payload = {
+          username: this.username,
+          password1: this.password1,
+          password2: this.password2,
+        };
+        this.$store.dispatch("signUp", payload);
       } else {
         alert("비밀번호를 다시 확인해 주세요.");
       }
