@@ -8,7 +8,7 @@ urlpatterns = [
     path('comments/', views.comment_list),
     path('comments/<int:comment_pk>/', views.comment_detail),
     path('reviews/<int:review_pk>/comments/', views.comment_create),
-    path('reviews/<int:review_pk>/likes/', views.likes, name='likes'),
+    path('reviews/<int:review_pk>/likes/', views.likes),
 
     # swagger settings
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
