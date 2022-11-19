@@ -70,7 +70,7 @@ overlay {
   height: 100%;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 150px;
   z-index: 10;
 }
 
@@ -123,6 +123,7 @@ input[type="password"] {
   border-radius: 5px;
 }
 
+/* input clear */
 input[type="text"]::-ms-clear {
   display: none;
 }

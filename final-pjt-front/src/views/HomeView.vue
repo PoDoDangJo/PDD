@@ -2,9 +2,11 @@
   <div>
     <TheHeader />
     <MovieSlider />
-    <MovieList :msg="'최근 개봉 영화'" />
-    <MovieList :msg="'인기 영화'" />
-    <MovieList :msg="'추천 영화'" />
+    <div class="slider__list">
+      <MovieList :msg="'최근 개봉 영화'" />
+      <MovieList :msg="'인기 영화'" />
+      <MovieList :msg="'추천 영화'" />
+    </div>
   </div>
 </template>
 
@@ -26,4 +28,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.slider__list {
+  position: absolute;
+  top: 40vw;
+}
+</style>

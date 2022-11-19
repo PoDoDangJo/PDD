@@ -11,27 +11,33 @@
         >
       </div>
     </nav>
-    <nav class="navbar">
-      <!-- Token이 없을 경우 -->
-      <div class="nav__text__box" v-if="!isLogin">
-        <button class="nav__text" @click="openLogInModal">로그인</button>
-        <button class="nav__text" @click="openSignUpModal">회원가입</button>
-      </div>
-      <!-- Token이 있는 경우 -->
-      <ul class="nav__text__box" v-else>
-        <button class="nav__text" @click="openProfileModal">프로필</button>
-        <button class="nav__text" @click="logOut">로그아웃</button>
-      </ul>
-    </nav>
+    <div>
+      <nav class="navbar">
+        <SearchBar />
+        <!-- Token이 없을 경우 -->
+        <div class="nav__text__box" v-if="!isLogin">
+          <button class="nav__text" @click="openLogInModal">로그인</button>
+          <button class="nav__text" @click="openSignUpModal">회원가입</button>
+        </div>
+        <!-- Token이 있는 경우 -->
+        <ul class="nav__text__box" v-else>
+          <button class="nav__text" @click="openProfileModal">프로필</button>
+          <button class="nav__text" @click="logOut">로그아웃</button>
+        </ul>
+      </nav>
+    </div>
   </header>
 </template>
 
 <script>
+import SearchBar from "@/components/TheHeader/SearchBar";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TheHeader",
-  components: {},
+  components: {
+    SearchBar,
+  },
   data() {
     return {};
   },
@@ -64,7 +70,16 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to bottom, #141414 10%, rgba(0, 0, 0, 0) 100%);
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 10%,
+    transparent
+  );
+
+  transition: background-color 0.4s;
+}
+.header__black:not(.solid) {
+  background-color: transparent;
 }
 
 .logo {
@@ -76,6 +91,15 @@ ul {
   align-items: center;
   will-change: transform;
   transition: 1s;
+}
+
+.search {
+  position: fixed;
+  right: calc(110px + 7.5vw);
+  top: calc(10px + 0.5vw);
+  height: 2vw;
+  min-height: 12px;
+  max-height: 20px;
 }
 
 .logo:hover {
@@ -95,8 +119,8 @@ ul {
 
 .nav__text__box {
   width: 8vw;
-  min-width: 120px;
-  max-width: 150px;
+  min-width: 110px;
+  max-width: 180px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -104,7 +128,7 @@ ul {
 
 .nav__text {
   text-shadow: 1px 1px 2px#141414;
-  font-size: calc(16px + 0.1vw);
+  font-size: calc(10px + 0.5vw);
 }
 
 button {

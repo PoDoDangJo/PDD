@@ -1,6 +1,6 @@
 <template>
   <div class="movie-card" @click="openDetailModal">
-    <img class="movie-backdrop" :src="movie?.poster_path" alt="poster" />
+    <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
   </div>
 </template>
 
@@ -26,9 +26,9 @@ export default {
 
 <style>
 .movie-card {
-  width: 10vw;
-  min-width: 50px;
-  max-width: 200px;
+  width: calc(100px + 10vw);
+  min-width: 200px;
+  max-width: 300px;
   scroll-snap-align: start;
   cursor: pointer;
   margin-right: calc(1px + 2vw);
