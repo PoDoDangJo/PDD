@@ -28,6 +28,12 @@ export default new Vuex.Store({
     isLogin(state) {
       return state.token ? true : false
     },
+    Movie_Last_1(state) {
+      return state.allMovies.slice(0, 5)
+    },
+    Movie_Last_2(state) {
+      return state.allMovies.slice(5, 9)
+    },
   },
   mutations: {
     GET_MOVIES(state, movies) {
