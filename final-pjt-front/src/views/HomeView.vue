@@ -24,7 +24,14 @@ export default {
     MovieList,
   },
   computed: {},
-  methods: {},
+  methods: {
+    inToHome() {
+      this.$store.dispatch("inToHome");
+    },
+  },
+  created() {
+    this.inToHome();
+  },
 };
 </script>
 
