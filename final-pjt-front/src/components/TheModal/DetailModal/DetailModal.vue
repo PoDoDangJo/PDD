@@ -4,24 +4,46 @@
 
     <div class="modal-card">
       <div>
-        <h1 class="modal-card-title">{{ movie?.title }}</h1>
-        <img class="modal-card-back-drop" :src="movie.backdrop_path" alt="" />
+        <iframe
+          class="trailer"
+          :src="`https://www.youtube.com/embed/${movie?.trailer_youtube_key}?autoplay=1&start=30&controls=0&disablekb=1&end=60&modestbranding=1`"
+          frameborder="0"
+          allow="autoplay"
+        ></iframe>
+        <p class="modal-card-tagline">{{ movie?.tagline }}</p>
+        <div class="detail__components">
+          <DetailInfo v-if="status == 'info'" />
+          <DetailComments v-else-if="status == 'comments'" />
+          <DetailSimilar v-else />
+        </div>
       </div>
-      <p class="modal-card-overview">{{ movie?.overview }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import DetailInfo from "./DetailInfo.vue";
+import DetailComments from "./DetailComments.vue";
+import DetailSimilar from "./DetailSimilar.vue";
+import { mapActions } from "vuex";
+
 export default {
   name: "DetailModal",
   props: {
     movie: Object,
   },
+  data() {
+    return {
+      status: "info",
+    };
+  },
   methods: {
-    closeDetailModal() {
-      this.$store.dispatch("closeDetailModal");
-    },
+    ...mapActions(["closeDetailModal"]),
+  },
+  components: {
+    DetailInfo,
+    DetailComments,
+    DetailSimilar,
   },
 };
 </script>
@@ -62,10 +84,10 @@ overlay {
   border-radius: 5px;
 }
 
-.modal-card-back-drop {
+.trailer {
   position: relative;
   width: 100%;
-
+  height: calc(50px + 10vw);
   /* same */
   min-width: 200px;
   left: 0;
@@ -78,46 +100,17 @@ overlay {
     rgba(0, 0, 0, 1) 65%,
     rgba(0, 0, 0, 0) 100%
   );
-
-  filter: grayscale(1);
 }
 
-.modal-card-title {
-  position: fixed;
-  z-index: 2;
-
+.modal-card-tagline {
+  position: absolute;
+  top: calc(40px + 10vw);
   margin: 1vw;
-  font-size: calc(12px + 1vw);
-  text-shadow: 1vw 1vw 1vw #141414;
-
-  cursor: default;
-
-  border-radius: 5px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
-.modal-card-title:hover {
-  background-position: 100% 0;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-  color: linear-gradient(
-    to right,
-    #a261f5,
-    #614af2,
-    #a261f5,
-    #dddcfb,
-    #a261f5,
-    #614af2,
-    #a261f5
-  );
 }
 
 .modal-card-overview {
   position: absolute;
-  top: calc(50px + 10vw);
+  top: calc(0px + 10vw);
   margin: 1vw;
   font-size: calc(4px + 0.7vw);
   text-align: justify;

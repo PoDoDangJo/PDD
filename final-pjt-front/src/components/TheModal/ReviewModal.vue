@@ -3,11 +3,11 @@
     <div class="overlay" @click="closeCreateReviewModal"></div>
 
     <div class="modal-card">
-      <div>
-        <h1 class="modal-card-title">{{}}</h1>
-        <img class="modal-card-back-drop" src="" alt="" />
-      </div>
-      <p class="modal-card-overview">{{}}</p>
+      <form @submit.prevent="createReview">
+        <input type="text" placeholder="제목" /><br />
+        <textarea cols="30" rows="10"></textarea><br />
+        <input type="submit" value="작성" />
+      </form>
     </div>
   </div>
 </template>

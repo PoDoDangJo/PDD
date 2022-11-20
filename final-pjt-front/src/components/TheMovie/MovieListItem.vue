@@ -1,5 +1,6 @@
 <template>
   <div class="movie-card" @click="openDetailModal">
+    <h1 class="modal-card-title">{{ movie?.title }}</h1>
     <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
   </div>
 </template>
@@ -37,11 +38,26 @@ export default {
   background-color: #141414;
 }
 
+.modal-card-title {
+  position: fixed;
+  z-index: 2;
+  top: 60%;
+  margin: 1vw;
+  font-size: calc(12px + 0.5vw);
+  text-shadow: 1vw 1vw 1vw #141414;
+
+  cursor: default;
+
+  border-radius: 5px;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
 /* hover */
 .movie-card:hover {
-  transform: scale(1.3);
-  z-index: 2;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  transform: scale(1.2);
+  z-index: 11;
 }
 
 .movie-backdrop {

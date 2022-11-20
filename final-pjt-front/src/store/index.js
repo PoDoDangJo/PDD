@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 // Use Local Storage
 import createPersistedState from "vuex-persistedstate";
-// import router from '../router/index'
+import router from "../router/index";
 
 import axios from "axios";
 
@@ -76,6 +76,7 @@ export default new Vuex.Store({
       state.loginModalStatus = false;
     },
     SAVE_TOKEN(state, token) {
+      state.isModal = false;
       state.token = token;
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
@@ -203,6 +204,7 @@ export default new Vuex.Store({
       context.commit("CLOSE_LOG_IN_MODAL");
     },
     logOut(context) {
+      router.push({ name: "HomeView" });
       context.commit("LOG_OUT");
     },
     inToHome(context) {

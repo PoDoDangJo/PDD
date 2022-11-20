@@ -15,7 +15,12 @@ export default {
   },
   methods: {
     inToCommunity() {
-      this.$store.dispatch("inToCommunity");
+      // token 없이 CommunityView에 들어간다면 HomeView로 이동
+      if (this.$store.state.token) {
+        this.$store.dispatch("inToCommunity");
+      } else {
+        this.$router.push({ name: "HomeView" });
+      }
     },
   },
   created() {

@@ -19,7 +19,7 @@
 import ReviewModal from "@/components/TheModal/ReviewModal";
 import SignUpModal from "@/components/TheModal/SignUpModal";
 import LogInModal from "@/components/TheModal/LogInModal";
-import DetailModal from "@/components/TheModal/DetailModal";
+import DetailModal from "@/components/TheModal/DetailModal/DetailModal";
 
 import { mapState } from "vuex";
 
