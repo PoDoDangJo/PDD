@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'drf_spectacular',
+    'django_extensions',
     # personal installation
     'django_dump_load_utf8',
-    'django_extensions',
     # default installation
     'django.contrib.admin',
     'django.contrib.auth',
@@ -67,6 +67,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',  # 누구나 허용 <- 다 풀고 permission_classes를 걸어서 몇개만 제한하는식으로 하면됨
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     # spectacular Settings
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -165,6 +166,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
