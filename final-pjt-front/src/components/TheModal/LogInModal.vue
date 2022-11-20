@@ -64,13 +64,12 @@ export default {
 </script>
 
 <style scoped>
-.modal,
-overlay {
+.modal {
   width: 100%;
   height: 100%;
   position: fixed;
   left: 0;
-  top: 150px;
+  top: 1vw;
   z-index: 10;
 }
 
