@@ -1,11 +1,12 @@
 from django.db import models
 from django.conf import settings
 
+User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class Review(models.Model):
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_reviews', blank=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    like_users = models.ManyToManyField(User, related_name='like_reviews', blank=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
     spoiler = models.BooleanField()
@@ -14,9 +15,12 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    review_id = models.ForeignKey(Review, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='CommunityComment')
+    review_id = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='community_comment')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='community_comment')
     content = models.CharField(max_length=200)
+    spoiler = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    like_users = models.ManyToManyField(User, related_name='like_comments', blank=True)
+
 
