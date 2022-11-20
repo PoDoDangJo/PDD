@@ -19,29 +19,13 @@ def movie_list(request):
         serializer = MovieListSerializer(movie, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = MovieSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-@api_view(['GET', 'DELETE', 'PUT'])
+@api_view(['GET'])
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     if request.method == 'GET':
         serializer = MovieSerializer(movie)
         return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        movie.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    elif request.method == 'PUT':
-        serializer = MovieSerializer(movie, data=request.data)  # POST와 차이
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -122,6 +106,7 @@ BASE_URL = 'https://api.themoviedb.org/3/movie'
 actor_pk = 20090
 
 
+@api_view(['GET'])
 def get_actors(movie):
     global actor_pk
     movie_id = movie.id
