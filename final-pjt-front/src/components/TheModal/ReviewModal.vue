@@ -4,9 +4,22 @@
 
     <div class="modal-card">
       <form @submit.prevent="createReview">
-        <input type="text" placeholder="제목" /><br />
-        <textarea cols="30" rows="10"></textarea><br />
-        <input type="submit" value="작성" />
+        <input
+          type="text"
+          placeholder="제목을 입력하세요."
+          :v-model="title"
+          required
+        />
+        <br />
+        <textarea
+          placeholder="내용을 입력하세요."
+          cols="30"
+          rows="10"
+          :v-model="content"
+          required
+        />
+        <br />
+        <button>게시글 작성</button>
       </form>
     </div>
   </div>
@@ -15,9 +28,22 @@
 <script>
 export default {
   name: "DetailModal",
+  data() {
+    return {
+      title: null,
+      content: null,
+    };
+  },
   methods: {
     closeCreateReviewModal() {
       this.$store.dispatch("closeCreateReviewModal");
+    },
+    createReview() {
+      const payload = {
+        title: this.title,
+        content: this.content,
+      };
+      this.$store.dispatch("createReview", payload);
     },
   },
 };

@@ -135,11 +135,10 @@ input[type="text"]::-ms-clear {
 
 .btn__hover {
   width: 14.4vw;
-  min-width: 85px;
-  max-width: 184pxx;
+  min-width: 5px;
   margin: 8px 0;
 
-  font-size: 16px;
+  font-size: 1vw;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
