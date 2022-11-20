@@ -15,6 +15,7 @@
 
 <script>
 import ArticleItem from "@/components/TheArticle/ArticleItem.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ArticleList",
@@ -22,7 +23,7 @@ export default {
     ArticleItem,
   },
   computed: {
-    reviews: (state) => state.allReviews,
+    ...mapGetters(["reviews"]),
   },
 };
 </script>
