@@ -18,17 +18,11 @@ def review_list(request):
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(user_id=request.user)
-            print('ㅇㅅㅇ')
-            print(request)
-            print(request.data)
-            print(request.user)
-            print('ㅇㅁㅇ')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def review_detail(request, review_pk):
-    # review = Review.objects.get(pk=review_pk)  # get특성상 중간에 퍼지면 404가 아니라 500을 줌, 끝까지 못가기 때문 -> get_object_oir_404 이런식으로해결가능
     review = get_object_or_404(Review, pk=review_pk)
     if request.method == 'GET':
         serializer = ReviewSerializer(review)
@@ -48,7 +42,6 @@ def review_detail(request, review_pk):
 @api_view(['GET'])
 def comment_list(request):
     if request.method == 'GET':
-        # comments = Comment.objects.all()
         comment = get_list_or_404(Comment)
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
@@ -56,7 +49,6 @@ def comment_list(request):
 
 @api_view(['GET', 'DELETE', 'PUT'])
 def comment_detail(request, comment_pk):
-    # comment = Comment.objects.get(pk=comment_pk)
     comment = get_object_or_404(Comment, pk=comment_pk)
 
     if request.method == 'GET':
@@ -68,7 +60,7 @@ def comment_detail(request, comment_pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
-        serializer = CommentSerializer(comment, data=request.data)  # POST와 차이
+        serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
@@ -76,10 +68,12 @@ def comment_detail(request, comment_pk):
 
 @api_view(['POST'])
 def comment_create(request, review_pk):
+    if 'image' in request.Files:
+        image = request.Files['image']
     review = get_object_or_404(Review, pk=review_pk)
-    serializer = CommentSerializer(data=request.data)  # request.POST 말고
+    serializer = CommentSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
-        serializer.save(user_id=request.user, review_id=review)  # commit=False말고 이렇게
+        serializer.save(user_id=request.user, review_id=review)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

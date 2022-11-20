@@ -3,6 +3,9 @@ from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 
+# def user_image_path(instance, filename):
+#     return f'reviews/{instance.user.username}/{filename}'
+
 # Create your models here.
 class Review(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -10,6 +13,7 @@ class Review(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     spoiler = models.BooleanField()
+    # review_image = models.ImageField(blank=True, upload_to=user_image_path)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

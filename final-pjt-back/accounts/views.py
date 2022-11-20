@@ -6,20 +6,16 @@ from rest_framework.response import Response
 from .serializers import UserProfileSerializer
 from django.http import JsonResponse
 
+User = get_user_model()
 
 # Create your views here.
 
-@api_view(['GET'])
+@api_view(['POST'])
 def profile(request, username):
-    User = get_user_model()
-    user = get_object_or_404(User, username=username)
-    print(user)
-    serializer = UserProfileSerializer(user)
-    print('ㅇㅅㅇ')
-    print(serializer)
-    print(serializer.data)
-    print('ㅇㅁㅇ')
-    return Response(serializer.data)
+    if request.method == 'POST':
+        user = get_object_or_404(User, username=username)
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
 
 
 @require_POST
