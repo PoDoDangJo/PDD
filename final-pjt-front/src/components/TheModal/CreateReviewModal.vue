@@ -1,23 +1,50 @@
 <template>
   <div class="modal" id="modal-container">
-    <div class="overlay" @click="closeReviewModal"></div>
+    <div class="overlay" @click="closeCreateReviewModal"></div>
 
     <div class="modal-card">
-      <h1>제목: {{ review?.title }}</h1>
-      <h2>작성자: {{ review?.user_id }}</h2>
+      <form @submit.prevent="createReview">
+        <input
+          type="text"
+          placeholder="제목을 입력하세요."
+          v-model="title"
+          required
+        />
+        <br />
+        <textarea
+          placeholder="내용을 입력하세요."
+          cols="30"
+          rows="10"
+          v-model="content"
+          required
+        />
+        <br />
+        <button>게시글 작성</button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ReviewModal",
-  props: {
-    review: Object,
+  name: "CreateReviewModal",
+  data() {
+    return {
+      title: null,
+      content: null,
+    };
   },
   methods: {
-    closeReviewModal() {
-      this.$store.dispatch("closeReviewModal");
+    closeCreateReviewModal() {
+      this.$store.dispatch("closeCreateReviewModal");
+    },
+    createReview() {
+      const payload = {
+        title: this.title,
+        content: this.content,
+        spoiler: 0,
+      };
+      this.$store.dispatch("createReview", payload);
     },
   },
 };
