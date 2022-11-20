@@ -8,7 +8,7 @@ const V2 = "http://localhost:8000/api/v2/";
 const ACCOUNTS = "accounts/";
 const REVIEW = "review/";
 const MOVIE = "movie/";
-const COMMENTS = 'comments/'
+const COMMENTS = "comments/";
 
 export default {
   accounts: {
@@ -21,7 +21,7 @@ export default {
     // 회원가입
     signup: () => V0 + ACCOUNTS + "signup/",
   },
-    
+
   movie: {
     // 모든 영화 정보 조회
     movies: () => V1,
@@ -46,7 +46,7 @@ export default {
 
   reviews: {
     // 게시판 전체 조회 및 글 작성
-    reviews: () => V2,
+    reviews: () => V2 + REVIEW,
     // 게시판 상세 페이지 조회 및 수정, 삭제
     review: (review_pk) => V2 + REVIEW + `${review_pk}/`,
     // 게시판 상세글 댓글 생성
