@@ -1,17 +1,22 @@
 <template>
   <div>
     <TheHeader />
-    <h1></h1>
+    <MovieSlider />
+    <ArticleList />
   </div>
 </template>
 
 <script>
 import TheHeader from "@/components/TheHeader/TheHeader";
+import MovieSlider from "@/components/TheMovie/MovieSlider";
+import ArticleList from "@/components/TheArticle/ArticleList";
 
 export default {
   name: "CommunityView",
   components: {
     TheHeader,
+    ArticleList,
+    MovieSlider,
   },
   methods: {
     inToCommunity() {
@@ -29,4 +34,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>
