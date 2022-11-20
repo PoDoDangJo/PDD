@@ -24,7 +24,8 @@ export default new Vuex.Store({
     allMovies: [],
     allReviews: [],
     isModal: null,
-    detailModalStatus: { isActive: false, movie: null },
+    movieDetailModalStatus: { isActive: false, movie: null },
+    reviewDetailModalStatus: { isActive: false, review: null },
     createReviewModalStatus: false,
     loginModalStatus: false,
     signUpModalStatus: false,
@@ -45,14 +46,21 @@ export default new Vuex.Store({
     isCommunity(state) {
       return state.isCommunity ? true : false;
     },
+    reviews(state) {
+      return state.allReviews;
+    },
   },
   mutations: {
     GET_MOVIES(state, movies) {
       state.allMovies = movies;
     },
-    DETAIL_MODAL_TOGGLE(state, detailModalStatus) {
+    DETAIL_MODAL_TOGGLE(state, movieDetailModalStatus) {
       state.isModal = !state.isModal;
-      state.detailModalStatus = detailModalStatus;
+      state.movieDetailModalStatus = movieDetailModalStatus;
+    },
+    REVIEW_MODAL_TOGGLE(state, reviewDetailModalStatus) {
+      state.isModal = !state.isModal;
+      state.reviewDetailModalStatus = reviewDetailModalStatus;
     },
     OPEN_CREATE_REVIEW_MODAL(state) {
       state.isModal = true;
@@ -60,6 +68,9 @@ export default new Vuex.Store({
     },
     GET_REVIEWS(state, reviews) {
       state.allReviews = reviews;
+    },
+    CREATE_REVIEWS(state, review) {
+      state.allReviews.push(review);
     },
     CLOSE_CREATE_REVIEW_MODAL(state) {
       state.isModal = false;
@@ -82,10 +93,11 @@ export default new Vuex.Store({
       state.isModal = false;
       state.loginModalStatus = false;
     },
-    SAVE_TOKEN(state, data) {
+    SAVE_TOKEN(state, userdata) {
+      state.username = userdata.username;
+
       state.isModal = false;
-      state.token = data.key;
-      state.username = data.username;
+      state.token = userdata.token;
 
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
@@ -150,24 +162,48 @@ export default new Vuex.Store({
         url: `${API_URL}/api/v1/movie/${id}`,
       })
         .then((response) => {
-          const isActive = !this.state.detailModalStatus.isActive;
+          const isActive = !this.state.movieDetailModalStatus.isActive;
           let movie = response.data;
 
           movie.backdrop_path = TMDB_URL + movie.backdrop_path;
           movie.poster_path = TMDB_URL + movie.poster_path;
 
-          const detailModalStatus = { isActive: isActive, movie: movie };
-          context.commit("DETAIL_MODAL_TOGGLE", detailModalStatus);
+          const movieDetailModalStatus = { isActive: isActive, movie: movie };
+          context.commit("DETAIL_MODAL_TOGGLE", movieDetailModalStatus);
         })
         .catch((error) => {
           console.log(error);
         });
     },
     closeDetailModal(context) {
-      const isActive = !this.state.detailModalStatus.isActive;
-      const detailModalStatus = { isActive: isActive, movie: null };
+      const isActive = !this.state.movieDetailModalStatus.isActive;
+      const movieDetailModalStatus = { isActive: isActive, movie: null };
+      context.commit("DETAIL_MODAL_TOGGLE", movieDetailModalStatus);
+    },
+    openReviewModal(context, id) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v2/reviews/${id}`,
+      })
+        .then((response) => {
+          const isActive = !this.state.reviewDetailModalStatus.isActive;
+          const review = response.data;
 
-      context.commit("DETAIL_MODAL_TOGGLE", detailModalStatus);
+          const reviewDetailModalStatus = {
+            isActive: isActive,
+            review: review,
+          };
+          context.commit("REVIEW_MODAL_TOGGLE", reviewDetailModalStatus);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    closeReviewModal(context) {
+      const isActive = !this.state.reviewDetailModalStatus.isActive;
+      const reviewDetailModalStatus = { isActive: isActive, review: null };
+
+      context.commit("REVIEW_MODAL_TOGGLE", reviewDetailModalStatus);
     },
     openCreateReviewModal(context) {
       context.commit("OPEN_CREATE_REVIEW_MODAL");
@@ -176,17 +212,22 @@ export default new Vuex.Store({
       context.commit("CLOSE_CREATE_REVIEW_MODAL");
     },
     createReview(context, payload) {
+      console.log(payload);
       axios({
         method: "post",
         url: `${API_URL}/api/v2/reviews/`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
         data: {
           title: payload.title,
           content: payload.content,
-          spoiler: 0,
+          spoiler: payload.spoiler,
         },
       })
         .then((response) => {
-          context.commit("GET_REVIEWS", response);
+          context.commit("CREATE_REVIEWS", response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -196,17 +237,25 @@ export default new Vuex.Store({
       context.commit("OPEN_SIGN_UP_MODAL");
     },
     signUp(context, payload) {
+      const username = payload.username;
+      const password1 = payload.password1;
+      const password2 = payload.password2;
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
         data: {
-          username: payload.username,
-          password1: payload.password1,
-          password2: payload.password2,
+          username: username,
+          password1: password1,
+          password2: password2,
         },
       })
         .then((response) => {
-          context.commit("SAVE_TOKEN", response.data);
+          const token = response.data.key;
+          const userdata = {
+            username: username,
+            token: token,
+          };
+          context.commit("SAVE_TOKEN", userdata);
         })
         .catch((error) => {
           console.log(error);
@@ -225,13 +274,17 @@ export default new Vuex.Store({
         method: "post",
         url: `${API_URL}/accounts/login/`,
         data: {
-          username,
-          password,
+          username: username,
+          password: password,
         },
       })
         .then((response) => {
-          console.log(response);
-          context.commit("SAVE_TOKEN", response.data);
+          const token = response.data.key;
+          const userdata = {
+            username: username,
+            token: token,
+          };
+          context.commit("SAVE_TOKEN", userdata);
         })
         .catch((error) => {
           context.commit("TOKEN_ERROR");
@@ -242,7 +295,10 @@ export default new Vuex.Store({
       context.commit("CLOSE_LOG_IN_MODAL");
     },
     logOut(context) {
-      router.push({ name: "HomeView" });
+      // CommunityView에 있다면 HomeView로 이동
+      if (context.state.isCommunity) {
+        router.push({ name: "HomeView" });
+      }
       context.commit("LOG_OUT");
     },
     inToHome(context) {
