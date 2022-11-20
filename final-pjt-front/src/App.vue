@@ -43,6 +43,9 @@ export default {
     getMovies() {
       this.$store.dispatch("getMovies");
     },
+    getReviews() {
+      this.$store.dispatch("getReviews");
+    },
     // 모달창 끄기 위한 토글
     modal_toggle() {
       this.$store.dispatch("modal_toggle");
@@ -51,6 +54,7 @@ export default {
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
     this.getMovies();
+    this.getReviews();
   },
 };
 </script>
@@ -59,6 +63,7 @@ export default {
 #app {
   scroll-behavior: smooth;
 }
+
 /* 스크롤바 안보이게 */
 ::-webkit-scrollbar {
   display: none;

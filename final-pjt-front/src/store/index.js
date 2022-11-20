@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+// import drf from "@/api/drf";
+
 // Use Local Storage
 import createPersistedState from "vuex-persistedstate";
 import router from "../router/index";
@@ -20,6 +22,7 @@ const TMDB_URL = "https://image.tmdb.org/t/p/w500";
 export default new Vuex.Store({
   state: {
     allMovies: [],
+    allReviews: [],
     isModal: null,
     detailModalStatus: { isActive: false, movie: null },
     createReviewModalStatus: false,
@@ -27,6 +30,7 @@ export default new Vuex.Store({
     signUpModalStatus: false,
     token: null,
     isCommunity: null,
+    username: null,
   },
   getters: {
     isLogin(state) {
@@ -54,6 +58,9 @@ export default new Vuex.Store({
       state.isModal = true;
       state.createReviewModalStatus = true;
     },
+    GET_REVIEWS(state, reviews) {
+      state.allReviews = reviews;
+    },
     CLOSE_CREATE_REVIEW_MODAL(state) {
       state.isModal = false;
       state.createReviewModalStatus = false;
@@ -75,9 +82,11 @@ export default new Vuex.Store({
       state.isModal = false;
       state.loginModalStatus = false;
     },
-    SAVE_TOKEN(state, token) {
+    SAVE_TOKEN(state, data) {
       state.isModal = false;
-      state.token = token;
+      state.token = data.key;
+      state.username = data.username;
+
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
       state.signUpModalStatus = false;
@@ -120,6 +129,21 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getReviews(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v2/reviews/`,
+      })
+        .then((response) => {
+          const reviews = response.data.map((review) => {
+            return review;
+          });
+          context.commit("GET_REVIEWS", reviews);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     openDetailModal(context, id) {
       axios({
         method: "get",
@@ -151,8 +175,22 @@ export default new Vuex.Store({
     closeCreateReviewModal(context) {
       context.commit("CLOSE_CREATE_REVIEW_MODAL");
     },
-    createReview(context) {
-      context.commit("CREATE_REVIEW");
+    createReview(context, payload) {
+      axios({
+        method: "post",
+        url: `${API_URL}/api/v2/reviews/`,
+        data: {
+          title: payload.title,
+          content: payload.content,
+          spoiler: 0,
+        },
+      })
+        .then((response) => {
+          context.commit("GET_REVIEWS", response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");
@@ -168,7 +206,7 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          context.commit("SAVE_TOKEN", response.data.key);
+          context.commit("SAVE_TOKEN", response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -193,7 +231,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           console.log(response);
-          context.commit("SAVE_TOKEN", response.data.key);
+          context.commit("SAVE_TOKEN", response.data);
         })
         .catch((error) => {
           context.commit("TOKEN_ERROR");
