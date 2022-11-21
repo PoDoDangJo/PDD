@@ -125,7 +125,7 @@ export default {
   border-radius: 5px;
 }
 
-.modal-card-overview:active {
+.modal-card-overview:hover {
   transform: display, 1s;
   overflow: scroll;
   text-overflow: ellipsis;

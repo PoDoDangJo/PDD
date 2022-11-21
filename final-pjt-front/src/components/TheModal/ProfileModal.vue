@@ -19,6 +19,9 @@ export default {
   methods: {
     ...mapActions(["getUserProfile", "closeProfileModal"]),
   },
+  created() {
+    this.getUserProfile();
+  },
 };
 </script>
 
