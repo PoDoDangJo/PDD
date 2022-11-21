@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- 모달창 -->
+    <ProfileModal v-if="profileModalStatus" />
     <CreateReviewModal v-if="createReviewModalStatus" />
     <SignUpModal v-if="signUpModalStatus" />
     <LogInModal v-if="loginModalStatus" />
@@ -25,8 +26,9 @@ import SignUpModal from "@/components/TheModal/SignUpModal";
 import LogInModal from "@/components/TheModal/LogInModal";
 import DetailModal from "@/components/TheModal/DetailModal/DetailModal";
 import ReviewModal from "@/components/TheModal/ReviewModal";
+import ProfileModal from "@/components/TheModal/ProfileModal";
 
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -36,6 +38,7 @@ export default {
     DetailModal,
     CreateReviewModal,
     ReviewModal,
+    ProfileModal,
   },
   computed: mapState({
     isModal: (state) => state.isModal,
@@ -43,25 +46,17 @@ export default {
     reviewDetailModalStatus: (state) => state.reviewDetailModalStatus,
     loginModalStatus: (state) => state.loginModalStatus,
     signUpModalStatus: (state) => state.signUpModalStatus,
+    profileModalStatus: (state) => state.profileModalStatus,
     createReviewModalStatus: (state) => state.createReviewModalStatus,
   }),
   methods: {
-    // 영화 데이터 가져오는 함수
-    getMovies() {
-      this.$store.dispatch("getMovies");
-    },
-    getReviews() {
-      this.$store.dispatch("getReviews");
-    },
-    // 모달창 끄기 위한 토글
-    modal_toggle() {
-      this.$store.dispatch("modal_toggle");
-    },
+    ...mapActions(["getMovies", "getReviews", "getPopularityMovies"]),
   },
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
     this.getMovies();
     this.getReviews();
+    this.getPopularityMovies();
   },
 };
 </script>

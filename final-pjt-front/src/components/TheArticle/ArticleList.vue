@@ -3,6 +3,7 @@
     <div class="article__list">
       <h1 class="article__list__category">전체 게시글</h1>
       <div class="movie-list">
+        <hr />
         <ArticleItem
           v-for="review in reviews"
           :key="review.id"
@@ -34,14 +35,27 @@ h1 {
   font-size: calc(16px + 1vw);
 }
 
-/* .article__list__category {
-} */
+hr {
+  border-top: 1px solid #dddcfb;
+  border-bottom: 1px solid #a261f5;
+}
+hr:after {
+  content: "";
+  display: block;
+  margin-top: 2px;
+  border-top: 1px solid #dddcfb;
+  border-bottom: 1px solid #a261f5;
+}
 
 .article__list {
   position: absolute;
   top: 40vw;
-  width: 300%;
+  width: 100%;
   transform: translate3d(0em, 0px, 0px);
   z-index: 2;
+}
+
+.movie-list {
+  margin: calc(50px + 1vw) 2vw;
 }
 </style>
