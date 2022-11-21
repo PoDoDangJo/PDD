@@ -228,10 +228,18 @@ def get_youtube_key(movie_dict):
                 'api_key': TMDB_API_KEY
             }
         ).json()
-
+        # 유튜브이고, 트레일러인 경우만 가져오기, 공식트레일러우선
+        tmp = ''
         for video in response.get('results'):
             if video.get('site') == 'YouTube':
-                return video.get('key')
+                if video.get('type') == 'Trailer':
+                    if video.get('official') == 'true':
+                        return video.get('key')
+                    else:
+                        tmp = video.get('key')
+        if tmp:
+            return tmp
+
         return 'nothing'
     except:
         return 'nothing'
@@ -254,8 +262,6 @@ def data(request):
             name=genre.get('name')
         )
     
-    print('인기 영화 목록')
-    print('--------------------------------------------------------------')
     cnt = 1
 
     # for i in range(317, 501): #?
