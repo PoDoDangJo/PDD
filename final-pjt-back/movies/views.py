@@ -1,5 +1,6 @@
 import requests
 import re
+import datetime
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -100,12 +101,21 @@ def comment_likes(request, comment_pk):
     return JsonResponse(context)
 
 # 인기순 영화 필터
+# - 기준 : 전체에서 영화만
 @api_view(['GET'])
 def movie_popularity(request):
     movies = Movie.objects.all().order_by('-popularity')
     serializers = MovieListSerializer(movies, many=True)
-    # if serializers.is_valid():
-        # serializers
+    return Response(serializers.data)
+
+# 고전 영화 필터
+# - 기준 : 2000년대 이전, 평점 높은 순, 트레일러 있는 영화만, 20개
+@api_view(['GET'])
+def movie_classic(request):
+    start_date = datetime.date(1000, 1, 1)
+    end_date = datetime.date(1999, 12, 31)
+    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).order_by('-vote_average')
+    serializers = MovieListSerializer(movies[:20], many=True)
     return Response(serializers.data)
 
 ############################################################################################
