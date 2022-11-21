@@ -114,7 +114,7 @@ def movie_popularity(request):
 def movie_classic(request):
     start_date = datetime.date(1000, 1, 1)
     end_date = datetime.date(1999, 12, 31)
-    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).order_by('-vote_average')
+    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).exclude(trailer_youtube_key='nothing').order_by('-vote_average')
     serializers = MovieListSerializer(movies[:20], many=True)
     return Response(serializers.data)
 
