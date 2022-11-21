@@ -66,17 +66,22 @@ def comment_create(request, movie_pk):
 
 
 @api_view(['POST'])
-def movie_likes(request, movie_pk):
+def movie_rates(request, movie_pk):
     if request.user.is_authenticated:
         movie = get_object_or_404(Movie, pk=movie_pk)
-        if movie.like_users.filter(pk=request.user.pk).exists():
-            movie.like_users.remove(request.user)
-            is_liked = False
-        else:
-            movie.like_users.add(request.user)
-            is_liked = True
+        rating = movie.ratings.filter(user_id=request.user)
+        for data in rating.values():
+            rating_data = data.get('rate')
+
+        serializer = RatingSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # 기존에 있었다면 삭제
+            if movie.ratings.filter(user_id=request.user.pk).exists():
+                rating.delete()
+            
+        serializer.save(user_id=request.user, movie_id=movie)
         context = {
-            'is_liked': is_liked,
+            'rating': rating_data,
         }
         return JsonResponse(context)
     context = {}
@@ -122,14 +127,13 @@ def movie_classic(request):
 
 TMDB_API_KEY =  '7135f382285b7a42b12f2513bd58adb1' 
 BASE_URL = 'https://api.themoviedb.org/3/movie'
-actor_pk = 20090
+actor_pk = 1
 
 
-@api_view(['GET'])
 def get_actors(movie):
     global actor_pk
     movie_id = movie.id
-    # print("test: credit response!")
+    print("배우 가져오러 들어왔다구!")
     response = requests.get(
         f'https://api.themoviedb.org/3/movie/{movie_id}/credits',
         params={
@@ -145,7 +149,6 @@ def get_actors(movie):
         actor_id = person.get('id')
         character_name = person.get('character')
         request_url_person = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={TMDB_API_KEY}&language=ko-KR'
-        # print(f"test: actor response_{actor_pk}!")
         try:
             response = requests.get(request_url_person).json()
         except:
@@ -164,13 +167,15 @@ def get_actors(movie):
             Actor.objects.create(
                 id=response.get('id'),
                 name=name,
+                popularity = response.get('popularity'),
                 profile_path= response.get('profile_path'),
             )
         movie.actors.add(actor_id)
-
+        
         try:
             character = Characters.objects.get(pk=actor_pk)
             character.character_name = character_name
+            
             character.save()
             actor_pk += 1
             if movie.actors.count() == 5:
@@ -212,6 +217,7 @@ def get_director(movie):
             Director.objects.create(
                 id=response.get('id'),
                 name=name,
+                popularity = response.get('popularity'),
                 profile_path= response.get('profile_path'),
             )
         movie.director.add(director_id)
@@ -261,11 +267,11 @@ def data(request):
             id=genre.get('id'),
             name=genre.get('name')
         )
+    print('장르 채우기 완료!')
     
     cnt = 1
 
-    # for i in range(317, 501): #?
-    for i in range(1, 100):
+    for i in range(1, 501):
         
         print(f'page{i}')
 
@@ -290,7 +296,7 @@ def data(request):
             # 디테일 api
             request_url_detail = f"{BASE_URL}/{movie_id}?api_key={TMDB_API_KEY}&language=ko-KR"
             movie_detail = requests.get(request_url_detail).json()
-            
+            print('디테일 api 저장까지 완료!')
             # 비슷한 영화 api
             request_url_similar= f'{BASE_URL}/{movie_id}/similar?api_key={TMDB_API_KEY}&language=ko-KR&page=1'
             movie_similars = requests.get(request_url_similar).json()
@@ -303,6 +309,7 @@ def data(request):
                 if not similar.get('poster_path'):
                     continue
                 similar_movies.append(similar.get('id'))
+            print('비슷한 영화 저장 완료!')
             
             if not Movie.objects.filter(pk=movie_detail.get('id')).exists():
                 movie = Movie.objects.create(
@@ -327,9 +334,12 @@ def data(request):
 
             for genre_id in movie_dict.get('genre_ids', []):
                 movie.genre_ids.add(genre_id)
-            
+            print('장르 세팅 완료!')
+
             get_actors(movie)    # 배우정보 더하기
+            print('배우정보 세팅완료!')
             get_director(movie)  # 감독정보 더하기
+            print('감독정보 세팅완료!')
 
     return JsonResponse(movie)
 

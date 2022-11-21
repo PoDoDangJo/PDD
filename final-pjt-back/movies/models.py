@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = settings.AUTH_USER_MODEL
 
@@ -7,12 +8,14 @@ User = settings.AUTH_USER_MODEL
 class Actor(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100, null=True)
+    popularity = models.FloatField(null=True)
     profile_path = models.TextField(null=True)
 
 
 class Director(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100, null=True)
+    popularity = models.FloatField(null=True)
     profile_path = models.TextField(null=True)
 
 
@@ -37,7 +40,7 @@ class Movie(models.Model):
     release_date = models.DateField(null=True)
     runtime = models.IntegerField(null=True)
     vote_average = models.FloatField(null=True)
-    like_users = models.ManyToManyField(User, related_name='like_movies')
+    # like_users = models.ManyToManyField(User, related_name='like_movies')
     trailer_youtube_key = models.TextField(null=True)
     movie_similar = models.JSONField(blank=True)
 
@@ -57,3 +60,9 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     like_users = models.ManyToManyField(User, related_name='like_movie_comment')
+
+
+class Rating(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='ratings')
+    rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
