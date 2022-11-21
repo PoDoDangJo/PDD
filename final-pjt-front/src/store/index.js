@@ -96,11 +96,14 @@ export default new Vuex.Store({
         return review
       })
     },
-    DELETE_REVIEW(state, review_id) {
+    DELETE_REVIEW(state, review) {
 
       console.log(state.allReviews)
-      console.log(review_id)
+      console.log(review)
 
+      const index = state.allReviews.indexOf(review)
+
+      state.allReviews.splice(index - 1, 1)
       state.isModal = false;
       state.reviewDetailModalStatus = { isActive: false, review: null };
     },
@@ -297,6 +300,8 @@ export default new Vuex.Store({
           title: payload.title,
           content: payload.content,
           spoiler: payload.spoiler,
+          like_users: [],
+          user_id: context.state.userInfo.id,
         },
       })
         .then((response) => {
@@ -312,8 +317,8 @@ export default new Vuex.Store({
     updateReview(context, review) {
       context.commit('UPDATE_REVIEW', review)
     },
-    deleteReview(context, review_id) {
-      context.commit('DELETE_REVIEW', review_id)
+    deleteReview(context, review) {
+      context.commit('DELETE_REVIEW', review)
     },
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");
