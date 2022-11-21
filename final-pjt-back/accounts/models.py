@@ -9,8 +9,8 @@ def user_image_path(instance, filename):
 
 class User(AbstractUser):
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
-    # profile_image = models.ImageField(upload_to=user_image_path, blank=True)
+    profile_image = models.ImageField(upload_to=user_image_path, blank=True)
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+# class Profile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
