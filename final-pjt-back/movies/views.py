@@ -99,6 +99,15 @@ def comment_likes(request, comment_pk):
     context = {}
     return JsonResponse(context)
 
+# 인기순 영화 필터
+@api_view(['GET'])
+def movie_popularity(request):
+    movies = Movie.objects.all().order_by('-popularity')
+    serializers = MovieListSerializer(movies, many=True)
+    # if serializers.is_valid():
+        # serializers
+    return Response(serializers.data)
+
 ############################################################################################
 
 TMDB_API_KEY =  '7135f382285b7a42b12f2513bd58adb1' 
