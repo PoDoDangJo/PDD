@@ -37,10 +37,10 @@ export default {
   methods: {
     ...mapActions(["closeReviewModal"]),
     updateReview() {
-      this.$store.dispatch("updateReview", this.review.id);
+      this.$store.dispatch("updateReview", this.review);
     },
     deleteReview() {
-      this.$store.dispatch("deleteReview", this.review.id);
+      this.$store.dispatch("deleteReview", this.review);
     },
   },
 };
