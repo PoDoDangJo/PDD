@@ -1,47 +1,23 @@
 <template>
   <div class="modal" id="modal-container">
-    <div class="overlay" @click="closeReviewModal"></div>
+    <div class="overlay" @click="closeProfileModal"></div>
 
     <div class="modal-card">
-      <h1>제목: {{ review?.title }}</h1>
-      <h2>작성자: {{ review?.user_id }}</h2>
-      <p>내용: {{ review?.content }}</p>
-
-      <div class="button__box">
-        <button
-          class="btn__hover btn__color"
-          type="submit"
-          @click="updateReview"
-        >
-          수정
-        </button>
-        <button
-          class="btn__hover btn__color"
-          type="submit"
-          @click="deleteReview"
-        >
-          삭제
-        </button>
-      </div>
+      <h1>이름: {{ userInfo?.username }}</h1>
+      <!-- <h2>작성자: {{ userInfo?.id }}</h2> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: "ReviewModal",
-  props: {
-    review: Object,
-  },
+  name: "ProfileModal",
+  computed: mapState({
+    userInfo: (state) => state.userInfo,
+  }),
   methods: {
-    ...mapActions(["closeReviewModal"]),
-    updateReview() {
-      this.$store.dispatch("updateReview", this.review.id);
-    },
-    deleteReview() {
-      this.$store.dispatch("deleteReview", this.review.id);
-    },
+    ...mapActions(["getUserProfile", "closeProfileModal"]),
   },
 };
 </script>
@@ -116,42 +92,12 @@ overlay {
   transition: all 0.8s ease-in-out;
 }
 
-.button__box {
-  position: absolute;
-  bottom: 0;
-  margin: 8px 1vw;
-}
-
-.btn__hover {
-  width: 14.4vw;
-  min-width: 5px;
-  margin: 8px 0;
-
-  font-size: 1vw;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-
-  height: 40px;
-  text-align: center;
-  border: none;
-  background-size: 500% 100%;
-
-  border-radius: 5px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
-.btn__hover:hover {
+.modal-card-title:hover {
   background-position: 100% 0;
   -o-transition: all 0.4s ease-in-out;
   -webkit-transition: all 0.6s ease-in-out;
   transition: all 0.8s ease-in-out;
-}
-
-.btn__hover.btn__color {
-  background-image: linear-gradient(
+  color: linear-gradient(
     to right,
     #a261f5,
     #614af2,
@@ -161,5 +107,16 @@ overlay {
     #614af2,
     #a261f5
   );
+}
+
+.modal-card-overview {
+  margin: 1vw;
+  font-size: calc(4px + 0.7vw);
+  text-align: justify;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>
