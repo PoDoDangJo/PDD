@@ -3,13 +3,13 @@
     <h1 class="movie-category">{{ msg }}</h1>
     <div class="wrapper">
       <section class="slide">
-        <div class="movie-list">
+        <ul class="movie-list">
           <MovieListItem
             v-for="movie in movies"
             :key="movie.id"
             :movie="movie"
           />
-        </div>
+        </ul>
       </section>
     </div>
   </div>
@@ -31,6 +31,11 @@ export default {
 </script>
 
 <style scoped>
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 .movie-list {
   margin-left: 2vw;
   width: 300%;

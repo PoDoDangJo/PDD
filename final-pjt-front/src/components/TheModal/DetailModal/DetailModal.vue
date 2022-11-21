@@ -4,19 +4,30 @@
 
     <div class="modal-card">
       <div>
+        <header class="detailHeader">
+          <h1>{{ movie?.title }}</h1>
+        </header>
         <iframe
           class="trailer"
           :src="`https://www.youtube.com/embed/${movie?.trailer_youtube_key}?autoplay=1&controls=0&disablekb=1&modestbranding=1`"
           frameborder="0"
           allow="autoplay"
         ></iframe>
-        <p class="modal-card-tagline">{{ movie?.tagline }}</p>
-        <p class="modal-card-overview">{{ movie?.overview }}</p>
-        <p>더보기</p>
         <div class="detail__components">
-          <DetailInfo v-if="status == 'info'" />
-          <DetailComments v-else-if="status == 'comments'" />
-          <DetailSimilar v-else />
+          <div class="button__container">
+            <button :class="{ isActive: infoPage }" @click="infoPage()">
+              상세정보
+            </button>
+            <button :class="{ isActive: commentPage }" @click="goCommentPage()">
+              사용자 평
+            </button>
+            <button :class="{ isActive: similarPage }" @click="goSimilarPage()">
+              관련영화
+            </button>
+          </div>
+          <DetailInfo v-if="infoPage" />
+          <DetailComments v-else-if="commentPage" />
+          <DetailSimilar v-else-if="similarPage" />
         </div>
       </div>
     </div>
@@ -27,20 +38,37 @@
 import DetailInfo from "./DetailInfo.vue";
 import DetailComments from "./DetailComments.vue";
 import DetailSimilar from "./DetailSimilar.vue";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "DetailModal",
-  props: {
-    movie: Object,
-  },
   data() {
     return {
-      status: "info",
+      infoPage: true,
+      commentPage: false,
+      similarPage: false,
     };
   },
+  computed: mapState({
+    movie: (state) => state.movieDetailModalStatus.movie,
+  }),
   methods: {
     ...mapActions(["closeDetailModal"]),
+    goInfoPage() {
+      this.infoPage = true;
+      this.commentPage = false;
+      this.similarPage = false;
+    },
+    goCommentPage() {
+      this.infoPage = false;
+      this.commentPage = true;
+      this.similarPage = false;
+    },
+    goSimilarPage() {
+      this.infoPage = false;
+      this.commentPage = false;
+      this.similarPage = true;
+    },
   },
   components: {
     DetailInfo,
@@ -57,6 +85,8 @@ export default {
   left: 0;
   top: 0;
   z-index: 10;
+
+  overflow: scroll;
 }
 
 .overlay {
@@ -84,24 +114,40 @@ export default {
   border-radius: 5px;
 }
 
+.detailHeader {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 50%,
+    transparent
+  );
+
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+h1 {
+  padding: 0 1vw 0 1vw;
+}
+
 .trailer {
   position: absolute;
   width: 100%;
   height: calc(100px + 20vw);
   /* same */
   min-width: 200px;
-  left: 0;
-  top: 0;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 
   mask-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 90%
+    rgba(0, 0, 0, 1) 90%,
+    rgba(0, 0, 0, 0) 100%
   );
 }
-
+/*
 .modal-card-tagline {
   position: absolute;
   top: calc(80px + 20vw);
@@ -127,10 +173,30 @@ export default {
 
 .modal-card-overview:hover {
   transform: display, 1s;
-  overflow: scroll;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
+} */
+
+.detail__components {
+  position: absolute;
+  top: calc(100px + 20vw);
+
+  margin: 0 1vw;
+}
+
+.button__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+}
+
+button {
+  font-size: calc(10px + 0.5vw);
+  all: unset;
+  text-align: center;
+  color: #dddcfb;
 }
 </style>
