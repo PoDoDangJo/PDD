@@ -10,16 +10,50 @@ User = get_user_model()
 
 # Create your views here.
 
-@api_view(['POST'])
+@api_view(['GET'])
 def profile(request, username):
-    if request.method == 'POST':
+    if request.method == 'GET':
         user = get_object_or_404(User, username=username)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
+# @api_view(['GET'])
+# def profile(request, username):
+#     if request.method == 'GET':
+#         user = get_object_or_404(User, username=username)
+#         user_profile = {
+#             'user_name' : user.username,
+#             'user_id' : user.pk,
+#             'user_email' : user.email,
+#             'user_like_movies' : user.like_movies.values(),
+#             'user_like_movie_comments' : user.like_movie_comment.values(),
+#             'user_like_reviews' : user.like_reviews.values(),
+#             'user_like_reviews_comments' : user.like_comments.values(),
+#             'user_like_reviews_comments' : user.like_comments.values()
+#         }
+#         return JsonResponse(user_profile, safe=False)
+
+# def article_json_1(request):
+#     articles = Article.objects.all()
+#     articles_json = []
+
+#     for article in articles:
+#         articles_json.append(
+#             {
+#                 'id': article.pk,
+#                 'title': article.title,
+#                 'content': article.content,
+#                 'created_at' : article.created_at,
+#                 'updated_at' : article.updated_at,
+
+#             }
+#         )
+#     return JsonResponse(articles_json, safe=False)
+
+
 
 @require_POST
-def follow(request, user_pk):
+def follow(request, username):
     print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
     if request.user.is_authenticated:
         User = get_user_model()
