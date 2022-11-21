@@ -100,9 +100,9 @@ export default new Vuex.Store({
 
       console.log(state.allReviews)
       console.log(review_id)
+
       state.isModal = false;
       state.reviewDetailModalStatus = { isActive: false, review: null };
-      state.allReviews.splice(review_id - 1, 1)
     },
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
@@ -218,7 +218,10 @@ export default new Vuex.Store({
     getUserProfile(context) {
       axios({
         method: 'get',
-        url: `${API_URL}/accounts/user/`
+        url: `${API_URL}/accounts/profile/${context.state.username}/`,
+        headers: {
+          Authorization: `Token ${ context.state.token }`
+        },
       })
       .then((response) => {
         context.commit('GET_USER_PROFILE', response.data)

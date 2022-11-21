@@ -10,9 +10,10 @@ User = get_user_model()
 
 # Create your views here.
 
-@api_view(['POST'])
+
+@api_view(['GET'])
 def profile(request, username):
-    if request.method == 'POST':
+    if request.method == 'GET':
         user = get_object_or_404(User, username=username)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
