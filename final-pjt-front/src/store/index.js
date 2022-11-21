@@ -22,6 +22,7 @@ const TMDB_URL = "https://image.tmdb.org/t/p/w500";
 export default new Vuex.Store({
   state: {
     allMovies: [],
+    popularityMovies: [],
     allReviews: [],
     isModal: null,
     movieDetailModalStatus: { isActive: false, movie: null },
@@ -29,9 +30,11 @@ export default new Vuex.Store({
     createReviewModalStatus: false,
     loginModalStatus: false,
     signUpModalStatus: false,
+    profileModalStatus: false,
     token: null,
     isCommunity: null,
     username: null,
+    userInfo: null
   },
   getters: {
     isLogin(state) {
@@ -54,6 +57,13 @@ export default new Vuex.Store({
     GET_MOVIES(state, movies) {
       state.allMovies = movies;
     },
+    GET_POPULERITY_MOVIES(state, movies) {
+      state.popularityMovies = movies;
+    },
+    GET_USER_PROFILE(state, userInfo) {
+      state.userInfo = userInfo
+      console.log(userInfo)
+    },
     DETAIL_MODAL_TOGGLE(state, movieDetailModalStatus) {
       state.isModal = !state.isModal;
       state.movieDetailModalStatus = movieDetailModalStatus;
@@ -71,10 +81,28 @@ export default new Vuex.Store({
     },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
+      state.createReviewModalStatus = false;
+      state.isModal = false;
     },
     CLOSE_CREATE_REVIEW_MODAL(state) {
       state.isModal = false;
       state.createReviewModalStatus = false;
+    },
+    UPDATE_REVIEW(state, reviewItem) {
+      state.allReviews = state.allReviews.reverse().map((review) => {
+        if (review.id == reviewItem.id) {
+          review = reviewItem
+        }
+        return review
+      })
+    },
+    DELETE_REVIEW(state, review_id) {
+
+      console.log(state.allReviews)
+      console.log(review_id)
+      state.isModal = false;
+      state.reviewDetailModalStatus = { isActive: false, review: null };
+      state.allReviews.splice(review_id - 1, 1)
     },
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
@@ -111,6 +139,14 @@ export default new Vuex.Store({
 
       location.reload;
     },
+    OPEN_PROFILE_MODAL(state) {
+      state.isModal = true;
+      state.profileModalStatus = true;
+    },
+    CLOSE_PROFILE_MODAL(state) {
+      state.isModal = false;
+      state.profileModalStatus = false;
+    },
     IN_TO_HOME(state) {
       state.isCommunity = false;
     },
@@ -141,6 +177,28 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getPopularityMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/popularity/`,
+        // headers: {
+        //   // 인증 여부를 확인하기 위한 Token을 담아서 요청
+        //   Authorization: `Token ${ context.state.token }`
+        // }
+      })
+        .then((response) => {
+          // 이미지를 불러오기 위한 URL 추가 작업
+          const movies = response.data.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          });
+          context.commit("GET_POPULERITY_MOVIES", movies);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getReviews(context) {
       axios({
         method: "get",
@@ -148,6 +206,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           const reviews = response.data.map((review) => {
+            // review.created_at = review.created_at.slice(2, 10)
             return review;
           });
           context.commit("GET_REVIEWS", reviews);
@@ -156,10 +215,22 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getUserProfile(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/accounts/user/`
+      })
+      .then((response) => {
+        context.commit('GET_USER_PROFILE', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
     openDetailModal(context, id) {
       axios({
         method: "get",
-        url: `${API_URL}/api/v1/movie/${id}`,
+        url: `${API_URL}/api/v1/movies/${id}`,
       })
         .then((response) => {
           const isActive = !this.state.movieDetailModalStatus.isActive;
@@ -212,7 +283,6 @@ export default new Vuex.Store({
       context.commit("CLOSE_CREATE_REVIEW_MODAL");
     },
     createReview(context, payload) {
-      console.log(payload);
       axios({
         method: "post",
         url: `${API_URL}/api/v2/reviews/`,
@@ -227,11 +297,20 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          context.commit("CREATE_REVIEWS", response.data);
+          // response.data.username = context.state.username;
+          const review = response.data
+          console.log(review)
+          context.commit("CREATE_REVIEWS", review);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    updateReview(context, review) {
+      context.commit('UPDATE_REVIEW', review)
+    },
+    deleteReview(context, review_id) {
+      context.commit('DELETE_REVIEW', review_id)
     },
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");
@@ -300,6 +379,12 @@ export default new Vuex.Store({
         router.push({ name: "HomeView" });
       }
       context.commit("LOG_OUT");
+    },
+    openProfileModal(context) {
+      context.commit("OPEN_PROFILE_MODAL");
+    },
+    closeProfileModal(context) {
+      context.commit("CLOSE_PROFILE_MODAL");
     },
     inToHome(context) {
       context.commit("IN_TO_HOME");

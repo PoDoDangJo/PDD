@@ -6,8 +6,8 @@ const V1 = "http://localhost:8000/api/v1/";
 const V2 = "http://localhost:8000/api/v2/";
 
 const ACCOUNTS = "accounts/";
-const REVIEW = "review/";
-const MOVIE = "movie/";
+const REVIEW = "reviews/";
+const MOVIE = "movies/";
 const COMMENTS = "comments/";
 
 export default {

@@ -38,26 +38,26 @@ export default {
   background-color: #141414;
 }
 
-.modal-card-title {
-  position: fixed;
-  z-index: 2;
-  top: 60%;
-  margin: 1vw;
-  font-size: calc(12px + 0.5vw);
-  text-shadow: 1vw 1vw 1vw #141414;
-
-  cursor: default;
-
-  border-radius: 5px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
 /* hover */
 .movie-card:hover {
   transform: scale(1.2);
   z-index: 11;
+}
+
+.modal-card-title {
+  position: fixed;
+  z-index: 2;
+  top: 65%;
+  margin: 10px;
+  font-size: calc(8px + 0.5vw);
+  text-shadow: 1vw 1vw 1vw #141414;
+
+  cursor: pointer;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+
+  -webkit-text-stroke: 0.3px #141414;
 }
 
 .movie-backdrop {
