@@ -11,6 +11,7 @@ urlpatterns = [
     path('comments/<int:comment_pk>/likes/', views.comment_likes),
     path('movies/<int:movie_pk>/comments/', views.comment_create),
     path('movies/<int:movie_pk>/likes/', views.movie_likes),
+    # path('movies/popular/', views)
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]
