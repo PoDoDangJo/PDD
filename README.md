@@ -1,2 +1,0 @@
-# PDD
-Final project
