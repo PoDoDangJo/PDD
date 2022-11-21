@@ -1,0 +1,79 @@
+/*** layout ***/
+
+.icon {
+  font-size: 200%;
+  border-radius: 1%;
+  padding: 0;
+  transition: transform 0.5s;
+  background-color: #141414;
+}
+/*** canvas ***/
+
+#canvas {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 0;
+}
+
+/*** content ***/
+#content {
+  position: relative;
+  z-index: 0;
+  touch-action: none; /* disable pull to refresh on mobile */
+}
+
+#water-ripples {
+  width: 100%;
+  height: calc(25px + 50vw);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#water-ripples-title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#water-ripples-title h1 {
+  color: white;
+  font-size: 8.5vw;
+  margin: 0;
+  opacity: 0;
+}
+
+#water-ripples img {
+  display: none;
+}
+
+#curtainsjs-ad a {
+  color: inherit;
+}
+
+/*** handling errors ***/
+
+.no-curtains #water-ripples {
+  display: flex;
+  overflow: hidden;
+}
+
+.no-curtains #water-ripples img {
+  display: block;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+.no-curtains #water-ripples-title h1 {
+  opacity: 1;
+}
