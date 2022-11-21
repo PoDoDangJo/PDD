@@ -14,7 +14,7 @@
       :review="reviewDetailModalStatus.review"
     />
     <!-- 메인 -->
-    <main :class="{ main: isModal }">
+    <main :class="{ isBlur: isModal }">
       <router-view />
     </main>
   </div>
@@ -72,9 +72,13 @@ export default {
 }
 
 /* 모달창 실행시 1초에 걸쳐 blur */
-.main {
+.isBlur {
   transition: filter 1s;
   filter: blur(0.5rem);
+}
+
+.main {
+  display: none;
 }
 
 /* a 태그 밑줄 색 제거 */
