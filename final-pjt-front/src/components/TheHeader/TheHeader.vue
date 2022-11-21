@@ -135,6 +135,7 @@ ul {
 .nav__text {
   text-shadow: 1px 1px 2px#141414;
   font-size: calc(10px + 0.5vw);
+  cursor: pointer;
 }
 
 button {

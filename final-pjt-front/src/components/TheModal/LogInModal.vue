@@ -7,25 +7,16 @@
         <img class="logo" src="@/assets/icons/logo.png" alt="" />
         <h1 class="login__info__text">로그인</h1>
       </div>
-      <form @submit.prevent="logIn, openSignUpModal">
-        <input
-          type="search"
-          id="username"
-          placeholder="아이디"
-          v-model="username"
-          required
-        />
+      <form @submit.prevent="logIn">
+        <input type="search" placeholder="아이디" v-model="username" required />
         <input
           type="password"
-          id="password"
           placeholder="비밀번호"
           v-model="password"
           required
         />
         <div class="form__button__box">
-          <button class="btn__hover btn__color" type="submit" @click="logIn">
-            로그인
-          </button>
+          <button class="btn__hover btn__color" type="submit">로그인</button>
           <button
             class="btn__hover btn__color"
             type="submit"
@@ -135,11 +126,10 @@ input[type="text"]::-ms-clear {
 
 .btn__hover {
   width: 14.4vw;
-  min-width: 85px;
-  max-width: 184pxx;
+  min-width: 5px;
   margin: 8px 0;
 
-  font-size: 16px;
+  font-size: 1vw;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
