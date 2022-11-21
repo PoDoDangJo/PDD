@@ -10,7 +10,7 @@ urlpatterns = [
     path('comments/<int:comment_pk>/', views.comment_detail),
     path('comments/<int:comment_pk>/likes/', views.comment_likes),
     path('movies/<int:movie_pk>/comments/', views.comment_create),
-    path('movies/<int:movie_pk>/likes/', views.movie_likes),
+    path('movies/<int:movie_pk>/rates/', views.movie_rates),
     path('movies/popularity/', views.movie_popularity),  # 인기영화
     path('movies/classic/', views.movie_classic),  # 고전영화
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
