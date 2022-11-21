@@ -34,7 +34,7 @@ export default new Vuex.Store({
     token: null,
     isCommunity: null,
     username: null,
-    userInfo: null
+    userInfo: null,
   },
   getters: {
     isLogin(state) {
@@ -61,8 +61,8 @@ export default new Vuex.Store({
       state.popularityMovies = movies;
     },
     GET_USER_PROFILE(state, userInfo) {
-      state.userInfo = userInfo
-      console.log(userInfo)
+      state.userInfo = userInfo;
+      console.log(userInfo);
     },
     DETAIL_MODAL_TOGGLE(state, movieDetailModalStatus) {
       state.isModal = !state.isModal;
@@ -91,19 +91,18 @@ export default new Vuex.Store({
     UPDATE_REVIEW(state, reviewItem) {
       state.allReviews = state.allReviews.reverse().map((review) => {
         if (review.id == reviewItem.id) {
-          review = reviewItem
+          review = reviewItem;
         }
-        return review
-      })
+        return review;
+      });
     },
     DELETE_REVIEW(state, review) {
+      console.log(state.allReviews);
+      console.log(review);
 
-      console.log(state.allReviews)
-      console.log(review)
+      const index = state.allReviews.indexOf(review);
 
-      const index = state.allReviews.indexOf(review)
-
-      state.allReviews.splice(index - 1, 1)
+      state.allReviews.splice(index - 1, 1);
       state.isModal = false;
       state.reviewDetailModalStatus = { isActive: false, review: null };
     },
@@ -220,18 +219,18 @@ export default new Vuex.Store({
     },
     getUserProfile(context) {
       axios({
-        method: 'get',
+        method: "get",
         url: `${API_URL}/accounts/profile/${context.state.username}/`,
         headers: {
-          Authorization: `Token ${ context.state.token }`
+          Authorization: `Token ${context.state.token}`,
         },
       })
-      .then((response) => {
-        context.commit('GET_USER_PROFILE', response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .then((response) => {
+          context.commit("GET_USER_PROFILE", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     openDetailModal(context, id) {
       axios({
@@ -305,9 +304,7 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          // response.data.username = context.state.username;
-          const review = response.data
-          console.log(review)
+          const review = response.data;
           context.commit("CREATE_REVIEWS", review);
         })
         .catch((error) => {
@@ -315,10 +312,25 @@ export default new Vuex.Store({
         });
     },
     updateReview(context, review) {
-      context.commit('UPDATE_REVIEW', review)
+      context.commit("UPDATE_REVIEW", review);
     },
-    deleteReview(context, review) {
-      context.commit('DELETE_REVIEW', review)
+    deleteReview(context, review_id) {
+      console.log(review_id);
+      axios({
+        method: "delete",
+        url: `${API_URL}/api/v2/reviews/${review_id}`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          context.commit("DELETE_REVIEW", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");

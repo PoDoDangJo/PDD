@@ -1,8 +1,8 @@
 <template>
-  <div class="movie-card" @click="openDetailModal">
+  <li class="movie-card icon" @click="openDetailModal">
     <h1 class="modal-card-title">{{ movie?.title }}</h1>
     <img class="movie-backdrop" :src="movie?.backdrop_path" alt="poster" />
-  </div>
+  </li>
 </template>
 
 <script>
@@ -25,7 +25,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+li {
+  float: left;
+  list-style: none;
+  height: 92%;
+  min-width: 200px;
+  max-width: 300px;
+  width: calc(100px + 20vw);
+}
+
 .movie-card {
   width: calc(100px + 10vw);
   min-width: 200px;
@@ -34,7 +43,7 @@ export default {
   cursor: pointer;
   margin-right: calc(1px + 2vw);
   /* animation */
-  transition: transform 0.5s;
+  transition: all 0.5s ease-in-out;
   background-color: #141414;
 }
 
@@ -47,10 +56,10 @@ export default {
 .modal-card-title {
   position: fixed;
   z-index: 2;
-  top: 65%;
-  margin: 10px;
-  font-size: calc(8px + 0.5vw);
-  text-shadow: 1vw 1vw 1vw #141414;
+  top: 0;
+  margin: 0.8vw calc(5px + 0.5vw);
+  font-size: calc(10px + 0.5vw);
+  text-shadow: 1px 1px 1px #141414;
 
   cursor: pointer;
   -o-transition: all 0.4s ease-in-out;

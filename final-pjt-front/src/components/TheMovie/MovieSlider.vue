@@ -1,11 +1,19 @@
 <template>
   <div class="slideshow-container">
     <div class="mySlides fade">
-      <img
-        class="backImages"
-        :src="require(`@/assets/images/${movies[slideIndex]}`)"
-        alt=""
-      />
+      <div id="content">
+        <div id="canvas"></div>
+
+        <div id="water-ripples">
+          <img
+            class="backImages"
+            :src="require(`@/assets/images/${movies[slideIndex]}`)"
+            alt="Photo by David Pisnoy on Unsplash"
+            crossorigin
+            data-sampler="planeTexture"
+          />
+        </div>
+      </div>
     </div>
     <!-- Next and previous buttons -->
     <p class="prev" @click="plusSlides(-1)">&#10094;</p>
@@ -24,7 +32,7 @@ export default {
         "everything-everywhere-all-at-once.jpeg",
         "Hobbit.jpg",
       ],
-      slideIndex: 0,
+      slideIndex: 1,
     };
   },
   methods: {
