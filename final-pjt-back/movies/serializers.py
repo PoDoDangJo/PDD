@@ -21,7 +21,8 @@ class DirectorSerializer(serializers.ModelSerializer):
 
         class Meta:
             model = Director
-            fields = ('name', 'profile_path', 'popularity')
+            fields = '__all__'
+            read_only_fields = ('movie',)
 
 
 class MovieListSerializer(serializers.ModelSerializer):
