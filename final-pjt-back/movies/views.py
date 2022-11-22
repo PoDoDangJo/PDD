@@ -119,7 +119,7 @@ def rate_likes(request, rate_pk):
 @api_view(['GET'])
 def movie_search(request, words_target):
     print(words_target)
-    movies = Movie.objects.filter(title__startswith=words_target)
+    movies = Movie.objects.filter(title__contains=words_target)
     serializers = MovieListSerializer(movies[:10], many=True)
     return Response(serializers.data)
 
