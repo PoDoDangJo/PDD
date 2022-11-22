@@ -707,7 +707,7 @@ class RipplesScene {
                 
                 // add fake lights & shadows
                 float lights = max(0.0, ripples.r - 0.5);
-                color.rgb += lights * (uLightIntensity / 10.0);
+                color.rgb += lights * (uLightIntensity / 12.0);
                 
                 float shadow = max(0.0, 1.0 - (ripples.r + 0.5));
                 color.rgb -= shadow * (uShadowIntensity / 10.0);
@@ -717,50 +717,6 @@ class RipplesScene {
         `;
   }
 
-  writeTitleCanvas(canvas) {
-    const title = document
-      .getElementById("water-ripples-title")
-      .querySelector("h1");
-    const titleStyle = window.getComputedStyle(title);
-
-    let titleTopPosition = title.offsetTop * this.curtains.pixelRatio;
-    // adjust small offset due to font interpretation?
-    titleTopPosition += title.clientHeight * this.curtains.pixelRatio * 0.1;
-
-    const planeBoundinRect = this.scenePlane.getBoundingRect();
-
-    const htmlPlaneWidth = planeBoundinRect.width;
-    const htmlPlaneHeight = planeBoundinRect.height;
-
-    // set sizes
-    canvas.width = htmlPlaneWidth;
-    canvas.height = htmlPlaneHeight;
-    let context = canvas.getContext("2d");
-
-    context.width = htmlPlaneWidth;
-    context.height = htmlPlaneHeight;
-
-    // draw our title with the original style
-    context.fillStyle = titleStyle.color;
-    context.font =
-      parseFloat(titleStyle.fontWeight) +
-      " " +
-      parseFloat(titleStyle.fontSize) * this.curtains.pixelRatio +
-      "px " +
-      titleStyle.fontFamily;
-    context.fontStyle = titleStyle.fontStyle;
-
-    context.textAlign = "center";
-
-    // vertical alignment
-    context.textBaseline = "top";
-    context.fillText(title.innerText, htmlPlaneWidth / 2, titleTopPosition);
-
-    if (this.scenePlane.textures && this.scenePlane.textures.length > 1) {
-      this.scenePlane.textures[1].resize();
-      this.scenePlane.textures[1].needUpdate();
-    }
-  }
 
   createScenePlane(rippleTexture) {
     // next we will create the plane that will display our result
@@ -813,123 +769,86 @@ class RipplesScene {
 
     this.scenePlane = this.curtains.addPlane(this.sceneElement, params);
 
-    // if the plane has been created
     if (this.scenePlane) {
-      const canvas = document.createElement("canvas");
-
-      canvas.setAttribute("data-sampler", "titleTexture");
-      canvas.style.display = "none";
 
       this.scenePlane.loadCanvas(canvas);
 
       this.scenePlane
-        .onLoading((texture) => {
-          texture.shouldUpdate = false;
-          if (this.scenePlane.canvases && this.scenePlane.canvases.length > 0) {
-            // title
-            if (document.fonts) {
-              document.fonts.ready.then(() => {
-                this.writeTitleCanvas(canvas);
-              });
-            } else {
-              setTimeout(() => {
-                this.writeTitleCanvas(canvas);
-              }, 750);
-            }
-          }
-        })
         .onReady(() => {
-          // create a texture that will hold our flowmap
           this.scenePlane.createTexture({
             sampler: "uRippleTexture",
             fromTexture: rippleTexture, // set it based on our ripples plane's texture
           });
         })
-        .onAfterResize(() => {
-          curtainsBBox = this.curtains.getBoundingRect();
-          this.scenePlane.uniforms.resolution.value = [
-            curtainsBBox.width,
-            curtainsBBox.height,
-          ];
-
-          this.writeTitleCanvas(canvas);
-        });
     }
   }
 }
 
 window.addEventListener("load", () => {
   const rippleScene = new RipplesScene({
-    viscosity: 4,
-    speed: 4,
-    size: 1,
-
-    displacementStrength: 1.5,
-    lightIntensity: 2,
-    shadowIntensity: 2,
   });
 });
 
-// card mouse interaction
-$(function () {
-  boxRollovers();
-});
+// // card mouse interaction
+// $(function () {
+//   boxRollovers();
+// });
 
-function boxRollovers() {
-  $selector = $("li");
-  XAngle = 0;
-  YAngle = 0;
-  Z = 50;
+// function boxRollovers() {
+//   $selector = $("li");
+//   XAngle = 0;
+//   YAngle = 0;
+//   Z = 50;
 
-  $selector.on("mousemove", function (e) {
-    var $this = $(this);
-    var XRel = e.pageX - $this.offset().left;
-    var YRel = e.pageY - $this.offset().top;
-    var width = $this.width();
+//   $selector.on("mousemove", function (e) {
+//     var $this = $(this);
+//     var XRel = e.pageX - $this.offset().left;
+//     var YRel = e.pageY - $this.offset().top;
+//     var width = $this.width();
 
-    YAngle = -(0.5 - XRel / width) * 40;
-    XAngle = (0.5 - YRel / width) * 40;
-    updateView($this.children(".icon"));
-  });
+//     YAngle = -(0.5 - XRel / width) * 40;
+//     XAngle = (0.5 - YRel / width) * 40;
+//     updateView($this.children(".icon"));
+//   });
 
-  $selector.on("mouseleave", function () {
-    oLayer = $(this).children(".icon");
-    oLayer.css({
-      transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
-      transition: "all 150ms linear 0s",
-      "-webkit-transition": "all 150ms linear 0s",
-    });
-    oLayer.find("strong").css({
-      transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
-      transition: "all 150ms linear 0s",
-      "-webkit-transition": "all 150ms linear 0s",
-    });
-  });
-}
+//   $selector.on("mouseleave", function () {
+//     oLayer = $(this).children(".icon");
+//     oLayer.css({
+//       transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
+//       transition: "all 150ms linear 0s",
+//       "-webkit-transition": "all 150ms linear 0s",
+//     });
+//     oLayer.find("strong").css({
+//       transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
+//       transition: "all 150ms linear 0s",
+//       "-webkit-transition": "all 150ms linear 0s",
+//     });
+//   });
+// }
 
-function updateView(oLayer) {
-  oLayer.css({
-    transform:
-      "perspective(525px) translateZ(" +
-      Z +
-      "px) rotateX(" +
-      XAngle +
-      "deg) rotateY(" +
-      YAngle +
-      "deg)",
-    transition: "none",
-    "-webkit-transition": "none",
-  });
-  oLayer.find("strong").css({
-    transform:
-      "perspective(525px) translateZ(" +
-      Z +
-      "px) rotateX(" +
-      XAngle / 0.66 +
-      "deg) rotateY(" +
-      YAngle / 0.66 +
-      "deg)",
-    transition: "none",
-    "-webkit-transition": "none",
-  });
-}
+// function updateView(oLayer) {
+//   oLayer.css({
+//     transform:
+//       "perspective(525px) translateZ(" +
+//       Z +
+//       "px) rotateX(" +
+//       XAngle +
+//       "deg) rotateY(" +
+//       YAngle +
+//       "deg)",
+//     transition: "none",
+//     "-webkit-transition": "none",
+//   });
+//   oLayer.find("strong").css({
+//     transform:
+//       "perspective(525px) translateZ(" +
+//       Z +
+//       "px) rotateX(" +
+//       XAngle / 0.66 +
+//       "deg) rotateY(" +
+//       YAngle / 0.66 +
+//       "deg)",
+//     transition: "none",
+//     "-webkit-transition": "none",
+//   });
+// }
