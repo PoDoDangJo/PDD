@@ -52,17 +52,24 @@ class Characters(models.Model):
     character_name = models.CharField(max_length=100, null=True)
 
 
-class Comment(models.Model):
-    movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movie_comment")
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="movie_comment")
-    content = models.TextField(max_length=200)
-    spoiler = models.BooleanField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    like_users = models.ManyToManyField(User, related_name='like_movie_comment')
-
-
 class Rating(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='ratings')
     rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comment = models.TextField(null=True)
+    spoiler = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    like_users = models.ManyToManyField(User, related_name='like_rating')
+
+
+# class Comment(models.Model):
+#     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movie_comment")
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="movie_comment")
+#     content = models.TextField(max_length=200)
+#     spoiler = models.BooleanField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     like_users = models.ManyToManyField(User, related_name='like_movie_comment')
+
+
