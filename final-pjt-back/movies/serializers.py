@@ -29,26 +29,25 @@ class MovieListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-        read_only_fields = ('movie_id', 'user_id', 'like_users')  # 유효성 검사에서 빼서 읽기전용필드로 만들기
+# class CommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = '__all__'
+#         read_only_fields = ('movie_id', 'user_id', 'like_users')  # 유효성 검사에서 빼서 읽기전용필드로 만들기
 
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
-        read_only_fields = ('movie_id', 'user_id',)
+        read_only_fields = ('movie_id', 'user_id', 'like_users')
 
 
 class MovieSerializer(serializers.ModelSerializer):
     genre_ids = GenreSerializer(many=True, read_only=True)
     director = DirectorSerializer(many=True, read_only=True)
-    rating = RatingSerializer(many=True, read_only=True)
-    comment_set = CommentSerializer(many=True, read_only=True)
-    comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
+    rating_set = RatingSerializer(many=True, read_only=True)
+    rating_count = serializers.IntegerField(source='rating_set.count', read_only=True)
 
     class Meta:
         model = Movie

@@ -2,6 +2,8 @@ import requests
 import re
 import datetime
 import random
+from django.db.models import Q
+
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -14,7 +16,9 @@ from .serializers import *
 from .models import *
 
 
-@api_view(['GET', 'POST'])
+# movie
+
+@api_view(['GET'])
 def movie_list(request):
     if request.method == 'GET':
         movie = get_list_or_404(Movie)
@@ -30,41 +34,33 @@ def movie_detail(request, movie_pk):
         return Response(serializer.data)
 
 
+# rating
+
 @api_view(['GET'])
-def comment_list(request):
+def rates_list(request):
     if request.method == 'GET':
-        comment = get_list_or_404(Comment)
-        serializer = CommentSerializer(comment, many=True)
+        rating = get_list_or_404(Rating)
+        serializer = RatingSerializer(rating, many=True)
         return Response(serializer.data)
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
-def comment_detail(request, comment_pk):
-    comment = get_object_or_404(Comment, pk=comment_pk)
+def rate_detail(request, rate_pk):
+    rating = get_object_or_404(Rating, pk=rate_pk)
 
     if request.method == 'GET':
-        serializer = CommentSerializer(comment)
+        serializer = RatingSerializer(rating)
         return Response(serializer.data)
 
     elif request.method == 'DELETE':
-        comment.delete()
+        Rating.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
-        serializer = CommentSerializer(comment, data=request.data)
+        serializer = RatingSerializer(rating, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
-
-
-@api_view(['POST'])
-def comment_create(request, movie_pk):
-    movie = get_object_or_404(Movie, pk=movie_pk)
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user_id=request.user, movie_id=movie)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 @api_view(['POST'])
 def movie_rates(request, movie_pk):
@@ -90,14 +86,14 @@ def movie_rates(request, movie_pk):
 
 
 @api_view(['POST'])
-def comment_likes(request, comment_pk):
+def rate_likes(request, rate_pk):
     if request.user.is_authenticated:
-        comment = get_object_or_404(Comment, pk=comment_pk)
-        if comment.like_users.filter(pk=request.user.pk).exists():
-            comment.like_users.remove(request.user)
+        rating = get_object_or_404(Rating, pk=rate_pk)
+        if rating.like_users.filter(pk=request.user.pk).exists():
+            rating.like_users.remove(request.user)
             is_liked = False
         else:
-            comment.like_users.add(request.user)
+            rating.like_users.add(request.user)
             is_liked = True
         context = {
             'is_liked': is_liked,
@@ -122,8 +118,27 @@ def comment_likes(request, comment_pk):
 # 영화 검색
 @api_view(['GET'])
 def movie_search(request, words_target):
+    print(words_target)
     movies = Movie.objects.filter(title__startswith=words_target)
-    serializers = MovieListSerializer(movies[:15], many=True)
+    serializers = MovieListSerializer(movies[:10], many=True)
+    return Response(serializers.data)
+
+# 배우 검색
+
+# 감독 검색
+
+# 연관 영화 검색
+# -기준 : 인기도 상위 3개
+@api_view(['GET'])
+def movie_similar(request, movie_pk):
+    similar_movies_id = Movie.objects.filter(id=movie_pk).values()
+    print('ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅ')
+    print(similar_movies_id)
+    print('ㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅅㅇㅅ')
+    movie_similar = Movie.objects.filter(id__in = similar_movies_id)
+    print(movie_similar)
+    print('################################')
+    serializers = MovieListSerializer(movie_similar, many=True)
     return Response(serializers.data)
 
 

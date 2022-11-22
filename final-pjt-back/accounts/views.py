@@ -61,29 +61,29 @@ def user_delete(request, username):
 
 
 
-@require_POST
-def follow(request, username):
-    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    if request.user.is_authenticated:
-        User = get_user_model()
-        me = request.user
-        you = User.objects.get(pk=user_pk)
-        print('ㅇㅅㅇ')
-        print(you)
-        print(me)
-        print('ㅇㅁㅇ')
-        if me != you:
-            if you.followers.filter(pk=me.pk).exists():
-                you.followers.remove(me)
-                is_followed = False
-            else:
-                you.followers.add(me)
-                is_followed = True
-            context = {
-                'is_followed': is_followed,
-                'followers_count': you.followers.count(),
-                'followings_count': you.followings.count(),
-            }
-            return JsonResponse(context)
-    context = {}
-    return JsonResponse(context)
+# @require_POST
+# def follow(request, username):
+#     print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+#     if request.user.is_authenticated:
+#         User = get_user_model()
+#         me = request.user
+#         you = User.objects.get(pk=user_pk)
+#         print('ㅇㅅㅇ')
+#         print(you)
+#         print(me)
+#         print('ㅇㅁㅇ')
+#         if me != you:
+#             if you.followers.filter(pk=me.pk).exists():
+#                 you.followers.remove(me)
+#                 is_followed = False
+#             else:
+#                 you.followers.add(me)
+#                 is_followed = True
+#             context = {
+#                 'is_followed': is_followed,
+#                 'followers_count': you.followers.count(),
+#                 'followings_count': you.followings.count(),
+#             }
+#             return JsonResponse(context)
+#     context = {}
+#     return JsonResponse(context)
