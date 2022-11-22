@@ -1,6 +1,7 @@
 import requests
 import re
 import datetime
+import random
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -105,12 +106,25 @@ def comment_likes(request, comment_pk):
     context = {}
     return JsonResponse(context)
 
+# @api_view(['GET'])
+# def movie_random(request):
+#     movies = []
+#     # for num in random.sample(list(range(1045945)), 15):
+#     for num in random.sample(list(range(400000)), 15):
+#         movies.append(Movie.objects.get(pk=num))
+#     print('ㅇㅅㅇ')
+#     serializers = MovieListSerializer(movies, many=True)
+#     print('ㅇㅅㅇ')
+#     return Response(serializers.data)
+
+
+
 # 인기순 영화 필터
-# - 기준 : 전체에서 영화만
+# - 기준 : 전체에서 영화만, 15개
 @api_view(['GET'])
 def movie_popularity(request):
     movies = Movie.objects.all().order_by('-popularity')
-    serializers = MovieListSerializer(movies, many=True)
+    serializers = MovieListSerializer(movies[:15], many=True)
     return Response(serializers.data)
 
 # 고전 영화 필터
