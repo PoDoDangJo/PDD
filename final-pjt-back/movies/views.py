@@ -119,6 +119,14 @@ def comment_likes(request, comment_pk):
 
 
 
+# 영화 검색
+@api_view(['GET'])
+def movie_search(request, words_target):
+    movies = Movie.objects.filter(title__startswith=words_target)
+    serializers = MovieListSerializer(movies[:15], many=True)
+    return Response(serializers.data)
+
+
 # 인기순 영화 필터
 # - 기준 : 전체에서 영화만, 15개
 @api_view(['GET'])
@@ -134,7 +142,7 @@ def movie_classic(request):
     start_date = datetime.date(1000, 1, 1)
     end_date = datetime.date(1999, 12, 31)
     movies = Movie.objects.filter(release_date__range=(start_date, end_date)).exclude(trailer_youtube_key='nothing').order_by('-vote_average')
-    serializers = MovieListSerializer(movies[:20], many=True)
+    serializers = MovieListSerializer(movies[:15], many=True)
     return Response(serializers.data)
 
 ############################################################################################
