@@ -1,7 +1,6 @@
 import requests
 import re
 import datetime
-import random
 from django.db.models import Q, F
 
 
@@ -102,24 +101,25 @@ def rate_likes(request, rate_pk):
     context = {}
     return JsonResponse(context)
 
-# @api_view(['GET'])
-# def movie_random(request):
-#     movies = []
-#     # for num in random.sample(list(range(1045945)), 15):
-#     for num in random.sample(list(range(400000)), 15):
-#         movies.append(Movie.objects.get(pk=num))
-#     print('ㅇㅅㅇ')
-#     serializers = MovieListSerializer(movies, many=True)
-#     print('ㅇㅅㅇ')
-#     return Response(serializers.data)
+@api_view(['GET'])
+def movie_random(request):
+    movies = Movie.objects.all().order_by('?')
+    serializers = MovieListSerializer(movies[:15], many=True)
+    return Response(serializers.data)
 
 
 
 # 영화 검색
-@api_view(['GET'])
+@api_view(['GET']) 
 def movie_search(request, words_target):
-    print(words_target)
-    movies = Movie.objects.filter(title__contains=words_target)
+    test = Movie.objects.values()
+    print(test)
+    movies = Movie.objects.annotate(
+        
+    )
+    filter(Q(title__contains=words_target)) | Q(actors__name__contains=words_target) | Q(director=words_target)
+    
+    
     serializers = MovieListSerializer(movies[:10], many=True)
     return Response(serializers.data)
 

@@ -10,8 +10,8 @@ urlpatterns = [
     
     # 영화 검색
     path('', views.movie_list),
-    # path('movies/random/', views.movie_random),
     path('data/', views.data),
+    path('movies/random/', views.movie_random),  # 랜덤 영화
     path('movies/<int:movie_pk>/', views.movie_detail),
     path('movies/popularity/', views.movie_popularity),  # 인기영화
     path('movies/classic/', views.movie_classic),  # 고전영화
