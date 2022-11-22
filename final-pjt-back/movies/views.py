@@ -112,6 +112,8 @@ def movie_random(request):
 # 영화 검색
 @api_view(['GET']) 
 def movie_search(request, words_target):
+    test = Movie.objects.values()
+    print(test)
     movies = Movie.objects.annotate(
         
     )
