@@ -1,9 +1,41 @@
 <template>
   <div class="modal" id="modal-container">
     <div class="overlay" @click="closeCreateReviewModal"></div>
-
     <div class="modal-card">
-      <form @submit.prevent="createReview">
+        <h1>게시글 작성!</h1>
+      <div class="article_conainer">
+        <textarea
+          name="article_title"
+          placeholder="제목을 입력해주세용."
+          class="article"
+          maxlength="100"
+          v-model="aritcleTitle"
+          rows="4"
+        />
+      </div><br>
+      <div class="article_conainer">
+      <textarea
+        name="article_content"
+        placeholder="내용을 입력해 주세용."
+        class="article"
+        maxlength="1000"
+        v-model="articleContent"
+        rows="4"
+      />
+      <div class="spolier__box">
+        <input
+          type="checkbox"
+          id="spolier-check"
+          name="spolier"
+          v-model="isSpolier"
+        />
+        <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
+      </div>
+      <button class="article_button btn__color">게시글 작성</button>
+    </div>
+    <br />
+    <div class="articles_conainer"></div>
+      <!-- <form @submit.prevent="createReview">
         <input
           type="text"
           placeholder="제목을 입력하세요."
@@ -20,7 +52,7 @@
         />
         <br />
         <button>게시글 작성</button>
-      </form>
+      </form> -->
     </div>
   </div>
 </template>
@@ -30,8 +62,8 @@ export default {
   name: "CreateReviewModal",
   data() {
     return {
-      title: null,
-      content: null,
+      aritcleTitle: null,
+      articleContent: null,
     };
   },
   methods: {
@@ -40,8 +72,8 @@ export default {
     },
     createReview() {
       const payload = {
-        title: this.title,
-        content: this.content,
+        title: this.aritcleTitle,
+        content: this.articleContent,
         spoiler: 0,
       };
       this.$store.dispatch("createReview", payload);
@@ -84,6 +116,9 @@ overlay {
   min-height: 500px;
   z-index: 10;
   border-radius: 5px;
+
+  /* display: flex;
+  justify-content: center; */
 }
 
 .modal-card-back-drop {
@@ -146,5 +181,95 @@ overlay {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+/* 붙여오기 한 부분 */
+.detail__article {
+  width: calc(100% - 20px);
+  margin: 2vw;
+}
+.spolier__box {
+  font-size: calc(6px + 0.3vw);
+  color: #a261f5;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.article_conainer {
+  width: 90%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid rgb(238, 238, 238);
+  background-color: #fff;
+}
+.article {
+  border: none;
+
+  outline: none;
+  min-width: 200px;
+  max-width: 800px;
+  resize: none;
+}
+
+.article_info {
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.count-length {
+  font-size: calc(4px + 0.5vw);
+  width: 92%;
+  display: flex;
+  justify-content: end;
+}
+
+.article_button {
+  width: 100%;
+
+  font-size: calc(8px + 0.5vw);
+  font-weight: 400;
+  color: #fff;
+  cursor: pointer;
+
+  height: 40px;
+  text-align: center;
+  border: none;
+  background-size: 500% 100%;
+
+  border-radius: 5px;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
+.article_button:hover {
+  background-position: 100% 0;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.8s ease-in-out;
+}
+
+.article_button.btn__color {
+  background-image: linear-gradient(
+    to right,
+    #a261f5,
+    #614af2,
+    #a261f5,
+    #dddcfb,
+    #a261f5,
+    #614af2,
+    #a261f5
+  );
+}
+
+.articles_conainer {
+  width: 90%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid rgb(0, 0, 0, 0.6);
 }
 </style>
