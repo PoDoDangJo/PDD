@@ -32,7 +32,7 @@
             </button>
           </div>
           <DetailInfo v-if="infoPage" />
-          <DetailComments v-else-if="commentPage" />
+          <DetailComments v-else-if="commentPage" :movie="movie" />
           <DetailSimilar
             v-else-if="similarPage"
             :similarMovieIds="similarMovieIds"

@@ -25,6 +25,7 @@ export default new Vuex.Store({
     popularityMovies: [],
     classicMovies: [],
     allReviews: [],
+    allRates: [],
     isModal: null,
     movieDetailModalStatus: { isActive: false, movie: null },
     reviewDetailModalStatus: { isActive: false, review: null },
@@ -62,6 +63,9 @@ export default new Vuex.Store({
       state.userInfo = userInfo;
       console.log(userInfo);
     },
+    GET_RATES(state, rates) {
+      state.allRates = rates;
+    },
     DETAIL_MODAL_TOGGLE(state, movieDetailModalStatus) {
       state.isModal = !state.isModal;
       state.movieDetailModalStatus = movieDetailModalStatus;
@@ -76,6 +80,9 @@ export default new Vuex.Store({
     },
     GET_REVIEWS(state, reviews) {
       state.allReviews = reviews;
+    },
+    CREATE_MOVIE_RATE(state, rates) {
+      state.allRates = rates;
     },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
@@ -268,6 +275,22 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getComments(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v2/comments/`,
+        headers: {
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          context.commit("GET_COMMENTS", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     openDetailModal(context, id) {
       axios({
         method: "get",
@@ -368,6 +391,52 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getRates(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/rates/`,
+        headers: {
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((response) => {
+          const movie_id = context.state.movieDetailModalStatus.movie.id;
+          const rates = response.data.filter((rate) => {
+            if (rate.movie_id == movie_id) {
+              return rate;
+            }
+          });
+          console.log(rates);
+          context.commit("GET_RATES", rates);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    createMovieRate(context, payload) {
+      axios({
+        method: "post",
+        url: `${API_URL}/api/v1/movies/${payload.movie_id}/rates/`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+        data: {
+          rate: payload.rate,
+          comment: payload.comment,
+          spoiler: payload.spoiler,
+          movie_id: payload.movie_id,
+          user_id: context.state.userInfo.id,
+        },
+      })
+        .then((response) => {
+          const rates = response.data;
+          context.commit("CREATE_MOVIE_RATE", rates);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");
     },
@@ -450,21 +519,21 @@ export default new Vuex.Store({
     },
     getSearch(context, searchData) {
       axios({
-        method: 'get',
-        url: `${API_URL}/api/v1/movies/search/${searchData}`
-        
+        method: "get",
+        url: `${API_URL}/api/v1/movies/search/${searchData}`,
       })
-      .then((response) => {
-        if (response.data.length == 0) {
-          alert('일치하는 영화를 찾을 수 없습니다.')
-        } else {
-          console.log(response)
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    }
+        .then((response) => {
+          if (response.data.length == 0) {
+            alert("일치하는 영화를 찾을 수 없습니다.");
+          } else {
+            console.log(response);
+            context.commit("GET_SEARCH", response.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   modules: {
     // accounts, articles, movies

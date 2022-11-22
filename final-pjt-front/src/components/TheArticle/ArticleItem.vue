@@ -17,15 +17,21 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "ArticleItem",
   props: {
     review: Object,
   },
   methods: {
+    ...mapActions(["getComments"]),
     openReviewModal() {
       this.$store.dispatch("openReviewModal", this.review.id);
     },
+  },
+  created() {
+    this.getComments();
   },
 };
 </script>
