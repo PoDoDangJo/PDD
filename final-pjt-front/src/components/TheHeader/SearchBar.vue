@@ -1,12 +1,17 @@
 <template>
   <div class="wrap">
     <div class="search">
-      <input type="text" class="searchTerm" placeholder="Search" />
-      <button type="submit" class="searchButton">
+      <input
+        type="text"
+        class="searchTerm"
+        placeholder="Search"
+        v-model="searchData"
+      />
+      <button type="submit" class="searchButton" @click="getSearch">
         <img
           class="seach__button__icon"
           src="@/assets/icons/search.png"
-          alt=""
+          alt="search"
         />
       </button>
     </div>
@@ -16,6 +21,25 @@
 <script>
 export default {
   name: "SearchBar",
+  data() {
+    return {
+      searchData: null,
+    };
+  },
+  computed: {
+    searchDataLength() {
+      return this.searchData.length;
+    },
+  },
+  methods: {
+    getSearch() {
+      if (this.searchDataLength >= 2) {
+        this.$store.dispatch("getSearch", this.searchData);
+      } else {
+        alert("최소 두 글자 이상의 단어로 검색해 주세요.");
+      }
+    },
+  },
 };
 </script>
 
@@ -48,8 +72,8 @@ button {
     #dddcfb, */
 
 .searchButton {
-  width: 40px;
-  height: 2rem;
+  width: 5vw;
+  height: 2vw;
   border: 3px solid #614af2;
   background: #614af2;
   text-align: center;

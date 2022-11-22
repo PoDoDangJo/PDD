@@ -6,15 +6,10 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "MovieListItem",
   props: {
     movie: Object,
-  },
-  data() {
-    return {};
   },
   computed: {},
   methods: {
@@ -60,6 +55,7 @@ li {
   margin: 0.8vw calc(5px + 0.5vw);
   font-size: calc(10px + 0.5vw);
   text-shadow: 1px 1px 1px #141414;
+  max-width: 200px;
 
   cursor: pointer;
   -o-transition: all 0.4s ease-in-out;

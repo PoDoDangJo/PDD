@@ -84,7 +84,7 @@ export default {
   top: 0;
   z-index: 10;
   opacity: 0.5;
-  background-color: black;
+  background-color: #141414;
 }
 
 .login__info {
