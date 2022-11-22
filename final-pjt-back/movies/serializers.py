@@ -6,7 +6,8 @@ class ActorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Actor
-        fields = ('name', 'profile_path', 'popularity')
+        fields = '__all__'
+        read_only_fields = ('id',)
 
 
 class GenreSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ import requests
 import re
 import datetime
 import random
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 from rest_framework.response import Response
@@ -123,23 +123,35 @@ def movie_search(request, words_target):
     serializers = MovieListSerializer(movies[:10], many=True)
     return Response(serializers.data)
 
+
 # 배우 검색
+@api_view(['GET'])
+def movie_actors(request, movie_pk):
+    actors = Characters.objects.annotate(
+        name = F('actor_id__name'),
+        profile_path = F('actor_id__profile_path'),
+        popularity = F('actor_id__popularity')
+        ).values(
+            'character_name', 'actor_id', 'name', 'profile_path', 'popularity'
+            ).filter(movie_id=movie_pk)
+    serializers = ActorSerializer(actors, many=True)
+    return Response(serializers.data)
+
+
 
 # 감독 검색
 
-# 연관 영화 검색
+
+
+
+# 비슷한 영화 검색
 # -기준 : 인기도 상위 3개
-@api_view(['GET'])
-def movie_similar(request, movie_pk):
-    similar_movies_id = Movie.objects.filter(id=movie_pk).values()
-    print('ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅ')
-    print(similar_movies_id)
-    print('ㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅅㅇㅅ')
-    movie_similar = Movie.objects.filter(id__in = similar_movies_id)
-    print(movie_similar)
-    print('################################')
-    serializers = MovieListSerializer(movie_similar, many=True)
-    return Response(serializers.data)
+# @api_view(['GET'])
+# def movie_similar(request, movie_pk):
+#     similar_movies_id = Movie.objects.filter(id=movie_pk).values()
+#     movie_similar = Movie.objects.filter(id__in = similar_movies_id)
+#     serializers = MovieListSerializer(movie_similar, many=True)
+#     return Response(serializers.data)
 
 
 # 인기순 영화 필터
