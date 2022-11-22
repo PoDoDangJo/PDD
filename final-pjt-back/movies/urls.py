@@ -20,7 +20,7 @@ urlpatterns = [
 
     # 영화 요소 검색
     path('actors/<movie_pk>/', views.movie_actors),  # 영화별 배우검색
-    # path('director/', views.director),  # 영화별 감독검색
+    path('director/<movie_pk>/', views.movie_directors),  # 영화별 감독검색
 
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')

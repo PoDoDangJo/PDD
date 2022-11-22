@@ -119,7 +119,7 @@ def rate_likes(request, rate_pk):
 @api_view(['GET'])
 def movie_search(request, words_target):
     print(words_target)
-    movies = Movie.objects.filter(title__startswith=words_target)
+    movies = Movie.objects.filter(title__contains=words_target)
     serializers = MovieListSerializer(movies[:10], many=True)
     return Response(serializers.data)
 
@@ -138,10 +138,13 @@ def movie_actors(request, movie_pk):
     return Response(serializers.data)
 
 
-
 # 감독 검색
-
-
+@api_view(['GET'])
+def movie_directors(request, movie_pk):
+    movie = Movie.objects.get(pk=movie_pk)
+    movie.director.values()
+    serializers = DirectorSerializer(movie.director, many=True)
+    return Response(serializers.data)
 
 
 # 비슷한 영화 검색
