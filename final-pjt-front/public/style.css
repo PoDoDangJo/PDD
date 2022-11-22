@@ -1,4 +1,7 @@
 /*** layout ***/
+html {
+  scroll-behavior: smooth;
+}
 
 .icon {
   font-size: 200%;

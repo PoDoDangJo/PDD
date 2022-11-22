@@ -717,7 +717,6 @@ class RipplesScene {
         `;
   }
 
-
   createScenePlane(rippleTexture) {
     // next we will create the plane that will display our result
     let curtainsBBox = this.curtains.getBoundingRect();
@@ -770,23 +769,20 @@ class RipplesScene {
     this.scenePlane = this.curtains.addPlane(this.sceneElement, params);
 
     if (this.scenePlane) {
-
       this.scenePlane.loadCanvas(canvas);
 
-      this.scenePlane
-        .onReady(() => {
-          this.scenePlane.createTexture({
-            sampler: "uRippleTexture",
-            fromTexture: rippleTexture, // set it based on our ripples plane's texture
-          });
-        })
+      this.scenePlane.onReady(() => {
+        this.scenePlane.createTexture({
+          sampler: "uRippleTexture",
+          fromTexture: rippleTexture, // set it based on our ripples plane's texture
+        });
+      });
     }
   }
 }
 
 window.addEventListener("load", () => {
-  const rippleScene = new RipplesScene({
-  });
+  const rippleScene = new RipplesScene({});
 });
 
 // // card mouse interaction

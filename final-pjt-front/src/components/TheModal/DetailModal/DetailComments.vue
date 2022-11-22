@@ -1,7 +1,7 @@
 <template>
   <div class="detail__comments">
     <div class="comment_info">
-      <StarRate class="star__container" />
+      <StarRate class="star__container" @rating="rating" />
       <p class="count-length">{{ commentLength }} / 200</p>
     </div>
     <div class="comment_conainer">
@@ -22,31 +22,61 @@
         />
         <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
       </div>
-      <button class="comment_button btn__color">댓글 작성</button>
+      <button class="comment_button btn__color" @click="createMovieRate">
+        댓글 작성
+      </button>
     </div>
     <br />
-    <div class="comments_conainer"></div>
+    <div class="comments_conainer">
+      <DetailCommentItem v-for="rate in rates" :key="rate.id" :rate="rate" />
+    </div>
   </div>
 </template>
 
 <script>
 import StarRate from "@/components/StarRate";
+import DetailCommentItem from "@/components/TheModal/DetailModal/DetailCommentItem";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "DetailComments",
+  props: {
+    movie: Object,
+  },
   components: {
     StarRate,
+    DetailCommentItem,
   },
   data() {
     return {
+      score: "5",
       movieComment: "",
       isSpolier: false,
     };
   },
-  computed: {
+  computed: mapState({
+    rates: (state) => state.allRates,
     commentLength() {
       return String(this.movieComment).length;
     },
+  }),
+  methods: {
+    ...mapActions(["getRates"]),
+    createMovieRate() {
+      const payload = {
+        movie_id: this.movie.id,
+        rate: this.score,
+        comment: this.movieComment,
+        spoiler: this.isSpolier,
+      };
+      this.$store.dispatch("createMovieRate", payload);
+    },
+    rating(score) {
+      console.log(score);
+    },
+  },
+  mounted() {
+    this.getRates();
   },
 };
 </script>
