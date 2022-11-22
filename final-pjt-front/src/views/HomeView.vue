@@ -3,9 +3,12 @@
     <TheHeader />
     <MovieSlider />
     <div class="slider__list">
-      <MovieList :msg="'최근 개봉 영화'" :movies="movieLastOne" />
+      <MovieList :msg="'최근 개봉 영화'" :movies="lastMovies" />
       <MovieList :msg="'인기 영화'" :movies="popularityMovies" />
-      <MovieList :msg="'추천 영화'" />
+      <MovieList :msg="'고전 명작'" :movies="classicMovies" class="ester_egg" />
+    </div>
+    <div id="post-2">
+      <div class="entry-title"></div>
     </div>
   </div>
 </template>
@@ -27,15 +30,10 @@ export default {
   },
   computed: {
     ...mapState({
-      popularityMovies: (state) => state.popularityMovies,
+      lastMovies: (state) => state.allMovies.slice(5, 10),
+      popularityMovies: (state) => state.popularityMovies.slice(5, 10),
+      classicMovies: (state) => state.classicMovies.slice(0, 5),
     }),
-
-    movieLastOne() {
-      return this.$store.getters.Movie_Last_1;
-    },
-    movieLastTwo() {
-      return this.$store.getters.Movie_Last_2;
-    },
   },
   methods: {
     inToHome() {
@@ -52,5 +50,9 @@ export default {
 .slider__list {
   position: absolute;
   top: 40vw;
+}
+
+.ester_egg:active {
+  color: red;
 }
 </style>

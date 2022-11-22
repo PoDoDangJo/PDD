@@ -23,6 +23,7 @@ export default new Vuex.Store({
   state: {
     allMovies: [],
     popularityMovies: [],
+    classicMovies: [],
     allReviews: [],
     isModal: null,
     movieDetailModalStatus: { isActive: false, movie: null },
@@ -40,12 +41,6 @@ export default new Vuex.Store({
     isLogin(state) {
       return state.token ? true : false;
     },
-    Movie_Last_1(state) {
-      return state.allMovies.slice(0, 5);
-    },
-    Movie_Last_2(state) {
-      return state.allMovies.slice(5, 10);
-    },
     isCommunity(state) {
       return state.isCommunity ? true : false;
     },
@@ -59,6 +54,9 @@ export default new Vuex.Store({
     },
     GET_POPULERITY_MOVIES(state, movies) {
       state.popularityMovies = movies;
+    },
+    GET_CLASSIC_MOVIES(state, movies) {
+      state.classicMovies = movies;
     },
     GET_USER_PROFILE(state, userInfo) {
       state.userInfo = userInfo;
@@ -179,6 +177,20 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getSimilarMovie(context, id) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/${id}`,
+      })
+        .then((response) => {
+          const similarMoviePoster = TMDB_URL + response.data.poster_path;
+
+          context.commit("GET_SIMILAR_MOVIE", similarMoviePoster);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getPopularityMovies(context) {
       axios({
         method: "get",
@@ -201,6 +213,28 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getClassicMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/classic/`,
+        // headers: {
+        //   // 인증 여부를 확인하기 위한 Token을 담아서 요청
+        //   Authorization: `Token ${ context.state.token }`
+        // }
+      })
+        .then((response) => {
+          // 이미지를 불러오기 위한 URL 추가 작업
+          const movies = response.data.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          });
+          context.commit("GET_CLASSIC_MOVIES", movies);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getReviews(context) {
       axios({
         method: "get",
@@ -214,7 +248,9 @@ export default new Vuex.Store({
           context.commit("GET_REVIEWS", reviews);
         })
         .catch((error) => {
-          console.log(error);
+          if (error.data) {
+            console.log(error.data);
+          }
         });
     },
     getUserProfile(context) {
@@ -412,6 +448,23 @@ export default new Vuex.Store({
     inToCommunity(context) {
       context.commit("IN_TO_COMMUNITY");
     },
+    getSearch(context, searchData) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/api/v1/movies/search/${searchData}`
+        
+      })
+      .then((response) => {
+        if (response.data.length == 0) {
+          alert('일치하는 영화를 찾을 수 없습니다.')
+        } else {
+          console.log(response)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   },
   modules: {
     // accounts, articles, movies

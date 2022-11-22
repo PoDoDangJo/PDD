@@ -14,7 +14,7 @@
       :review="reviewDetailModalStatus.review"
     />
     <!-- 메인 -->
-    <main :class="{ isBlur: isModal }">
+    <main :class="{ is__blur: isModal }">
       <router-view />
     </main>
   </div>
@@ -50,13 +50,19 @@ export default {
     createReviewModalStatus: (state) => state.createReviewModalStatus,
   }),
   methods: {
-    ...mapActions(["getMovies", "getReviews", "getPopularityMovies"]),
+    ...mapActions([
+      "getMovies",
+      "getReviews",
+      "getPopularityMovies",
+      "getClassicMovies",
+    ]),
   },
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
     this.getMovies();
     this.getReviews();
     this.getPopularityMovies();
+    this.getClassicMovies();
   },
 };
 </script>
@@ -64,6 +70,7 @@ export default {
 <style>
 #app {
   scroll-behavior: smooth;
+  z-index: 9;
 }
 
 /* 스크롤바 안보이게 */
@@ -72,7 +79,7 @@ export default {
 }
 
 /* 모달창 실행시 1초에 걸쳐 blur */
-.isBlur {
+.is__blur {
   transition: filter 1s;
   filter: blur(0.5rem);
 }

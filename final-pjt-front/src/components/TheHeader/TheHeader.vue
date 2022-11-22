@@ -21,7 +21,7 @@
     </nav>
     <div>
       <nav class="navbar">
-        <SearchBar />
+        <SearchBar class="search" />
         <!-- Token이 없을 경우 -->
         <div class="nav__text__box" v-if="!isLogin">
           <button class="nav__text" @click="openLogInModal">로그인</button>
@@ -101,11 +101,15 @@ ul {
 
 .search {
   position: fixed;
-  right: calc(110px + 7.5vw);
   top: calc(10px + 0.5vw);
   height: 2vw;
-  min-height: 12px;
   max-height: 20px;
+  opacity: 0.5;
+  transition: all 0.4s;
+}
+
+.search:hover {
+  opacity: 1;
 }
 
 .logo:hover {

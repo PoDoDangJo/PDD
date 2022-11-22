@@ -4,30 +4,39 @@
 
     <div class="modal-card">
       <div>
-        <header class="detailHeader">
+        <header class="detail-header">
           <h1>{{ movie?.title }}</h1>
         </header>
         <iframe
           class="trailer"
-          :src="`https://www.youtube.com/embed/${movie?.trailer_youtube_key}?autoplay=1&controls=0&disablekb=1&modestbranding=1`"
+          :src="`https://www.youtube.com/embed/${movie?.trailer_youtube_key}?autoplay=1&controls=0&disablekb=1&modestbranding=1&loop=1`"
           frameborder="0"
           allow="autoplay"
         ></iframe>
         <div class="detail__components">
           <div class="button__container">
-            <button :class="{ isActive: infoPage }" @click="infoPage()">
+            <button :class="{ is__active: infoPage }" @click="goInfoPage()">
               상세정보
             </button>
-            <button :class="{ isActive: commentPage }" @click="goCommentPage()">
+            <button
+              :class="{ is__active: commentPage }"
+              @click="goCommentPage()"
+            >
               사용자 평
             </button>
-            <button :class="{ isActive: similarPage }" @click="goSimilarPage()">
+            <button
+              :class="{ is__active: similarPage }"
+              @click="goSimilarPage()"
+            >
               관련영화
             </button>
           </div>
           <DetailInfo v-if="infoPage" />
           <DetailComments v-else-if="commentPage" />
-          <DetailSimilar v-else-if="similarPage" />
+          <DetailSimilar
+            v-else-if="similarPage"
+            :similarMovieIds="similarMovieIds"
+          />
         </div>
       </div>
     </div>
@@ -51,6 +60,9 @@ export default {
   },
   computed: mapState({
     movie: (state) => state.movieDetailModalStatus.movie,
+    similarMovieIds() {
+      return this.movie.movie_similar.slice(3);
+    },
   }),
   methods: {
     ...mapActions(["closeDetailModal"]),
@@ -114,7 +126,7 @@ export default {
   border-radius: 5px;
 }
 
-.detailHeader {
+.detail-header {
   position: absolute;
   width: 100%;
   z-index: 10;
@@ -126,6 +138,7 @@ export default {
 
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  font-size: calc(8px + 0.5vw);
 }
 
 h1 {
@@ -183,20 +196,33 @@ h1 {
   position: absolute;
   top: calc(100px + 20vw);
 
-  margin: 0 1vw;
+  width: 100%;
 }
 
 .button__container {
   display: flex;
   justify-content: space-between;
+
+  margin: 0 2vw;
+  margin-top: 1vw;
   align-items: center;
-  width: 200px;
+  width: calc(180px + 10vw);
+  min-width: 260px;
+  max-width: 800px;
+}
+
+.button__container > button {
+  font-size: calc(10px + 0.5vw);
+  cursor: pointer;
 }
 
 button {
-  font-size: calc(10px + 0.5vw);
   all: unset;
   text-align: center;
   color: #dddcfb;
+}
+
+.is__active {
+  color: #614af2;
 }
 </style>

@@ -38,7 +38,6 @@
           id="rating-3"
           value="3"
           type="radio"
-          checked
         />
         <label aria-label="4 stars" class="rating__label" for="rating-4"
           ><i class="rating__icon rating__icon--star fa fa-star"></i
@@ -59,6 +58,7 @@
           id="rating-5"
           value="5"
           type="radio"
+          checked
         />
       </div>
     </div>
@@ -75,6 +75,7 @@ export default {
 #full-stars-example {
   .rating__group {
     display: inline-flex;
+    margin-bottom: 1vw;
   }
 
   .rating__icon {
@@ -88,8 +89,8 @@ export default {
 
   .rating__label {
     cursor: pointer;
-    padding: 0 0.1em;
-    font-size: 2rem;
+    padding: 0 0.2vw;
+    font-size: calc(10px + 0.5vw);
   }
 
   .rating__icon--star {
@@ -98,10 +99,6 @@ export default {
 
   .rating__icon--none {
     color: #eee;
-  }
-
-  .rating__input--none:checked + .rating__label .rating__icon--none {
-    color: red;
   }
 
   .rating__input:checked ~ .rating__label .rating__icon--star {
@@ -114,19 +111,6 @@ export default {
 
   .rating__input:hover ~ .rating__label .rating__icon--star {
     color: #ddd;
-  }
-
-  /* make none icon grey on rating group hover */
-  .rating-group:hover
-    .rating__input--none:not(:hover)
-    + .rating__label
-    .rating__icon--none {
-    color: #eee;
-  }
-
-  /* make none icon red on hover */
-  .rating__input--none:hover + .rating__label .rating__icon--none {
-    color: red;
   }
 }
 </style>
