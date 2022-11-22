@@ -108,23 +108,18 @@ def movie_random(request):
     return Response(serializers.data)
 
 
-
 # 영화 검색
 @api_view(['GET']) 
 def movie_search(request, words_target):
     test = Movie.objects.values()
     print(test)
-    movies = Movie.objects.annotate(
-        
-    )
-    filter(Q(title__contains=words_target)) | Q(actors__name__contains=words_target) | Q(director=words_target)
-    
-    
+    movies = Movie.objects.filter(title__contains=words_target)
+    # annotate(filter(Q(title__contains=words_target))# | Q(actors__name__contains=words_target) | Q(director=words_target)
     serializers = MovieListSerializer(movies[:10], many=True)
     return Response(serializers.data)
 
 
-# 배우 검색
+# 영화 아이디로 배우 검색
 @api_view(['GET'])
 def movie_actors(request, movie_pk):
     actors = Characters.objects.annotate(
@@ -138,7 +133,7 @@ def movie_actors(request, movie_pk):
     return Response(serializers.data)
 
 
-# 감독 검색
+# 영화 아이디로 감독 검색
 @api_view(['GET'])
 def movie_directors(request, movie_pk):
     movie = Movie.objects.get(pk=movie_pk)
@@ -155,6 +150,19 @@ def movie_directors(request, movie_pk):
 #     movie_similar = Movie.objects.filter(id__in = similar_movies_id)
 #     serializers = MovieListSerializer(movie_similar, many=True)
 #     return Response(serializers.data)
+
+
+# 장르별 영화 추천
+@api_view(['GET'])
+def movie_random_genre(request):
+    # 장르를 랜덤하게 하나 선택한다.
+    genre = Genres.objects.all().order_by('?').values()[0]
+    print(genre.get('id'), genre.get('name'))
+    # 해당 영화를 검색해서 가져온다.
+    movies = Movie.objects.filter(genre_ids=genre.get('id'))
+    # 응답한다.(movielist로 보내면 될거같다.)
+    serializers = MovieListSerializer(movies[:15], many=True)
+    return Response(serializers.data)
 
 
 # 인기순 영화 필터

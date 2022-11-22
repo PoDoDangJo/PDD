@@ -15,6 +15,8 @@ urlpatterns = [
     path('movies/<int:movie_pk>/', views.movie_detail),
     path('movies/popularity/', views.movie_popularity),  # 인기영화
     path('movies/classic/', views.movie_classic),  # 고전영화
+    path('movies/random_genre/', views.movie_random_genre),  # 랜덤 장르 영화
+
     # path('movies/similar/<int:movie_pk>/', views.movie_similar),  # 비슷한 영화
     path('movies/search/<str:words_target>', views.movie_search),  # 영화 검색
 
