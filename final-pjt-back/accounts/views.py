@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth import logout as auth_logout
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from django.views.decorators.http import require_POST
 from rest_framework.response import Response
+from rest_framework import status
 from .serializers import UserProfileSerializer
 from django.http import JsonResponse
 
@@ -16,6 +18,13 @@ def profile(request, username):
         user = get_object_or_404(User, username=username)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+
+@api_view(['POST'])
+def user_delete(request, username):
+    if request.user.is_authenticated:
+        request.user.delete()
+        auth_logout(request)
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 # @api_view(['GET'])
 # def profile(request, username):

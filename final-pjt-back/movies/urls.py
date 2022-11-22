@@ -14,6 +14,7 @@ urlpatterns = [
     path('movies/<int:movie_pk>/rates/', views.movie_rates),
     path('movies/popularity/', views.movie_popularity),  # 인기영화
     path('movies/classic/', views.movie_classic),  # 고전영화
+    path('movies/search/<str:words_target>', views.movie_search),  # 영화 검색
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]
