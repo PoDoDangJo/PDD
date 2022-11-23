@@ -6,7 +6,7 @@
       <MovieList :msg="'최근 개봉 영화'" :movies="lastMovies" />
       <MovieList :msg="'인기 영화'" :movies="popularityMovies" />
       <MovieList :msg="'고전 명작'" :movies="classicMovies" class="ester_egg" />
-      <MovieList :msg="`${genreMoviesTitle} 장르`" :movies="genreMovies" />
+      <MovieList :msg="`${genreMoviesTitle} 장르는 어떠세용?`" :movies="genreMovies" />
     </div>
     <div class="scrolltop-wrap">
       <a href="#" role="button" aria-label="Scroll to top">
