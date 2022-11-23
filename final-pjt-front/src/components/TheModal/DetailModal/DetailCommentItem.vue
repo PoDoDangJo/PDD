@@ -91,7 +91,6 @@ export default {
 }
 
 .rating__icon__star {
-  box-shadow: 1px 1px 10px #000;
   color: orange;
 }
 </style>

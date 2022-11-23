@@ -5,7 +5,7 @@
     <div class="modal-card">
       <div class="profile__info">
         <img class="profile" src="@/assets/icons/logo.png" alt="" />
-        <h1 class="profile__info__text">{{ userInfo?.username }}</h1>
+        <h1 class="profile__info__text">{{ username }}</h1>
       </div>
       <div class="profile-detail"></div>
       <!-- <h2>작성자: {{ userInfo?.id }}</h2> -->
@@ -19,18 +19,18 @@ export default {
   name: "ProfileModal",
   computed: mapState({
     userInfo: (state) => state.userInfo,
+    username: (state) => state.username,
   }),
   methods: {
     ...mapActions(["getUserProfile", "closeProfileModal"]),
   },
   created() {
-    this.getUserProfile();
+    this.getUserProfile(this.userInfo.username);
   },
 };
 </script>
 
 <style scoped>
-
 .profile__info {
   width: 50%;
   display: inline-block;
@@ -49,9 +49,7 @@ export default {
 }
 
 .profile-detail {
-  
 }
-
 
 /* 아래는 기본 */
 .modal,
