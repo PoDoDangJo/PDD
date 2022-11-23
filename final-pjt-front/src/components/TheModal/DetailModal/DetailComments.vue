@@ -77,7 +77,8 @@ export default {
       this.$store.dispatch("createMovieRate", payload);
     },
     rating(score) {
-      console.log(score);
+      score;
+      console.log("hi");
     },
   },
 };
@@ -184,7 +185,5 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  border-radius: 0.25rem;
-  border: 0.0625rem solid rgb(0, 0, 0, 0.6);
 }
 </style>

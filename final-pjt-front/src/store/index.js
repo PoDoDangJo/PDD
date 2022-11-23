@@ -108,6 +108,11 @@ export default new Vuex.Store({
       state.allRates = rates;
       location.reload;
     },
+
+    DELETE_MOVIE_RATE(state, rate) {
+      const index = state.allRate.indexOf(rate);
+      state.allReviews.splice(index - 1, 1);
+    },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
       state.createReviewModalStatus = false;
@@ -287,18 +292,14 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
-
-          const movieData = [response.data[0]]
-
+          const movieData = [response.data[0]];
           const movies = response.data[1].map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
-
-          })
-          movieData.push(movies)
-          context.commit("GET_GENRE_MOVIES", movieData)
-
+          });
+          movieData.push(movies);
+          context.commit("GET_GENRE_MOVIES", movieData);
         })
         .catch((error) => {
           console.log(error);
@@ -311,10 +312,7 @@ export default new Vuex.Store({
         url: `${API_URL}/api/v2/reviews/`,
       })
         .then((response) => {
-          const reviews = response.data.map((review) => {
-            // review.created_at = review.created_at.slice(2, 10)
-            return review;
-          });
+          const reviews = response.data;
           context.commit("GET_REVIEWS", reviews);
         })
         .catch((error) => {
@@ -490,6 +488,22 @@ export default new Vuex.Store({
         .then((response) => {
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteMovieRate(context, rate_id) {
+      axios({
+        method: "delete",
+        url: `${API_URL}/api/v2/rates/${rate_id}`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((response) => {
+          context.commit("DELETE_MOVIE_RATE", response.data);
         })
         .catch((error) => {
           console.log(error);
