@@ -48,6 +48,7 @@ class RatingSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     genre_ids = GenreSerializer(many=True, read_only=True)
     director = DirectorSerializer(many=True, read_only=True)
+    actors = ActorSerializer(many=True, read_only=True)
     rating_set = RatingSerializer(many=True, read_only=True)
     rating_count = serializers.IntegerField(source='rating_set.count', read_only=True)
 
@@ -55,6 +56,7 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
         # read_only_fields = ()
+
 
 class SimilarMovieSerializer(serializers.ModelSerializer):
     
