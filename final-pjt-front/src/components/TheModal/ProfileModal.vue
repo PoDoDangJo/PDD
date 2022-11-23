@@ -3,7 +3,11 @@
     <div class="overlay" @click="closeProfileModal"></div>
 
     <div class="modal-card">
-      <h1>이름: {{ userInfo?.username }}</h1>
+      <div class="profile__info">
+        <img class="profile" src="@/assets/icons/logo.png" alt="" />
+        <h1 class="profile__info__text">{{ userInfo?.username }}</h1>
+      </div>
+      <div class="profile-detail"></div>
       <!-- <h2>작성자: {{ userInfo?.id }}</h2> -->
     </div>
   </div>
@@ -26,6 +30,30 @@ export default {
 </script>
 
 <style scoped>
+
+.profile__info {
+  width: 50%;
+  display: inline-block;
+  margin: 0 25%;
+}
+
+.profile__info__text {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.profile {
+  margin: 10px 10%;
+  width: 80%;
+  border-radius: 70%;
+}
+
+.profile-detail {
+  
+}
+
+
+/* 아래는 기본 */
 .modal,
 overlay {
   width: 100%;

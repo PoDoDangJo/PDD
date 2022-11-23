@@ -55,6 +55,7 @@ export default {
       "getReviews",
       "getPopularityMovies",
       "getClassicMovies",
+      "getGenreMovies",
     ]),
   },
   created() {
@@ -63,6 +64,7 @@ export default {
     this.getReviews();
     this.getPopularityMovies();
     this.getClassicMovies();
+    this.getGenreMovies();
   },
 };
 </script>
