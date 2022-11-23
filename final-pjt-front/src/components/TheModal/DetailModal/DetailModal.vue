@@ -36,7 +36,7 @@
       <div class="detail__components">
         <DetailInfo v-if="infoPage" />
         <DetailComments v-else-if="commentPage" :movie="movie" />
-        <DetailSimilar v-else-if="similarPage" @change-movie="changeMovie" />
+        <DetailSimilar v-if="similarPage" @change-movie="changeMovie" />
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["closeDetailModal", "checkRates", "getRates"]),
+    ...mapActions(["closeDetailModal", "getRates"]),
     goInfoPage() {
       this.infoPage = true;
       this.commentPage = false;
@@ -96,7 +96,6 @@ export default {
   },
   created() {
     this.getRates();
-    this.checkRates();
     this.getSimilarMovie();
   },
 };
@@ -173,11 +172,7 @@ h1 {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 1) 90%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 95%, #14141400 100%);
   z-index: 1;
 }
 /*
@@ -215,14 +210,14 @@ h1 {
 .detail__components__nav {
   position: absolute;
   top: calc(100px + 18vw);
-  height: 90px;
+  height: calc(35px + 3vw);
   width: 100%;
-  background-image: linear-gradient(to bottom, #141414 80%, #14141400 100%);
+  background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
 }
 
 .detail__components {
   position: absolute;
-  top: calc(120px + 20vw);
+  top: calc(130px + 20vw);
 
   width: 100%;
 }
@@ -244,6 +239,7 @@ h1 {
   font-size: calc(10px + 0.5vw);
   cursor: pointer;
   z-index: 1;
+  margin-top: calc(10px + 1vw);
 }
 
 button {

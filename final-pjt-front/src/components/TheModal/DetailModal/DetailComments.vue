@@ -1,6 +1,9 @@
 <template>
   <div class="detail__comments">
-    <div v-if="youCanRate">
+    <div v-if="!isLogin" @click="openLogInModal" class="overlay">
+      로그인해야 보임
+    </div>
+    <div v-if="youCanRate" :class="{ is__blur: !isLogin }">
       <div class="comment_info">
         <StarRate class="star__container" @rating="rating" />
         <p class="count-length">{{ commentLength }} / 200</p>
@@ -37,7 +40,7 @@
 <script>
 import StarRate from "@/components/StarRate";
 import DetailCommentItem from "@/components/TheModal/DetailModal/DetailCommentItem";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "DetailComments",
@@ -56,13 +59,14 @@ export default {
     };
   },
   computed: mapState({
-    youCanRate: (state) => state.youCanRate,
+    ...mapGetters(["isLogin", "youCanRate"]),
     rates: (state) => state.allRates,
     commentLength() {
       return String(this.movieComment).length;
     },
   }),
   methods: {
+    ...mapActions(["openLogInModal"]),
     createMovieRate() {
       const payload = {
         movie_id: this.movie.id,
@@ -80,6 +84,20 @@ export default {
 </script>
 
 <style scoped>
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  color: #a261f5;
+  font-weight: 600;
+  cursor: pointer;
+}
 .detail__comments {
   width: calc(100% - 20px);
   margin: 2vw;

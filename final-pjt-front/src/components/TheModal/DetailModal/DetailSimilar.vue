@@ -22,7 +22,7 @@ import _ from "lodash";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    similarMovies: (state) => _.sampleSize(state.similarMovies, 3),
+    similarMovies: (state) => _.sampleSize(state.similarMovies, 4),
   }),
   methods: {
     openDetailModal(movie) {
@@ -53,10 +53,17 @@ export default {
   text-anchor: end;
 }
 
-@media screen and (min-width: 750px) {
+@media screen and (min-width: 1024px) {
   .detail__similar {
     display: flex;
     justify-content: center;
+
+    list-style: none;
+  }
+
+  .movie-card {
+    width: calc(100px + 4vw);
+    float: left;
   }
 }
 
@@ -70,7 +77,7 @@ li {
 }
 
 .movie-card {
-  width: calc(100px + 5vw);
+  width: calc(100px + 3vw);
   min-width: 100px;
   max-width: 190px;
   scroll-snap-align: start;
