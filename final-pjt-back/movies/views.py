@@ -14,8 +14,7 @@ from django.http import JsonResponse
 from .serializers import *
 from .models import *
 
-
-# movie
+# movies
 
 @api_view(['GET'])
 def movie_list(request):
@@ -66,16 +65,16 @@ def movie_rates(request, movie_pk):
     if request.user.is_authenticated:
         movie = get_object_or_404(Movie, pk=movie_pk)
         rating = movie.ratings.filter(user_id=request.user)
-        for data in rating.values():
-            rating_data = data.get('rate')
-
         serializer = RatingSerializer(data=request.data)
+        
         if serializer.is_valid(raise_exception=True):
             # 기존에 있었다면 삭제
             if movie.ratings.filter(user_id=request.user.pk).exists():
                 rating.delete()
-            
         serializer.save(user_id=request.user, movie_id=movie)
+
+        for data in rating.values():
+            rating_data = data.get('rate')
         context = {
             'rating': rating_data,
         }
@@ -101,6 +100,8 @@ def rate_likes(request, rate_pk):
     context = {}
     return JsonResponse(context)
 
+
+# 영화 랜덤
 @api_view(['GET'])
 def movie_random(request):
     movies = Movie.objects.all().order_by('?')
@@ -144,12 +145,26 @@ def movie_directors(request, movie_pk):
 
 # 비슷한 영화 검색
 # -기준 : 인기도 상위 3개
-# @api_view(['GET'])
-# def movie_similar(request, movie_pk):
-#     similar_movies_id = Movie.objects.filter(id=movie_pk).values()
-#     movie_similar = Movie.objects.filter(id__in = similar_movies_id)
-#     serializers = MovieListSerializer(movie_similar, many=True)
-#     return Response(serializers.data)
+@api_view(['GET'])
+def movie_similar(request, movie_pk):
+    similar_movies_id = Movie.objects.filter(id=movie_pk).values('movie_similar')
+    data=[]
+    for sm in similar_movies_id:
+        sm.get('movie_similar')
+        print('###########################################')
+        movie = Movie.objects.filter(id__in=sm.get('movie_similar'))
+        serializer = SimilarMovieSerializer(movie, many=True)
+    return Response(serializer.data)
+    
+    # movie_similar = Movie.objects.filter(id__in = similar_movies_id)
+    # serializers = MovieListSerializer(movie_similar, many=True)
+    # return Response(serializers.data) 
+# 비슷한 영화는 포스터와 영화 id만 있으면 된다. 랜덤 3개
+# 영화 아이디를 넣으면, 관련 데이터 가져오기
+
+# 인기 감독의 영화 추천
+# 1. 인기 영화 감독을 구한다.
+# 
 
 
 # 장르별 영화 추천
@@ -162,7 +177,7 @@ def movie_random_genre(request):
     movies = Movie.objects.filter(genre_ids=genre.get('id'))
     # 응답한다.(movielist로 보내면 될거같다.)
     serializers = MovieListSerializer(movies[:15], many=True)
-    return Response(serializers.data)
+    return Response(data=[genre.get('name'), serializers.data])
 
 
 # 인기순 영화 필터
