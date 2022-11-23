@@ -8,13 +8,6 @@
         v-model="searchData"
         @keyup.enter="getSearch"
       />
-      <!-- <button type="submit" class="searchButton" @click="getSearch">
-        <img
-          class="seach__button__icon"
-          src="@/assets/icons/search.png"
-          alt="search"
-        />
-      </button> -->
     </div>
   </div>
 </template>

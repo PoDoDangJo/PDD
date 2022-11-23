@@ -75,6 +75,7 @@ export default {
         spoiler: this.isSpolier,
       };
       this.$store.dispatch("createMovieRate", payload);
+      // location.reload();
     },
     rating(score) {
       score;

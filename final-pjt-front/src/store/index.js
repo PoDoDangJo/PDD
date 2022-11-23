@@ -29,6 +29,7 @@ export default new Vuex.Store({
     allReviews: [],
     allRates: [],
     similarMovies: [],
+    searchMovies: [],
     isModal: false,
     movieDetailModalStatus: { isActive: false, movie: null },
     reviewDetailModalStatus: { isActive: false, review: null },
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     isCommunity: null,
     userInfo: null,
     username: null,
+    searchData: null,
   },
   getters: {
     isLogin(state) {
@@ -53,7 +55,7 @@ export default new Vuex.Store({
     },
     youCanRate(state) {
       for (const rate of state.allRates) {
-        if (rate.user_id == state.userInfo.id) {
+        if (rate.user_id.id == state.userInfo.id) {
           return false;
         }
       }
@@ -61,11 +63,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    GET_SEARCH(state, movies) {
-      const hi = state.username;
-      console.log(hi);
-      console.log(movies);
-    },
     GET_LAST_MOVIES(state, movies) {
       state.lastMovies = movies;
     },
@@ -106,12 +103,11 @@ export default new Vuex.Store({
     },
     CREATE_MOVIE_RATE(state, rates) {
       state.allRates = rates;
-      location.reload;
     },
 
     DELETE_MOVIE_RATE(state, rate) {
       const index = state.allRate.indexOf(rate);
-      state.allReviews.splice(index - 1, 1);
+      state.allReviews.splice(index, 1);
     },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
@@ -133,7 +129,7 @@ export default new Vuex.Store({
     DELETE_REVIEW(state, review) {
       const index = state.allReviews.indexOf(review);
 
-      state.allReviews.splice(index - 1, 1);
+      state.allReviews.splice(index, 1);
       state.isModal = false;
       state.reviewDetailModalStatus = { isActive: false, review: null };
     },
@@ -190,6 +186,11 @@ export default new Vuex.Store({
     },
     GET_SIMILAR_MOVIE(state, similarMovies) {
       state.similarMovies = similarMovies;
+    },
+    GET_SEARCH(state, movies) {
+      console.log(movies);
+      state.searchMovies = movies;
+      router.push({ name: "SearchView" });
     },
   },
   actions: {
@@ -486,6 +487,7 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
+          console.log(response.data);
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
         })
@@ -588,6 +590,7 @@ export default new Vuex.Store({
       context.commit("IN_TO_COMMUNITY");
     },
     getSearch(context, searchData) {
+      context.state.searchData = searchData;
       axios({
         method: "get",
         url: `${API_URL}/api/v1/movies/search/${searchData}/`,
@@ -596,7 +599,13 @@ export default new Vuex.Store({
           if (response.data.length == 0) {
             alert("일치하는 영화를 찾을 수 없습니다.");
           } else {
-            context.commit("GET_SEARCH", response.data);
+            const movies = response.data.map((movie) => {
+              movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+              movie.poster_path = TMDB_URL + movie.poster_path;
+              return movie;
+            });
+            console.log("hi");
+            context.commit("GET_SEARCH", movies);
           }
         })
         .catch((error) => {

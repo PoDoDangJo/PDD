@@ -40,6 +40,7 @@ export default {
       this.$store.dispatch("updateReview", this.review.id);
     },
     deleteReview() {
+      console.log(this.review);
       this.$store.dispatch("deleteReview", this.review.id);
     },
   },
