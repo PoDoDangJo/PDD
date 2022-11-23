@@ -55,3 +55,10 @@ class MovieSerializer(serializers.ModelSerializer):
         model = Movie
         fields = '__all__'
         # read_only_fields = ()
+
+class SimilarMovieSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Movie
+        fields = ('id', 'poster_path')
+        read_only_fields = ('movie_id', 'user_id', 'like_users')
