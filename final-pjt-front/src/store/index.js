@@ -302,7 +302,69 @@ export default new Vuex.Store({
           })
           movieData.push(movies)
           context.commit("GET_GENRE_MOVIES", movieData)
-
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    //
+    getDirectorMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/popular_director/`,
+      })
+        .then((response) => {
+          // 이미지를 불러오기 위한 URL 추가 작업
+          // for (const n = 0; n++)  여기에요 사장님!
+          console.log(response.data)
+          const movieData = [];
+          for (let n = 0; n < response.data.length; n++) {
+            if ( n % 2 === 1){
+              if (response.data[n].length === 1)
+                movieData.push(response.data[n][0]);
+              else {
+                for (let k = 0; k < response.data[n].length; k++) {
+                  movieData.push(response.data[n][k])
+                }
+                }
+            }
+          }
+          const movies = movieData.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          })
+          context.commit("GET_DIRECTOR_MOVIES", movies)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getActorMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/popular_actor/`,
+      })
+        .then((response) => {
+          console.log(response.data)
+          const movieData = [];
+          for (let n = 0; n < response.data.length; n++) {
+            if ( n % 2 === 1){
+              if (response.data[n].length === 1)
+                movieData.push(response.data[n][0]);
+              else {
+                for (let k = 0; k < response.data[n].length; k++) {
+                  movieData.push(response.data[n][k])
+                }
+                }
+            }
+          }
+          const movies = movieData.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          })
+          context.commit("GET_ACTOR_MOVIES", movies)
         })
         .catch((error) => {
           console.log(error);

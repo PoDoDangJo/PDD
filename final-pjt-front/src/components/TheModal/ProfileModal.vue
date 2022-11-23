@@ -7,8 +7,53 @@
         <img class="profile" src="@/assets/icons/logo.png" alt="" />
         <h1 class="profile__info__text">{{ username }}</h1>
       </div>
-      <div class="profile-detail"></div>
-      <!-- <h2>작성자: {{ userInfo?.id }}</h2> -->
+      <div class="profile-detail">
+        <div class="detail__components__nav">
+          <div class="button__container">
+            <button :class="{ is__active: infoPage }" @click="goInfoPage()">
+              내 영화
+            </button>
+            <button
+              :class="{ is__active: commentPage }"
+              @click="goCommentPage()"
+            >
+              내 글
+            </button>
+            <button
+              :class="{ is__active: similarPage }"
+              @click="goSimilarPage()"
+            >
+              내 댓글
+            </button>
+            <button
+              :class="{ is__active: similarPage }"
+               @click="goSimilarPage()"
+            >
+              좋아요한 평가
+            </button>
+            <button
+              :class="{ is__active: similarPage }"
+               @click="goSimilarPage()"
+            >
+              좋아요한 글
+            </button>
+            <button
+              :class="{ is__active: similarPage }"
+               @click="goSimilarPage()"
+            >
+              좋아요한 댓글
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <h2>내가 좋아하는 영화</h2>
+      <h3>{{userInfo?.id}}</h3>
+      <h2>내가 좋아하는 영화평가</h2>
+      <h3>{{userInfo?.rating}}</h3> 
+      <h2>내가 좋아하는 글</h2>
+      <h3>{{userInfo?.id}}</h3>
+      <h2>내가 좋아하는 댓글</h2>
+      <h3>{{userInfo?.id}}</h3> -->
     </div>
   </div>
 </template>
@@ -23,6 +68,9 @@ export default {
   }),
   methods: {
     ...mapActions(["getUserProfile", "closeProfileModal"]),
+    getProfile() {
+
+    }
   },
   created() {
     this.getUserProfile(this.userInfo.username);
@@ -39,7 +87,7 @@ export default {
 
 .profile__info__text {
   text-align: center;
-  margin: 50px 0;
+  margin: 20px 0;
 }
 
 .profile {
@@ -48,7 +96,49 @@ export default {
   border-radius: 70%;
 }
 
-.profile-detail {
+.detail__components__nav {
+  position: absolute;
+  top: calc(18vw);
+  height: calc(35px + 3vw);
+  width: 100%;
+  background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
+}
+
+.detail__components {
+  position: absolute;
+  top: calc(130px + 20vw);
+
+  width: 100%;
+}
+
+.button__container {
+  display: flex;
+  justify-content: space-between;
+
+  font-weight: 600;
+  margin: 0 2vw;
+  margin-top: 1vw;
+  align-items: center;
+  width: calc(180px + 10vw);
+  min-width: 260px;
+  max-width: 800px;
+}
+
+.button__container > button {
+  font-size: calc(10px + 0.5vw);
+  cursor: pointer;
+  z-index: 1;
+  margin-top: calc(10px + 1vw);
+}
+
+button {
+  all: unset;
+  text-align: center;
+  color: #dddcfb;
+}
+
+.is__active {
+  color: #614af2;
 }
 
 /* 아래는 기본 */
