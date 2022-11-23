@@ -216,7 +216,7 @@ def movie_popularity(request):
 def movie_new(request):
     end_date = datetime.datetime.today()
     start_date = datetime.date(2022, 1, 1)
-    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).order_by('-release_date')
+    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).exclude(trailer_youtube_key = 'nothing').order_by('-release_date')
     serializers = MovieListSerializer(movies[:15], many=True)
     return Response(serializers.data)
 
