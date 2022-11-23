@@ -97,7 +97,7 @@ export default {
     },
 
     checkRate() {
-      if (this.rate.user_id == this.userInfo.id) {
+      if (this.rate.user_id.id == this.userInfo.id) {
         return true;
       } else {
         return false;

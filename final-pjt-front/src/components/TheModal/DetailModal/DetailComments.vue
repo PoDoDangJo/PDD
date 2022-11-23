@@ -11,7 +11,7 @@
       <div class="comment_conainer">
         <textarea
           name="movie_comment"
-          placeholder="영화에 대한 평가는 한 번만 가능합니다."
+          placeholder="영화에 대한 평가를 남겨주세요."
           class="movie_comment"
           maxlength="200"
           v-model="movieComment"

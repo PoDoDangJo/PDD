@@ -2,7 +2,7 @@
   <div id="content">
     <div id="canvas"></div>
 
-    <div class="search-title">{{ searchData }}</div>
+    <div class="search-title glow">{{ searchData }}</div>
 
     <div class="search-list">
       <ul class="movie-list">
@@ -11,6 +11,7 @@
           v-for="movie in searchMovies"
           :key="movie.id"
           :src="`${movie.poster_path}`"
+          @click="openDetailModal(movie.id)"
         />
       </ul>
     </div>
@@ -48,6 +49,9 @@ export default {
       this.$router.push({ name: "HomeView" });
       location.reload;
     },
+    openDetailModal(id) {
+      this.$store.dispatch("openDetailModal", id);
+    },
   },
 };
 </script>
@@ -59,6 +63,8 @@ export default {
   position: relative;
   top: calc(100px + 15vw);
   margin: 2vw;
+  border: 2px solid #fff;
+  cursor: pointer;
 }
 
 h1 {
@@ -117,5 +123,29 @@ ul {
   justify-content: center;
   top: calc(20px + 1vw);
   z-index: 20;
+  font-weight: 700;
+}
+
+.glow {
+  color: #fff;
+  text-align: center;
+  /* -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate; */
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+/* #614af2,
+    #a261f5,
+    #dddcfb, */
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 0px #dddcfb, 0 0 5px #dddcfb, 0 0 10px #614af2,
+      0 0 15px #614af2, 0 0 20px #614af2, 0 0 25px #614af2, 0 0 30px #614af2;
+  }
+  to {
+    text-shadow: 0 0 0px #dddcfb, 0 0 5px #614af2, 0 0 10px #614af2,
+      0 0 15px #614af2, 0 0 20px #614af2, 0 0 25px #614af2, 0 0 30px #614af2;
+  }
 }
 </style>

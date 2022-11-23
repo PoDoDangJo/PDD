@@ -131,7 +131,12 @@ export default new Vuex.Store({
 
       state.allReviews.splice(index, 1);
       state.isModal = false;
+
       state.reviewDetailModalStatus = { isActive: false, review: null };
+
+      // 게시글 삭제시 본인 다음 인덱스의 글이 안보인다.
+      // 하지만 게시글은 정상적으로 삭제됨 새로고침 시 반영
+      location.reload();
     },
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
