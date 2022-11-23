@@ -7,6 +7,8 @@
       <MovieList :msg="'인기 영화'" :movies="popularityMovies" />
       <MovieList :msg="'고전 명작'" :movies="classicMovies" class="ester_egg" />
       <MovieList :msg="`${genreMoviesTitle} 장르는 어떠세용?`" :movies="genreMovies" />
+      <MovieList :msg="'인기 감독들의 명작'" :movies="directorMovies" />
+      <MovieList :msg="'인기 배우들의 명작'" :movies="actorMovies" />
     </div>
     <div class="scrolltop-wrap">
       <a href="#" role="button" aria-label="Scroll to top">
@@ -48,6 +50,8 @@ export default {
     classicMovies: (state) => state.classicMovies.slice(0, 5),
     genreMovies: (state) => state.genreMovies.slice(0, 5),
     genreMoviesTitle: (state) => state.genreMoviesTitle,
+    directorMovies: (state) => state.directorMovies.slice(0, 5),
+    actorMovies: (state) => state.actorMovies.slice(0, 5),
   }),
   methods: {
     inToHome() {

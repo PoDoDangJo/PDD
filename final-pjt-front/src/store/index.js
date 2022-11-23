@@ -8,7 +8,7 @@ import createPersistedState from "vuex-persistedstate";
 import router from "../router/index";
 
 import axios from "axios";
-
+// import { range } from "lodash";
 // import Modules
 // import accounts from './modules/accounts'
 // import articles from './modules/articles'
@@ -25,7 +25,9 @@ export default new Vuex.Store({
     popularityMovies: [],
     classicMovies: [],
     genreMovies: [],
-    genreMoviesTitle: null, // 랜덤 장르 영화 타이틀
+    genreMoviesTitle: null,  // 랜덤 장르 영화 타이틀
+    directorMovies: [],
+    actorMovies: [],
     allReviews: [],
     allRates: [],
     similarMovies: [],
@@ -78,6 +80,12 @@ export default new Vuex.Store({
     GET_GENRE_MOVIES(state, movieData) {
       state.genreMovies = movieData[1];
       state.genreMoviesTitle = movieData[0];
+    },
+    GET_DIRECTOR_MOVIES(state, movies) {
+      state.directorMovies = movies;
+    },
+    GET_ACTOR_MOVIES(state, movies) {
+      state.actorMovies = movies;
     },
     GET_USER_PROFILE(state, userInfo) {
       state.userInfo = userInfo;
@@ -280,10 +288,6 @@ export default new Vuex.Store({
       axios({
         method: "get",
         url: `${API_URL}/api/v1/movies/random_genre/`,
-        // headers: {
-        //   // 인증 여부를 확인하기 위한 Token을 담아서 요청
-        //   Authorization: `Token ${ context.state.token }`
-        // }
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -299,6 +303,69 @@ export default new Vuex.Store({
           movieData.push(movies)
           context.commit("GET_GENRE_MOVIES", movieData)
 
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    //
+    getDirectorMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/popular_director/`,
+      })
+        .then((response) => {
+          // 이미지를 불러오기 위한 URL 추가 작업
+          // for (const n = 0; n++)  여기에요 사장님!
+          console.log(response.data)
+          const movieData = [];
+          for (let n = 0; n < response.data.length; n++) {
+            if ( n % 2 === 1){
+              if (response.data[n].length === 1)
+                movieData.push(response.data[n][0]);
+              else {
+                for (let k = 0; k < response.data[n].length; k++) {
+                  movieData.push(response.data[n][k])
+                }
+                }
+            }
+          }
+          const movies = movieData.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          })
+          context.commit("GET_DIRECTOR_MOVIES", movies)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getActorMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/popular_actor/`,
+      })
+        .then((response) => {
+          console.log(response.data)
+          const movieData = [];
+          for (let n = 0; n < response.data.length; n++) {
+            if ( n % 2 === 1){
+              if (response.data[n].length === 1)
+                movieData.push(response.data[n][0]);
+              else {
+                for (let k = 0; k < response.data[n].length; k++) {
+                  movieData.push(response.data[n][k])
+                }
+                }
+            }
+          }
+          const movies = movieData.map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          })
+          context.commit("GET_ACTOR_MOVIES", movies)
         })
         .catch((error) => {
           console.log(error);
