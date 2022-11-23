@@ -51,7 +51,7 @@ export default {
   }),
   methods: {
     ...mapActions([
-      "getMovies",
+      "getLastMovies",
       "getReviews",
       "getPopularityMovies",
       "getClassicMovies",
@@ -60,7 +60,7 @@ export default {
   },
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
-    this.getMovies();
+    this.getLastMovies();
     this.getReviews();
     this.getPopularityMovies();
     this.getClassicMovies();
@@ -84,6 +84,7 @@ export default {
 .is__blur {
   transition: filter 1s;
   filter: blur(0.5rem);
+  overflow: hidden;
 }
 
 .main {

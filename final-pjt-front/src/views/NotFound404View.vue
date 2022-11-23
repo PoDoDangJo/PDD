@@ -6,6 +6,7 @@
       <div class="go-home">
         <h1>Not Found 404</h1>
         <p @click="goToHome">Go Back To Home</p>
+        <button @click="changeImage">Change Image</button>
       </div>
       <img
         class="backImages"
@@ -37,6 +38,7 @@ export default {
       this.$router.push({ name: "HomeView" });
       location.reload;
     },
+    changeImage() {},
   },
 };
 </script>
@@ -51,5 +53,14 @@ h1 {
   margin: auto auto;
   align-items: center;
   opacity: 1;
+}
+
+p {
+  cursor: pointer;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
 }
 </style>

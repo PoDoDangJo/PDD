@@ -1,33 +1,34 @@
 <template>
   <div class="detail__comments">
-    <div class="comment_info">
-      <StarRate class="star__container" @rating="rating" />
-      <p class="count-length">{{ commentLength }} / 200</p>
-    </div>
-    <div class="comment_conainer">
-      <textarea
-        name="movie_comment"
-        placeholder="영화에 대한 평가를 내려주세요."
-        class="movie_comment"
-        maxlength="200"
-        v-model="movieComment"
-        rows="4"
-      />
-      <div class="spolier__box">
-        <input
-          type="checkbox"
-          id="spolier-check"
-          name="spolier"
-          v-model="isSpolier"
-        />
-        <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
+    <div v-if="youCanRate">
+      <div class="comment_info">
+        <StarRate class="star__container" @rating="rating" />
+        <p class="count-length">{{ commentLength }} / 200</p>
       </div>
-      <button class="comment_button btn__color" @click="createMovieRate">
-        댓글 작성
-      </button>
+      <div class="comment_conainer">
+        <textarea
+          name="movie_comment"
+          placeholder="영화에 대한 평가는 한 번만 가능합니다."
+          class="movie_comment"
+          maxlength="200"
+          v-model="movieComment"
+          rows="4"
+        />
+        <div class="spolier__box">
+          <input
+            type="checkbox"
+            id="spolier-check"
+            name="spolier"
+            v-model="isSpolier"
+          />
+          <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
+        </div>
+        <button class="comment_button btn__color" @click="createMovieRate">
+          댓글 작성
+        </button>
+      </div>
     </div>
-    <br />
-    <div class="comments_conainer">
+    <div class="comments_conainer" v-else>
       <DetailCommentItem v-for="rate in rates" :key="rate.id" :rate="rate" />
     </div>
   </div>
@@ -36,7 +37,7 @@
 <script>
 import StarRate from "@/components/StarRate";
 import DetailCommentItem from "@/components/TheModal/DetailModal/DetailCommentItem";
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "DetailComments",
@@ -55,13 +56,13 @@ export default {
     };
   },
   computed: mapState({
+    youCanRate: (state) => state.youCanRate,
     rates: (state) => state.allRates,
     commentLength() {
       return String(this.movieComment).length;
     },
   }),
   methods: {
-    ...mapActions(["getRates"]),
     createMovieRate() {
       const payload = {
         movie_id: this.movie.id,
@@ -74,9 +75,6 @@ export default {
     rating(score) {
       console.log(score);
     },
-  },
-  mounted() {
-    this.getRates();
   },
 };
 </script>

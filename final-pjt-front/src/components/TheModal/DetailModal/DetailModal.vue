@@ -3,7 +3,7 @@
     <div class="overlay" @click="closeDetailModal"></div>
 
     <div class="modal-card">
-      <div>
+      <div class="video">
         <header class="detail-header">
           <h1>{{ movie?.title }}</h1>
         </header>
@@ -13,7 +13,7 @@
           frameborder="0"
           allow="autoplay"
         ></iframe>
-        <div class="detail__components">
+        <div class="detail__components__nav">
           <div class="button__container">
             <button :class="{ is__active: infoPage }" @click="goInfoPage()">
               상세정보
@@ -31,13 +31,12 @@
               관련영화
             </button>
           </div>
-          <DetailInfo v-if="infoPage" />
-          <DetailComments v-else-if="commentPage" :movie="movie" />
-          <DetailSimilar
-            v-else-if="similarPage"
-            :similarMovieIds="similarMovieIds"
-          />
         </div>
+      </div>
+      <div class="detail__components">
+        <DetailInfo v-if="infoPage" />
+        <DetailComments v-else-if="commentPage" :movie="movie" />
+        <DetailSimilar v-else-if="similarPage" @change-movie="changeMovie" />
       </div>
     </div>
   </div>
@@ -51,6 +50,11 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   name: "DetailModal",
+  components: {
+    DetailInfo,
+    DetailComments,
+    DetailSimilar,
+  },
   data() {
     return {
       infoPage: true,
@@ -65,7 +69,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["closeDetailModal"]),
+    ...mapActions(["closeDetailModal", "checkRates", "getRates"]),
     goInfoPage() {
       this.infoPage = true;
       this.commentPage = false;
@@ -81,11 +85,19 @@ export default {
       this.commentPage = false;
       this.similarPage = true;
     },
+    getSimilarMovie() {
+      this.$store.dispatch("getSimilarMovie", this.movie.id);
+    },
+    changeMovie() {
+      this.infoPage = true;
+      this.commentPage = false;
+      this.similarPage = false;
+    },
   },
-  components: {
-    DetailInfo,
-    DetailComments,
-    DetailSimilar,
+  created() {
+    this.getRates();
+    this.checkRates();
+    this.getSimilarMovie();
   },
 };
 </script>
@@ -97,8 +109,6 @@ export default {
   left: 0;
   top: 0;
   z-index: 10;
-
-  overflow: scroll;
 }
 
 .overlay {
@@ -110,6 +120,12 @@ export default {
   z-index: 10;
   opacity: 0.5;
   background-color: black;
+}
+
+.video {
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .modal-card {
@@ -124,6 +140,8 @@ export default {
   min-height: calc(700px + 9vw);
   z-index: 10;
   border-radius: 5px;
+
+  overflow: scroll;
 }
 
 .detail-header {
@@ -132,7 +150,7 @@ export default {
   z-index: 10;
   background-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.7) 70%,
     transparent
   );
 
@@ -142,7 +160,8 @@ export default {
 }
 
 h1 {
-  padding: 0 1vw 0 1vw;
+  padding: 0 0 0 1vw;
+  margin: 1vw 0;
 }
 
 .trailer {
@@ -159,6 +178,7 @@ h1 {
     rgba(0, 0, 0, 1) 90%,
     rgba(0, 0, 0, 0) 100%
   );
+  z-index: 1;
 }
 /*
 .modal-card-tagline {
@@ -192,9 +212,17 @@ h1 {
   -webkit-box-orient: vertical;
 } */
 
+.detail__components__nav {
+  position: absolute;
+  top: calc(100px + 18vw);
+  height: 90px;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #141414 80%, #14141400 100%);
+}
+
 .detail__components {
   position: absolute;
-  top: calc(100px + 20vw);
+  top: calc(120px + 20vw);
 
   width: 100%;
 }
@@ -203,6 +231,7 @@ h1 {
   display: flex;
   justify-content: space-between;
 
+  font-weight: 600;
   margin: 0 2vw;
   margin-top: 1vw;
   align-items: center;
@@ -214,6 +243,7 @@ h1 {
 .button__container > button {
   font-size: calc(10px + 0.5vw);
   cursor: pointer;
+  z-index: 1;
 }
 
 button {

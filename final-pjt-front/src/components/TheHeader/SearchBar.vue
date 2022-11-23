@@ -6,14 +6,15 @@
         class="searchTerm"
         placeholder="Search"
         v-model="searchData"
+        @keyup.enter="getSearch"
       />
-      <button type="submit" class="searchButton" @click="getSearch">
+      <!-- <button type="submit" class="searchButton" @click="getSearch">
         <img
           class="seach__button__icon"
           src="@/assets/icons/search.png"
           alt="search"
         />
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -60,7 +61,7 @@ export default {
 .searchTerm {
   background: linear-gradient(white, white) padding-box,
     linear-gradient(to right, #a261f5, #dddcfb, #614af2) border-box;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
   border: 3px solid transparent;
 }
 
@@ -89,12 +90,27 @@ button {
 
 /*Resize the wrap to see the search bar change!*/
 .wrap {
-  width: calc(200px + 10vw);
-  min-width: 200px;
+  width: calc(100px + 10vw);
+  min-width: 100px;
   max-width: 500px;
   position: absolute;
-  top: 30px;
+  margin-top: calc(0.5vw);
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.wrap:focus {
+  animation-name: input-active;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes input-active {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>

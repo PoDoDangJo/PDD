@@ -707,7 +707,7 @@ class RipplesScene {
                 
                 // add fake lights & shadows
                 float lights = max(0.0, ripples.r - 0.5);
-                color.rgb += lights * (uLightIntensity / 12.0);
+                color.rgb += lights * (uLightIntensity / 10.0);
                 
                 float shadow = max(0.0, 1.0 - (ripples.r + 0.5));
                 color.rgb -= shadow * (uShadowIntensity / 10.0);
@@ -715,6 +715,51 @@ class RipplesScene {
                 gl_FragColor = color;
             }
         `;
+  }
+
+  writeTitleCanvas(canvas) {
+    const title = document
+      .getElementById("water-ripples-title")
+      .querySelector("h1");
+    const titleStyle = window.getComputedStyle(title);
+
+    let titleTopPosition = title.offsetTop * this.curtains.pixelRatio;
+    // adjust small offset due to font interpretation?
+    titleTopPosition += title.clientHeight * this.curtains.pixelRatio * 0.1;
+
+    const planeBoundinRect = this.scenePlane.getBoundingRect();
+
+    const htmlPlaneWidth = planeBoundinRect.width;
+    const htmlPlaneHeight = planeBoundinRect.height;
+
+    // set sizes
+    canvas.width = htmlPlaneWidth;
+    canvas.height = htmlPlaneHeight;
+    let context = canvas.getContext("2d");
+
+    context.width = htmlPlaneWidth;
+    context.height = htmlPlaneHeight;
+
+    // draw our title with the original style
+    context.fillStyle = titleStyle.color;
+    context.font =
+      parseFloat(titleStyle.fontWeight) +
+      " " +
+      parseFloat(titleStyle.fontSize) * this.curtains.pixelRatio +
+      "px " +
+      titleStyle.fontFamily;
+    context.fontStyle = titleStyle.fontStyle;
+
+    context.textAlign = "center";
+
+    // vertical alignment
+    context.textBaseline = "top";
+    context.fillText(title.innerText, htmlPlaneWidth / 2, titleTopPosition);
+
+    if (this.scenePlane.textures && this.scenePlane.textures.length > 1) {
+      this.scenePlane.textures[1].resize();
+      this.scenePlane.textures[1].needUpdate();
+    }
   }
 
   createScenePlane(rippleTexture) {
@@ -769,20 +814,58 @@ class RipplesScene {
     this.scenePlane = this.curtains.addPlane(this.sceneElement, params);
 
     if (this.scenePlane) {
+      const canvas = document.createElement("canvas");
+
+      canvas.setAttribute("data-sampler", "titleTexture");
+      canvas.style.display = "none";
       this.scenePlane.loadCanvas(canvas);
 
-      this.scenePlane.onReady(() => {
-        this.scenePlane.createTexture({
-          sampler: "uRippleTexture",
-          fromTexture: rippleTexture, // set it based on our ripples plane's texture
+      this.scenePlane
+        .onLoading((texture) => {
+          texture.shouldUpdate = false;
+          if (this.scenePlane.canvases && this.scenePlane.canvases.length > 0) {
+            // title
+            if (document.fonts) {
+              document.fonts.ready.then(() => {
+                this.writeTitleCanvas(canvas);
+              });
+            } else {
+              setTimeout(() => {
+                this.writeTitleCanvas(canvas);
+              }, 750);
+            }
+          }
+        })
+        .onReady(() => {
+          
+          this.scenePlane.createTexture({
+            sampler: "uRippleTexture",
+            fromTexture: rippleTexture, // set it based on our ripples plane's texture
+          })
+        })
+        .onAfterResize(() => {
+          curtainsBBox = this.curtains.getBoundingRect();
+          this.scenePlane.uniforms.resolution.value = [
+            curtainsBBox.width,
+            curtainsBBox.height,
+          ];
+
+          this.writeTitleCanvas(canvas);
         });
-      });
     }
   }
 }
 
 window.addEventListener("load", () => {
-  const rippleScene = new RipplesScene({});
+  const rippleScene = new RipplesScene({
+    viscosity: 4,
+    speed: 4,
+    size: 1,
+
+    displacementStrength: 1.5,
+    lightIntensity: 2,
+    shadowIntensity: 2,
+  });
 });
 
 // // card mouse interaction
