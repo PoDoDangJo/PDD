@@ -6,14 +6,14 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('username',)
+        fields = ('username', 'id',)
 
 class ReviewListSerializer(serializers.ModelSerializer):
     user_id = UserSerializer(read_only=True)
 
     class Meta:
         model = Review
-        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'user_id')
+        fields = ('id', 'title', 'spoiler', 'content', 'created_at', 'updated_at', 'user_id')
 
 class CommentSerializer(serializers.ModelSerializer):
     user_id = UserSerializer(read_only=True)
