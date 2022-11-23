@@ -53,7 +53,7 @@ class Characters(models.Model):
 
 
 class Rating(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rating')
     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='ratings')
     rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
     comment = models.TextField(null=True)
