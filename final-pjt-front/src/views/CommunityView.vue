@@ -20,7 +20,7 @@ export default {
     MovieSlider,
   },
   methods: {
-    ...mapActions(["getUserProfile"]),
+    ...mapActions(["getUserProfile", "getReviews"]),
     inToCommunity() {
       // token 없이 CommunityView에 들어간다면 HomeView로 이동
       if (this.$store.state.token) {
@@ -33,6 +33,7 @@ export default {
   created() {
     this.inToCommunity();
     this.getUserProfile();
+    this.getReviews();
   },
 };
 </script>

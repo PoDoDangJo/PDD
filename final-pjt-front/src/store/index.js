@@ -40,9 +40,8 @@ export default new Vuex.Store({
     profileModalStatus: false,
     token: null,
     isCommunity: null,
-    username: null,
     userInfo: null,
-    youCanRate: true,
+    username: null,
   },
   getters: {
     isLogin(state) {
@@ -54,11 +53,20 @@ export default new Vuex.Store({
     reviews(state) {
       return state.allReviews;
     },
+    youCanRate(state) {
+      for (const rate of state.allRates) {
+        if (rate.user_id == state.userInfo.id) {
+          return false;
+        }
+      }
+      return true;
+    },
   },
   mutations: {
     GET_SEARCH(state, movies) {
-      state.allRates
-      console.log(movies)
+      const hi = state.username;
+      console.log(hi);
+      console.log(movies);
     },
     GET_LAST_MOVIES(state, movies) {
       state.lastMovies = movies;
@@ -70,7 +78,7 @@ export default new Vuex.Store({
       state.classicMovies = movies;
     },
     GET_GENRE_MOVIES(state, movieData) {
-      state.genreMovies = movieData[1]
+      state.genreMovies = movieData[1];
       state.genreMoviesTitle = movieData[0];
     },
     GET_DIRECTOR_MOVIES(state, movies) {
@@ -106,7 +114,7 @@ export default new Vuex.Store({
     },
     CREATE_MOVIE_RATE(state, rates) {
       state.allRates = rates;
-      location.reload
+      location.reload;
     },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
@@ -126,7 +134,6 @@ export default new Vuex.Store({
       });
     },
     DELETE_REVIEW(state, review) {
-
       const index = state.allReviews.indexOf(review);
 
       state.allReviews.splice(index - 1, 1);
@@ -143,6 +150,7 @@ export default new Vuex.Store({
       state.signUpModalStatus = false;
     },
     OPEN_LOG_IN_MODAL(state) {
+      state.movieDetailModalStatus = { isActive: false, movie: null };
       state.isModal = true;
       state.loginModalStatus = true;
     },
@@ -151,11 +159,11 @@ export default new Vuex.Store({
       state.loginModalStatus = false;
     },
     SAVE_TOKEN(state, userdata) {
-      state.username = userdata.username;
-
       state.isModal = false;
       state.token = userdata.token;
-      state.userInfo = userdata
+
+      state.username = userdata.username;
+      state.userInfo = userdata;
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
       state.signUpModalStatus = false;
@@ -164,7 +172,7 @@ export default new Vuex.Store({
     },
     LOG_OUT(state) {
       state.token = null;
-      state.userInfo = null
+      state.userInfo = null;
       localStorage.removeItem("token");
 
       location.reload;
@@ -183,12 +191,9 @@ export default new Vuex.Store({
     IN_TO_COMMUNITY(state) {
       state.isCommunity = true;
     },
-    CHECK_RATES(state, bool) {
-      state.youCanRate = bool
-    },
     GET_SIMILAR_MOVIE(state, similarMovies) {
-      state.similarMovies = similarMovies
-    }
+      state.similarMovies = similarMovies;
+    },
   },
   actions: {
     getLastMovies(context) {
@@ -220,14 +225,14 @@ export default new Vuex.Store({
       })
         .then((response) => {
           const similarMovies = response.data.map((similar) => {
-            const movie_id = similar.id
+            const movie_id = similar.id;
             const poster_path = TMDB_URL + similar.poster_path;
             const similarMovie = {
-              movie_id : movie_id,
-              poster_path: poster_path
-            }
-            return similarMovie
-          })
+              movie_id: movie_id,
+              poster_path: poster_path,
+            };
+            return similarMovie;
+          });
           context.commit("GET_SIMILAR_MOVIE", similarMovies);
         })
         .catch((error) => {
@@ -286,11 +291,14 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
+
           const movieData = [response.data[0]]
+
           const movies = response.data[1].map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
+
           })
           movieData.push(movies)
           context.commit("GET_GENRE_MOVIES", movieData)
@@ -417,7 +425,6 @@ export default new Vuex.Store({
         url: `${API_URL}/api/v1/movies/${id}/`,
       })
         .then((response) => {
-          console.log('hi')
           let movie = response.data;
 
           movie.backdrop_path = TMDB_URL + movie.backdrop_path;
@@ -431,7 +438,7 @@ export default new Vuex.Store({
         });
     },
     closeDetailModal(context) {
-      context.state.youCanRate = true
+      context.state.youCanRate = true;
       const movieDetailModalStatus = { isActive: false, movie: null };
       context.commit("CLOSE_DETAIL_MODAL", movieDetailModalStatus);
     },
@@ -518,7 +525,13 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          context.commit("GET_RATES", response.data);
+          const movie_id = context.state.movieDetailModalStatus.movie.id;
+          const rates = response.data.filter((rate) => {
+            if (rate.movie_id == movie_id) {
+              return rate;
+            }
+          });
+          context.commit("GET_RATES", rates);
         })
         .catch((error) => {
           console.log(error);
@@ -553,15 +566,13 @@ export default new Vuex.Store({
     },
     signUp(context, payload) {
       const username = payload.username;
-      const password1 = payload.password1;
-      const password2 = payload.password2;
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
         data: {
           username: username,
-          password1: password1,
-          password2: password2,
+          password1: payload.password1,
+          password2: payload.password2,
         },
       })
         .then((response) => {
@@ -573,7 +584,7 @@ export default new Vuex.Store({
           context.commit("SAVE_TOKEN", userdata);
         })
         .catch((error) => {
-          alert('이미 존재하는 이름 입니다.')
+          alert("이미 존재하는 이름입니다.");
           console.log(error);
         });
     },
@@ -585,13 +596,12 @@ export default new Vuex.Store({
     },
     logIn(context, payload) {
       const username = payload.username;
-      const password = payload.password;
       axios({
         method: "post",
         url: `${API_URL}/accounts/login/`,
         data: {
           username: username,
-          password: password,
+          password: payload.password,
         },
       })
         .then((response) => {
@@ -603,22 +613,9 @@ export default new Vuex.Store({
           context.commit("SAVE_TOKEN", userdata);
         })
         .catch((error) => {
-          context.commit("TOKEN_ERROR");
+          alert("흠 다시 확인해 주세요");
           console.log(error);
         });
-    },
-    checkRates(context) {
-      const allRates = context.state.allRates
-      const user_id = context.state.userInfo.id
-      const movie_id = context.state.movieDetailModalStatus.movie.movie_id
-      for (const rate of allRates) {
-        // 이 영화 평가를 했을 경우
-        if (rate.user_id == user_id && rate.movie_id == movie_id) {
-          // 더이상 평가 금지
-          context.commit('CHECK_RATES', false)
-          break
-        }
-      }
     },
     closeLogInModal(context) {
       context.commit("CLOSE_LOG_IN_MODAL");

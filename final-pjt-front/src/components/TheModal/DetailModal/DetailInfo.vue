@@ -33,8 +33,14 @@
       </div>
       <div>
         <span>출연:</span>
-        <span v-for="actorProfile of actorProfiles" :key="actorProfile.id">
-          {{ actorProfile.name }}
+        <span>
+          {{ actorsName }}
+        </span>
+      </div>
+      <div>
+        <span>장르:</span>
+        <span>
+          {{ genres }}
         </span>
       </div>
     </div>
@@ -75,6 +81,22 @@ export default {
 
       return actorProfiles;
     },
+    actorsName() {
+      const actors = this.movie.actors.slice(0, 3);
+      const actorsName = [];
+      for (const actor of actors) {
+        actorsName.push(actor.name);
+      }
+      return actorsName.join(", ");
+    },
+    genres() {
+      const genres = this.movie.genre_ids;
+      const genresName = [];
+      for (const genre of genres) {
+        genresName.push(genre.name);
+      }
+      return genresName.join(", ");
+    },
   }),
 };
 </script>
@@ -85,17 +107,11 @@ export default {
 }
 .info-title {
   opacity: 0.8;
-  font-size: calc(5px + 0.5vw) !important;
+  font-size: calc(8px + 0.5vw) !important;
 }
 
 .movie__overview {
-  /* overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  font-size: calc(4px + 0.5vw);
-  transition: all 0.5s ease-in-out; */
+  font-size: calc(8px + 0.3vw);
 }
 
 .people-profile {
@@ -123,7 +139,10 @@ export default {
   margin: 0 1vw;
 }
 
+.people-name {
+  margin: 1vw 0;
+}
 .people-name > * {
-  padding: 10px;
+  padding-top: 1vw;
 }
 </style>
