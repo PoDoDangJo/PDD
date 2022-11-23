@@ -282,15 +282,14 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
-          console.log(response.data)
           const movieData = [response.data[0]]
           const movies = response.data[1].map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
-          });
+          })
           movieData.push(movies)
-          context.commit("GET_CLASSIC_MOVIES", movieData);
+          context.commit("GET_GENRE_MOVIES", movieData)
         })
         .catch((error) => {
           console.log(error);
