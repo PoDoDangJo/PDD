@@ -68,8 +68,8 @@ def comment_detail(request, comment_pk):
 
 @api_view(['POST'])
 def comment_create(request, review_pk):
-    if 'image' in request.Files:
-        image = request.Files['image']
+    # if 'image' in request.Files:
+    #     image = request.Files['image']
     review = get_object_or_404(Review, pk=review_pk)
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
