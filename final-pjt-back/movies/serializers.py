@@ -1,5 +1,12 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth import get_user_model
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('username',)
 
 
 class ActorSerializer(serializers.ModelSerializer):
@@ -39,18 +46,18 @@ class MovieListSerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
+    user_id = UserSerializer(read_only=True)
+
     class Meta:
         model = Rating
         fields = '__all__'
-        read_only_fields = ('movie_id', 'user_id', 'like_users')
+        read_only_fields = ('movie_id', 'like_users', 'user_id')
 
 
 class MovieSerializer(serializers.ModelSerializer):
     genre_ids = GenreSerializer(many=True, read_only=True)
     director = DirectorSerializer(many=True, read_only=True)
     actors = ActorSerializer(many=True, read_only=True)
-    rating_set = RatingSerializer(many=True, read_only=True)
-    rating_count = serializers.IntegerField(source='rating_set.count', read_only=True)
 
     class Meta:
         model = Movie
