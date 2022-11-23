@@ -72,15 +72,18 @@ def movie_rates(request, movie_pk):
             if movie.ratings.filter(user_id=request.user.pk).exists():
                 rating.delete()
         serializer.save(user_id=request.user, movie_id=movie)
+        return Response(serializer.data)
 
-        for data in rating.values():
-            rating_data = data.get('rate')
-        context = {
-            'rating': rating_data,
-        }
-        return JsonResponse(context)
-    context = {}
-    return JsonResponse(context)
+
+
+        # for data in rating.values():
+        #     rating_data = data.get('rate')
+    #     context = {
+    #         'rating': rating_data,
+    #     }
+    #     return JsonResponse(context)
+    # context = {}
+    # return JsonResponse(context)
 
 
 @api_view(['POST'])
@@ -216,7 +219,7 @@ def movie_popularity(request):
 def movie_new(request):
     end_date = datetime.datetime.today()
     start_date = datetime.date(2022, 1, 1)
-    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).order_by('-release_date')
+    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).exclude(trailer_youtube_key = 'nothing').order_by('-release_date')
     serializers = MovieListSerializer(movies[:15], many=True)
     return Response(serializers.data)
 
