@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     ...mapState({
-      lastMovies: (state) => state.allMovies.slice(5, 10),
+      lastMovies: (state) => state.lastMovies.slice(0, 5),
       popularityMovies: (state) => state.popularityMovies.slice(5, 10),
       classicMovies: (state) => state.classicMovies.slice(0, 5),
     }),

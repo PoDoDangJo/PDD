@@ -2,7 +2,7 @@
   <div class="modal" id="modal-container">
     <div class="overlay" @click="closeCreateReviewModal"></div>
     <div class="modal-card">
-        <h1>게시글 작성!</h1>
+      <h1>게시글 작성!</h1>
       <div class="article_conainer">
         <textarea
           name="article_title"
@@ -12,47 +12,32 @@
           v-model="aritcleTitle"
           rows="4"
         />
-      </div><br>
-      <div class="article_conainer">
-      <textarea
-        name="article_content"
-        placeholder="내용을 입력해 주세용."
-        class="article"
-        maxlength="1000"
-        v-model="articleContent"
-        rows="4"
-      />
-      <div class="spolier__box">
-        <input
-          type="checkbox"
-          id="spolier-check"
-          name="spolier"
-          v-model="isSpolier"
-        />
-        <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
       </div>
-      <button class="article_button btn__color">게시글 작성</button>
-    </div>
-    <br />
-    <div class="articles_conainer"></div>
-      <!-- <form @submit.prevent="createReview">
-        <input
-          type="text"
-          placeholder="제목을 입력하세요."
-          v-model="title"
-          required
-        />
-        <br />
+      <br />
+      <div class="article_conainer">
         <textarea
-          placeholder="내용을 입력하세요."
-          cols="30"
-          rows="10"
-          v-model="content"
-          required
+          name="article_content"
+          placeholder="내용을 입력해 주세용."
+          class="article"
+          maxlength="1000"
+          v-model="articleContent"
+          rows="4"
         />
-        <br />
-        <button>게시글 작성</button>
-      </form> -->
+        <div class="spolier__box">
+          <input
+            type="checkbox"
+            id="spolier-check"
+            name="spolier"
+            v-model="isSpolier"
+          />
+          <label for="spolier">잠깐! 스포일러가 될 수 있어요.</label>
+        </div>
+        <button class="article_button btn__color" @click="createReview">
+          게시글 작성
+        </button>
+      </div>
+      <br />
+      <div class="articles_conainer"></div>
     </div>
   </div>
 </template>

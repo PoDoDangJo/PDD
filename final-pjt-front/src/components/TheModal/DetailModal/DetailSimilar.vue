@@ -1,66 +1,35 @@
 <template>
   <div class="detail__similar">
-    <div v-if="similarMovies.length">
-      <h1>비슷한 영화 있음</h1>
-    </div>
-    <div v-else>
-      <ul v-for="similarMovie in similarMovies" :key="similarMovie.id">
-        <li class="movie-card icon" @click="openDetailModal">
-          <img
-            class="movie-backdrop"
-            :src="similarMovie.poster_path"
-            alt="poster"
-          />
-        </li>
-      </ul>
+    <ul v-for="similarMovie in similarMovies" :key="similarMovie.id">
+      <li class="movie-card icon" @click="openDetailModal(similarMovie)">
+        <img
+          class="movie-backdrop"
+          :src="similarMovie.poster_path"
+          alt="poster"
+        />
+      </li>
+    </ul>
+    <div v-if="!similarMovies.length" class="message">
+      <h4 class="no-movie">관련 영화를 찾을 수 없습니다!</h4>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import axios from "axios";
-
-const API_URL = "http://127.0.0.1:8000";
-const TMDB_URL = "https://image.tmdb.org/t/p/w500";
+import _ from "lodash";
 
 export default {
   name: "DetailSimilar",
-  props: {
-    similarMovieIds: Object,
-  },
-  data() {
-    return {
-      similarMovies: [],
-    };
-  },
   computed: mapState({
-    movie: (state) => state.movieDetailModalStatus.movie,
+    similarMovies: (state) => _.sampleSize(state.similarMovies, 3),
   }),
   methods: {
-    openDetailModal() {
-      this.$store.dispatch("openDetailModal", this.movie.id);
+    openDetailModal(movie) {
+      this.$store.dispatch("openDetailModal", movie.movie_id);
     },
-
-    getSimilarMovie(arrays) {
-      for (const array of arrays) {
-        console.log(array);
-        axios({
-          method: "get",
-          url: `${API_URL}/api/v1/movies/${array.id}`,
-        })
-          .then((response) => {
-            const similarMoviePoster = TMDB_URL + response.data.poster_path;
-            const similarMovie = {
-              id: response.data.id,
-              poster_path: similarMoviePoster,
-            };
-            this.similarMovies.push(similarMovie);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+    changeMovie() {
+      this.$emit("change-movie");
     },
   },
 };
@@ -68,7 +37,27 @@ export default {
 
 <style scoped>
 .detail__similar {
-  margin: 2vw;
+  margin: 1vw 2vw;
+  list-style: none;
+}
+
+.message {
+  width: 100%;
+  height: calc(100px + 10vw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.no-movie {
+  font-size: calc(8px +0.5vw);
+  text-anchor: end;
+}
+
+@media screen and (min-width: 750px) {
+  .detail__similar {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 li {
@@ -77,6 +66,7 @@ li {
   min-width: 200px;
   max-width: 300px;
   width: calc(100px + 20vw);
+  margin: 1vw;
 }
 
 .movie-card {
@@ -92,7 +82,7 @@ li {
 /* hover */
 .movie-card:hover {
   transform: scale(1.1);
-  z-index: 11;
+  z-index: 15;
 }
 
 .movie-backdrop {
@@ -100,5 +90,11 @@ li {
   width: 100%;
   border-radius: 1%;
   overflow: hidden;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 </style>

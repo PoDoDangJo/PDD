@@ -84,7 +84,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #full-stars-example {
   .rating__group {
     display: inline-flex;
