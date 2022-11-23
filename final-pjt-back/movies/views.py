@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from .serializers import *
 from .models import *
 
+# movies
 
 @api_view(['GET'])
 def movie_list(request):
@@ -64,16 +65,16 @@ def movie_rates(request, movie_pk):
     if request.user.is_authenticated:
         movie = get_object_or_404(Movie, pk=movie_pk)
         rating = movie.ratings.filter(user_id=request.user)
-        for data in rating.values():
-            rating_data = data.get('rate')
-
         serializer = RatingSerializer(data=request.data)
+        
         if serializer.is_valid(raise_exception=True):
             # 기존에 있었다면 삭제
             if movie.ratings.filter(user_id=request.user.pk).exists():
                 rating.delete()
-            
         serializer.save(user_id=request.user, movie_id=movie)
+
+        for data in rating.values():
+            rating_data = data.get('rate')
         context = {
             'rating': rating_data,
         }
