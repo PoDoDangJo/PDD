@@ -1,11 +1,19 @@
 from rest_framework import serializers
 from .models import Review, Comment
+from django.contrib.auth import get_user_model
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('username',)
 
 class ReviewListSerializer(serializers.ModelSerializer):
+    user_id = UserSerializer(read_only=True)
+
     class Meta:
         model = Review
-        fields = ('id', 'title', 'content', 'created_at', 'updated_at')
+        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'user_id')
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +23,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    
+    user = UserSerializer(read_only=True)
     comment_set = CommentSerializer(many=True, read_only=True)
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
 
     class Meta:
         model = Review
         fields = '__all__'
-        read_only_fields = ('user_id',)
+        # read_only_fields = ('user_id',)

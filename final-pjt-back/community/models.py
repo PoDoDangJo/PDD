@@ -8,7 +8,7 @@ User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 class Review(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
     like_users = models.ManyToManyField(User, related_name='like_reviews', blank=True)
     title = models.CharField(max_length=100)
     content = models.TextField()

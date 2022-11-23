@@ -24,6 +24,8 @@ export default new Vuex.Store({
     lastMovies: [],
     popularityMovies: [],
     classicMovies: [],
+    genreMovies: [],
+    genreMoviesTitle: null,  // 랜덤 장르 영화 타이틀
     allReviews: [],
     allRates: [],
     similarMovies: [],
@@ -64,6 +66,10 @@ export default new Vuex.Store({
     },
     GET_CLASSIC_MOVIES(state, movies) {
       state.classicMovies = movies;
+    },
+    GET_GENRE_MOVIES(state, movieData) {
+      state.genreMovies = movieData[1]
+      state.genreMoviesTitle = movieData[0];
     },
     GET_USER_PROFILE(state, userInfo) {
       state.userInfo = userInfo;
@@ -264,6 +270,33 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 랜덤 장르 영화
+    getGenreMovies(context) {
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/movies/random_genre/`,
+        // headers: {
+        //   // 인증 여부를 확인하기 위한 Token을 담아서 요청
+        //   Authorization: `Token ${ context.state.token }`
+        // }
+      })
+        .then((response) => {
+          // 이미지를 불러오기 위한 URL 추가 작업
+          console.log(response.data)
+          const movieData = [response.data[0]]
+          const movies = response.data[1].map((movie) => {
+            movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+            movie.poster_path = TMDB_URL + movie.poster_path;
+            return movie;
+          });
+          movieData.push(movies)
+          context.commit("GET_CLASSIC_MOVIES", movieData);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    //
     getReviews(context) {
       axios({
         method: "get",
