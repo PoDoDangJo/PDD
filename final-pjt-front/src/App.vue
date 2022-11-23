@@ -13,7 +13,7 @@
       v-if="reviewDetailModalStatus.isActive"
       :review="reviewDetailModalStatus.review"
     />
-    <!-- 메인 -->
+    <!-- 메인 --> 
     <main :class="{ is__blur: isModal }">
       <router-view />
     </main>
@@ -56,6 +56,8 @@ export default {
       "getPopularityMovies",
       "getClassicMovies",
       "getGenreMovies",
+      "getDirectorMovies",
+      "getActorMovies",
     ]),
   },
   created() {
@@ -65,6 +67,8 @@ export default {
     this.getPopularityMovies();
     this.getClassicMovies();
     this.getGenreMovies();
+    this.getDirectorMovies();
+    this.getActorMovies();
   },
 };
 </script>
