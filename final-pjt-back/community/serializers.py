@@ -16,17 +16,16 @@ class ReviewListSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'user_id')
 
 class CommentSerializer(serializers.ModelSerializer):
+    user_id = UserSerializer(read_only=True)
+
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('review_id', 'user_id',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
+        read_only_fields = ('review_id',)  # 유효성 검사에서 빼서 읽기전용필드로 만들기
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    
-    user = UserSerializer(read_only=True)
-    comment_set = CommentSerializer(many=True, read_only=True)
-    comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
+    user_id = UserSerializer(read_only=True)
 
     class Meta:
         model = Review
