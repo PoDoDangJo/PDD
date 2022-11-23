@@ -13,7 +13,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'title', 'content', 'created_at', 'updated_at', 'user_id')
+        fields = ('id', 'title', 'spoiler', 'content', 'created_at', 'updated_at', 'user_id')
 
 class CommentSerializer(serializers.ModelSerializer):
     user_id = UserSerializer(read_only=True)
