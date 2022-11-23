@@ -52,7 +52,7 @@ export default {
   methods: {
     ...mapActions([
       "getLastMovies",
-      "getReviews",
+      // "getReviews",
       "getPopularityMovies",
       "getClassicMovies",
       "getGenreMovies",
@@ -63,7 +63,7 @@ export default {
   created() {
     // App 실행시 영화 데이터 가져오는 함수 실행
     this.getLastMovies();
-    this.getReviews();
+    // this.getReviews();
     this.getPopularityMovies();
     this.getClassicMovies();
     this.getGenreMovies();
