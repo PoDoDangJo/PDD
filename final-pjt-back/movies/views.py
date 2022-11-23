@@ -148,7 +148,6 @@ def movie_directors(request, movie_pk):
 @api_view(['GET'])
 def movie_similar(request, movie_pk):
     similar_movies_id = Movie.objects.filter(id=movie_pk).values('movie_similar')
-    data=[]
     for sm in similar_movies_id:
         sm.get('movie_similar')
         movie = Movie.objects.filter(id__in=sm.get('movie_similar'))
@@ -160,12 +159,33 @@ def movie_similar(request, movie_pk):
 @api_view(['GET'])
 def popular_director(request):
     # 인기 감독을 구한다.
-    director = Director.objects.all().order_by('popularity')
-    print(director)
+    P_director = Director.objects.all().order_by('-popularity').values()[:3]
     # 인기감독이 들어간 영화 리스트를 뽑는다.
-
+    data=[]
+    for dir in P_director:
+        movies = Movie.objects.filter(director__id = dir.get('id'))
+        serializer = MovieListSerializer(movies, many=True)
+        data.append(dir)
+        data.append(serializer.data)
     # 둘을 합쳐서 데이터로 보낸다.
+    return Response(data=data)
 
+
+# 인기 배우가 참여한 영화 추천
+@api_view(['GET'])
+def popular_actor(request):
+    # 인기 배우를 구한다.
+    P_actor = Actor.objects.all().order_by('-popularity').values()[:3]
+    print(P_actor)
+    # 인기감독이 들어간 영화 리스트를 뽑는다.
+    data=[]
+    for act in P_actor:
+        movies = Movie.objects.filter(actors__id = act.get('id')).order_by('-vote_average')
+        serializer = MovieListSerializer(movies, many=True)
+        data.append(act)
+        data.append(serializer.data)
+    # 둘을 합쳐서 데이터로 보낸다.
+    return Response(data=data)
 
 
 # 장르별 영화 추천
