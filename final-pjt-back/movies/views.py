@@ -66,7 +66,7 @@ def movie_rates(request, movie_pk):
         movie = get_object_or_404(Movie, pk=movie_pk)
         rating = movie.ratings.filter(user_id=request.user)
         serializer = RatingSerializer(data=request.data)
-        
+
         if serializer.is_valid(raise_exception=True):
             # 기존에 있었다면 삭제
             if movie.ratings.filter(user_id=request.user.pk).exists():
@@ -148,23 +148,44 @@ def movie_directors(request, movie_pk):
 @api_view(['GET'])
 def movie_similar(request, movie_pk):
     similar_movies_id = Movie.objects.filter(id=movie_pk).values('movie_similar')
-    data=[]
     for sm in similar_movies_id:
         sm.get('movie_similar')
-        print('###########################################')
         movie = Movie.objects.filter(id__in=sm.get('movie_similar'))
         serializer = SimilarMovieSerializer(movie, many=True)
     return Response(serializer.data)
     
-    # movie_similar = Movie.objects.filter(id__in = similar_movies_id)
-    # serializers = MovieListSerializer(movie_similar, many=True)
-    # return Response(serializers.data) 
-# 비슷한 영화는 포스터와 영화 id만 있으면 된다. 랜덤 3개
-# 영화 아이디를 넣으면, 관련 데이터 가져오기
 
 # 인기 감독의 영화 추천
-# 1. 인기 영화 감독을 구한다.
-# 
+@api_view(['GET'])
+def popular_director(request):
+    # 인기 감독을 구한다.
+    P_director = Director.objects.all().order_by('-popularity').values()[:3]
+    # 인기감독이 들어간 영화 리스트를 뽑는다.
+    data=[]
+    for dir in P_director:
+        movies = Movie.objects.filter(director__id = dir.get('id'))
+        serializer = MovieListSerializer(movies, many=True)
+        data.append(dir)
+        data.append(serializer.data)
+    # 둘을 합쳐서 데이터로 보낸다.
+    return Response(data=data)
+
+
+# 인기 배우가 참여한 영화 추천
+@api_view(['GET'])
+def popular_actor(request):
+    # 인기 배우를 구한다.
+    P_actor = Actor.objects.all().order_by('-popularity').values()[:3]
+    print(P_actor)
+    # 인기감독이 들어간 영화 리스트를 뽑는다.
+    data=[]
+    for act in P_actor:
+        movies = Movie.objects.filter(actors__id = act.get('id')).order_by('-vote_average')
+        serializer = MovieListSerializer(movies, many=True)
+        data.append(act)
+        data.append(serializer.data)
+    # 둘을 합쳐서 데이터로 보낸다.
+    return Response(data=data)
 
 
 # 장르별 영화 추천
@@ -179,14 +200,26 @@ def movie_random_genre(request):
     serializers = MovieListSerializer(movies[:15], many=True)
     return Response(data=[genre.get('name'), serializers.data])
 
-
-# 인기순 영화 필터
-# - 기준 : 전체에서 영화만, 15개
+# 최신 영화
+# 기준 : 전체에서  오늘 날짜 이하의 realse_date 기준 과거 15개
 @api_view(['GET'])
 def movie_popularity(request):
     movies = Movie.objects.all().order_by('-popularity')
     serializers = MovieListSerializer(movies[:15], many=True)
     return Response(serializers.data)
+
+
+
+# 인기순 영화 필터
+# - 기준 : 전체에서 영화만, 15개
+@api_view(['GET'])
+def movie_new(request):
+    end_date = datetime.datetime.today()
+    start_date = datetime.date(2022, 1, 1)
+    movies = Movie.objects.filter(release_date__range=(start_date, end_date)).order_by('-release_date')
+    serializers = MovieListSerializer(movies[:15], many=True)
+    return Response(serializers.data)
+
 
 # 고전 영화 필터
 # - 기준 : 2000년대 이전, 평점 높은 순, 트레일러 있는 영화만, 20개
