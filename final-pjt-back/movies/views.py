@@ -51,7 +51,8 @@ def rate_detail(request, rate_pk):
         return Response(serializer.data)
 
     elif request.method == 'DELETE':
-        Rating.delete()
+        rate = Rating.objects.get(pk=rate_pk)
+        rate.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
