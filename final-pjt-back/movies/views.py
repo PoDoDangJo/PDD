@@ -162,31 +162,59 @@ def movie_similar(request, movie_pk):
 @api_view(['GET'])
 def popular_director(request):
     # 인기 감독을 구한다.
-    P_director = Director.objects.all().order_by('-popularity').values()[:3]
+    P_director = Director.objects.all().order_by('-popularity').values()[:10]
     # 인기감독이 들어간 영화 리스트를 뽑는다.
     data=[]
-    for dir in P_director:
+    cnt = 0
+    for dir in P_director:  # 보내주는 데이터를 15개로 제한
         movies = Movie.objects.filter(director__id = dir.get('id'))
-        serializer = MovieListSerializer(movies, many=True)
-        data.append(dir)
-        data.append(serializer.data)
+        if cnt <= 15:
+            if len(movies.values()) + cnt < 15:
+                cnt += len(movies.values())
+                serializer = MovieDirRecommendSerializer(movies, many=True)
+                data.append(dir)
+                data.append(serializer.data)
+            else:
+                tmp = movies.values()[15-cnt]
+                serializer = MovieDirRecommendSerializer([tmp], many=True)
+                data.append(dir)
+                data.append(serializer.data)
+        else: 
+            break
     # 둘을 합쳐서 데이터로 보낸다.
     return Response(data=data)
 
 
 # 인기 배우가 참여한 영화 추천
 @api_view(['GET'])
-def popular_actor(request):
-    # 인기 배우를 구한다.
-    P_actor = Actor.objects.all().order_by('-popularity').values()[:3]
-    print(P_actor)
-    # 인기감독이 들어간 영화 리스트를 뽑는다.
+def popular_actor(request):  # 15개로 제한
+#     # 인기 배우를 구한다.
+    P_actor = Actor.objects.all().order_by('-popularity').values()[:5]
+#     # 인기 배우가 들어간 영화 리스트를 뽑는다.
     data=[]
-    for act in P_actor:
-        movies = Movie.objects.filter(actors__id = act.get('id')).order_by('-vote_average')
-        serializer = MovieListSerializer(movies, many=True)
-        data.append(act)
-        data.append(serializer.data)
+    cnt = 0
+    for act in P_actor:  # 보내주는 데이터를 15개로 제한
+        movies = Movie.objects.filter(actors__id = act.get('id'))
+        print(cnt)
+        if cnt <= 15:
+            if len(movies.values()) + cnt < 15:
+                cnt += len(movies.values())
+                serializer = MovieActRecommendSerializer(movies, many=True)
+                data.append(act)
+                data.append(serializer.data)
+            elif len(movies.values()) + cnt == 15:
+                cnt += len(movies.values())
+                serializer = MovieActRecommendSerializer(movies, many=True)
+                data.append(act)
+                data.append(serializer.data)
+                break
+            else:
+                tmp = movies.values()[15-cnt]
+                serializer = MovieActRecommendSerializer([tmp], many=True)
+                data.append(act)
+                data.append(serializer.data)
+        else: 
+            break
     # 둘을 합쳐서 데이터로 보낸다.
     return Response(data=data)
 
