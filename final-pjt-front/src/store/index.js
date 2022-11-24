@@ -30,6 +30,7 @@ export default new Vuex.Store({
     actorMovies: [],
     allReviews: [],
     allRates: [],
+    allComments: [],
     similarMovies: [],
     searchMovies: [],
     isModal: false,
@@ -111,8 +112,13 @@ export default new Vuex.Store({
     },
     CREATE_MOVIE_RATE(state, rates) {
       state.allRates = rates;
+      location.reload()
     },
+    CREATE_REVIEW_COMMENT(state, comments) {
+      state.allComments.push(comments)
 
+      location.reload()
+    },
     DELETE_MOVIE_RATE(state, rate) {
       const index = state.allRate.indexOf(rate);
       state.allReviews.splice(index, 1);
@@ -201,10 +207,17 @@ export default new Vuex.Store({
       state.similarMovies = similarMovies;
     },
     GET_SEARCH(state, movies) {
-      console.log(movies);
       state.searchMovies = movies;
       router.push({ name: "SearchView" });
     },
+    GET_COMMENTS(state, comments) {
+      const review_id = state.reviewDetailModalStatus.review.id
+      state.allComments = comments.map((comment) => {
+        if (comment.review_id == review_id) {
+          return comment
+        }
+      })
+    }
   },
   actions: {
     getLastMovies(context) {
@@ -377,7 +390,6 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    //
     getReviews(context) {
       axios({
         method: "get",
@@ -403,21 +415,6 @@ export default new Vuex.Store({
       })
         .then((response) => {
           context.commit("GET_USER_PROFILE", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getComments(context) {
-      axios({
-        method: "get",
-        url: `${API_URL}/api/v2/comments/`,
-        headers: {
-          Authorization: `Token ${context.state.token}`,
-        },
-      })
-        .then((response) => {
-          context.commit("GET_COMMENTS", response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -558,7 +555,6 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          console.log(response.data);
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
         })
@@ -683,6 +679,45 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    getComments(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/api/v2/comments/`,
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+      .then((response) => {
+        this.commit('GET_COMMENTS', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+    createReviewComment(context, payload) {
+      console.log(payload)
+      axios({
+        method: "post",
+        url: `${API_URL}/api/v2/reviews/${payload.review_id}/comments/`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+        data: {
+          content: payload.content,
+          spoiler: false,
+          review_id: payload.review_id,
+          user_id: context.state.userInfo.id,
+        },
+      })
+        .then((response) => {
+          const comments = response.data;
+          context.commit("CREATE_REVIEW_COMMENT", comments);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
   },
   modules: {
     // accounts, articles, movies

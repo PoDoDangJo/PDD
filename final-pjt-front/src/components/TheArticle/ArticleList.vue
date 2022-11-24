@@ -48,6 +48,7 @@ hr:after {
 }
 
 .article__list {
+  /* background-image: linear-gradient(to bottom, #14141400 0%, #141414 40%); */
   position: absolute;
   top: 40vw;
   width: 100%;

@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   name: "ArticleItem",
   props: {
@@ -33,7 +31,6 @@ export default {
       return this.review.created_at.slice(0, 10);
     },
     title() {
-      console.log(this.review);
       if (this.review.spoiler) {
         return "스포일러를 주의하시고 누르세요.";
       } else {
@@ -42,13 +39,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getComments"]),
     openReviewModal() {
       this.$store.dispatch("openReviewModal", this.review.id);
     },
-  },
-  created() {
-    this.getComments();
   },
 };
 </script>

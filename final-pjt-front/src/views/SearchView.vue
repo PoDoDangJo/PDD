@@ -2,7 +2,10 @@
   <div id="content">
     <div id="canvas"></div>
 
-    <div class="search-title glow">{{ searchData }}</div>
+    <div class="search-title">
+      <h1>{{ searchData }}</h1>
+      <button @click="reloading">WAVE</button>
+    </div>
 
     <div class="search-list">
       <ul class="movie-list">
@@ -38,7 +41,7 @@ export default {
   name: "SearchView",
   computed: mapState({
     searchData: (state) => state.searchData,
-    searchMovies: (state) => state.searchMovies,
+    searchMovies: (state) => _.sampleSize(state.searchMovies, 5),
     randomImage() {
       console.log(this.searchMovies);
       return _.sample(this.searchMovies).backdrop_path;
@@ -51,6 +54,9 @@ export default {
     },
     openDetailModal(id) {
       this.$store.dispatch("openDetailModal", id);
+    },
+    reloading() {
+      location.reload();
     },
   },
 };
@@ -67,9 +73,6 @@ export default {
   cursor: pointer;
 }
 
-h1 {
-  margin: 0;
-}
 .go-home {
   height: 200px;
   z-index: 10;
@@ -117,35 +120,15 @@ ul {
 }
 
 .search-title {
+  width: 90%;
+  height: 200px;
+  left: calc(10px + 1vw);
   font-size: calc(10px + 2vw);
   display: flex;
-  position: relative;
-  justify-content: center;
-  top: calc(20px + 1vw);
+  position: fixed;
+  justify-content: space-between;
+  align-items: center;
   z-index: 20;
   font-weight: 700;
-}
-
-.glow {
-  color: #fff;
-  text-align: center;
-  /* -webkit-animation: glow 1s ease-in-out infinite alternate;
-  -moz-animation: glow 1s ease-in-out infinite alternate; */
-  animation: glow 1s ease-in-out infinite alternate;
-}
-
-/* #614af2,
-    #a261f5,
-    #dddcfb, */
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 0px #dddcfb, 0 0 5px #dddcfb, 0 0 10px #614af2,
-      0 0 15px #614af2, 0 0 20px #614af2, 0 0 25px #614af2, 0 0 30px #614af2;
-  }
-  to {
-    text-shadow: 0 0 0px #dddcfb, 0 0 5px #614af2, 0 0 10px #614af2,
-      0 0 15px #614af2, 0 0 20px #614af2, 0 0 25px #614af2, 0 0 30px #614af2;
-  }
 }
 </style>
