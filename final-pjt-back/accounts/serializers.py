@@ -1,9 +1,18 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from movies.models import Rating
+from movies.models import Rating, Movie
 from community.models import Review, Comment
 
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ('id', 'title', 'poster_path', 'backdrop_path',)
+    
+
+
 class RatingSerializer(serializers.ModelSerializer):
+    movie_id = MovieSerializer(read_only=True)
+    
     class Meta:
         model = Rating
         fields = '__all__'

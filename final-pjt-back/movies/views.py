@@ -75,17 +75,6 @@ def movie_rates(request, movie_pk):
         return Response(serializer.data)
 
 
-
-        # for data in rating.values():
-        #     rating_data = data.get('rate')
-    #     context = {
-    #         'rating': rating_data,
-    #     }
-    #     return JsonResponse(context)
-    # context = {}
-    # return JsonResponse(context)
-
-
 @api_view(['POST'])
 def rate_likes(request, rate_pk):
     if request.user.is_authenticated:
@@ -96,8 +85,11 @@ def rate_likes(request, rate_pk):
         else:
             rating.like_users.add(request.user)
             is_liked = True
+            UserSerializer(request.user)
         context = {
             'is_liked': is_liked,
+            'user_id': request.user.id,
+            'username' : request.user.username,
         }
         return JsonResponse(context)
     context = {}
@@ -115,8 +107,6 @@ def movie_random(request):
 # 영화 검색
 @api_view(['GET']) 
 def movie_search(request, words_target):
-    test = Movie.objects.values()
-    print(test)
     movies = Movie.objects.filter(title__contains=words_target)
     # annotate(filter(Q(title__contains=words_target))# | Q(actors__name__contains=words_target) | Q(director=words_target)
     serializers = MovieListSerializer(movies[:10], many=True)
