@@ -28,6 +28,10 @@ export default {
       this.$store.dispatch("openDetailModal", movie.movie_id);
     },
   },
+  created () {
+    // this.$store.dispatch('getUserProfile')
+    console.log(this.$store.state.userInfo)
+  }
 };
 </script>
 
