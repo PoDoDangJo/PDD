@@ -4,47 +4,56 @@
 
     <div class="modal-card">
       <div class="profile__info">
-        <img class="profile" src="@/assets/icons/logo.png" alt="" />
+        <!-- <img class="profile" src="@/assets/icons/logo.png" alt="" /> -->
         <h1 class="profile__info__text">{{ username }}</h1>
+        <p>처음 만난 날 : {{ userInfo.date_joined.slice(0, 10) }}</p>
       </div>
       <div class="profile-detail">
         <div class="detail__components__nav">
           <div class="button__container">
-            <button :class="{ is__active: infoPage }" @click="goInfoPage()">
+            <button :class="{ is__active: rateMoviePage }" @click="goRateMoviePage()">
               내 영화
+            </button>
+            <button
+              :class="{ is__active: articlePage }"
+              @click="goArticlePage()"
+            >
+              내 글
             </button>
             <button
               :class="{ is__active: commentPage }"
               @click="goCommentPage()"
             >
-              내 글
-            </button>
-            <button
-              :class="{ is__active: similarPage }"
-              @click="goSimilarPage()"
-            >
               내 댓글
             </button>
             <button
-              :class="{ is__active: similarPage }"
-               @click="goSimilarPage()"
+              :class="{ is__active: likeRatePage }"
+               @click="goLikeRatePage()"
             >
               좋아요한 평가
             </button>
             <button
-              :class="{ is__active: similarPage }"
-               @click="goSimilarPage()"
+              :class="{ is__active: likeArticlePage }"
+               @click="goLikeArticlePage()"
             >
               좋아요한 글
             </button>
             <button
-              :class="{ is__active: similarPage }"
-               @click="goSimilarPage()"
+              :class="{ is__active: likeCommentPage }"
+               @click="goLikeCommentPage()"
             >
               좋아요한 댓글
             </button>
           </div>
         </div>
+      </div>
+      <div class="detail__components">
+        <ProfileRateMovie v-if="rateMoviePage"/>
+        <ProfileAritcle v-if="articlePage"/>
+        <ProfileComment v-if="commentPage"/>
+        <ProfileLikeRate v-if="likeRatePage"/>
+        <ProfileLikeArticle v-if="likeArticlePage"/>
+        <ProfileLikeComment v-if="likeCommentPage"/>
       </div>
       <!-- <h2>내가 좋아하는 영화</h2>
       <h3>{{userInfo?.id}}</h3>
@@ -60,17 +69,87 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import ProfileRateMovie from "./ProfileRateMovie.vue";
+import ProfileAritcle from "./ProfileAritcle.vue";
+import ProfileComment from "./ProfileComment.vue";
+import ProfileLikeRate from "./ProfileLikeRate.vue";
+import ProfileLikeArticle from "./ProfileLikeArticle.vue";
+import ProfileLikeComment from "./ProfileLikeComment.vue";
+
 export default {
   name: "ProfileModal",
+  components: {
+    ProfileRateMovie,
+    ProfileAritcle,
+    ProfileComment,
+    ProfileLikeRate,
+    ProfileLikeArticle,
+    ProfileLikeComment,
+  },
+  data() {
+    return {
+      rateMoviePage: true,
+      articlePage: false,
+      commentPage: false,
+      likeRatePage: false,
+      likeArticlePage: false,
+      likeCommentPage: false,
+    }
+  },
   computed: mapState({
     userInfo: (state) => state.userInfo,
     username: (state) => state.username,
   }),
   methods: {
     ...mapActions(["getUserProfile", "closeProfileModal"]),
-    getProfile() {
-
-    }
+    goRateMoviePage() {
+      this.rateMoviePage = true;
+      this.articlePage = false;
+      this.commentPage = false;
+      this.likeRatePage = false;
+      this.likeArticlePage = false;
+      this.likeCommentPage = false;
+    },
+    goArticlePage() {
+      this.rateMoviePage = false;
+      this.articlePage = true;
+      this.commentPage = false;
+      this.likeRatePage = false;
+      this.likeArticlePage = false;
+      this.likeCommentPage = false;
+    },
+    goCommentPage() {
+      this.rateMoviePage = false;
+      this.articlePage = false;
+      this.commentPage = true;
+      this.likeRatePage = false;
+      this.likeArticlePage = false;
+      this.likeCommentPage = false;
+    },
+    goLikeRatePage() {
+      this.rateMoviePage = false;
+      this.articlePage = false;
+      this.commentPage = false;
+      this.likeRatePage = true;
+      this.likeArticlePage = false;
+      this.likeCommentPage = false;
+    },
+    goLikeArticlePage() {
+      this.rateMoviePage = false;
+      this.articlePage = false;
+      this.commentPage = false;
+      this.likeRatePage = false;
+      this.likeArticlePage = true;
+      this.likeCommentPage = false;
+    },
+    goLikeCommentPage() {
+      this.rateMoviePage = false;
+      this.articlePage = false;
+      this.commentPage = false;
+      this.likeRatePage = false;
+      this.likeArticlePage = false;
+      this.likeCommentPage = true;
+    },
   },
   created() {
     this.getUserProfile(this.userInfo.username);
@@ -172,7 +251,7 @@ overlay {
   max-width: 500px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: 500px;
+  min-height: 700px;
   z-index: 10;
   border-radius: 5px;
 }
