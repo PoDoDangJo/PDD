@@ -70,7 +70,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["closeDetailModal", "getRates", "getUserProfile"]),
+    ...mapActions(["closeDetailModal", "getRates"]),
     goInfoPage() {
       this.infoPage = true;
       this.commentPage = false;
@@ -100,8 +100,6 @@ export default {
     this.getRates();
     // 관련 영화 가져오기
     this.getSimilarMovie();
-    // 유저 프로필 가져오기
-    this.getUserProfile();
   },
 };
 </script>
