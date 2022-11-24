@@ -32,7 +32,7 @@
               :class="{ is__active: likeRatePage }"
               @click="goLikeRatePage()"
             >
-               [좋아한 평가]
+              [좋아한 평가]
             </button>
             <button
               :class="{ is__active: likeArticlePage }"
@@ -95,7 +95,7 @@ export default {
     username: (state) => state.username,
   }),
   methods: {
-    ...mapActions(["getUserProfile", "closeProfileModal"]),
+    ...mapActions(["closeProfileModal"]),
     goRateMoviePage() {
       this.rateMoviePage = true;
       this.articlePage = false;
@@ -144,9 +144,6 @@ export default {
       this.likeArticlePage = false;
       this.likeCommentPage = true;
     },
-  },
-  created() {
-    this.getUserProfile(this.userInfo.username);
   },
 };
 </script>

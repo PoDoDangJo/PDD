@@ -84,7 +84,7 @@ button {
   min-width: 100px;
   max-width: 500px;
   position: absolute;
-  margin-top: calc(0.5vw);
+  top: calc(15px + 0.8vw);
   left: 50%;
   transform: translate(-50%, -50%);
 }

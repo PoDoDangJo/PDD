@@ -1,27 +1,30 @@
 <template>
   <div class="detail__similar">
     <ul>
-      <li  v-for="myLikeReview in myLikeReviews" :key="myLikeReview.id" class="movie-card icon">
-        <h3>title : {{ myLikeReview.title }}</h3><br>
+      <li
+        v-for="myLikeReview in myLikeReviews"
+        :key="myLikeReview.id"
+        class="movie-card icon"
+      >
+        <h3>title : {{ myLikeReview.title }}</h3>
+        <br />
         <h4>content : {{ myLikeReview.content }}</h4>
-        <h3>♥{{ myLikeReview.like_users.length }}</h3><br>
+        <h3>♥{{ myLikeReview.like_users.length }}</h3>
+        <br />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myLikeReviews: (state) => state.userInfo.like_reviews
+    myLikeReviews: (state) => state.userInfo.like_reviews,
   }),
   methods: {
-    ...mapActions([
-      "getUserProfile",
-    ]),
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);
     },
@@ -39,7 +42,7 @@ ul {
 .detail__similar {
   margin: 1vw 2vw;
   list-style: none;
-  overflow:scroll;
+  overflow: scroll;
 }
 
 .message {

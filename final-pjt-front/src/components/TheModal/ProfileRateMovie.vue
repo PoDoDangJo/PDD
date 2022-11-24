@@ -1,30 +1,33 @@
 <template>
   <div class="detail__similar">
     <ul>
-      <li  v-for="myRatingMovie in myRatingMovies" :key="myRatingMovie.id" class="movie-card icon">
+      <li
+        v-for="myRatingMovie in myRatingMovies"
+        :key="myRatingMovie.id"
+        class="movie-card icon"
+        @click="openDetailModal(myRatingMovie)"
+      >
         <img
           class="movie-backdrop"
           :src="`https://image.tmdb.org/t/p/original${myRatingMovie.movie_id.poster_path}`"
           alt="poster"
-        /><br>
-        <h3>♥{{ myRatingMovie.like_users.length }}</h3><br>
+        /><br />
+        <h3>♥{{ myRatingMovie.like_users.length }}</h3>
+        <br />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myRatingMovies: (state) => state.userInfo.rating
+    myRatingMovies: (state) => state.userInfo.rating,
   }),
   methods: {
-    ...mapActions([
-      "getUserProfile",
-    ]),
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);
     },
@@ -42,7 +45,7 @@ ul {
 .detail__similar {
   margin: 1vw 2vw;
   list-style: none;
-  overflow:scroll;
+  overflow: scroll;
 }
 
 .message {
