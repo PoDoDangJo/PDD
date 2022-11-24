@@ -11,7 +11,10 @@
       <div class="profile-detail">
         <div class="detail__components__nav">
           <div class="button__container">
-            <button :class="{ is__active: rateMoviePage }" @click="goRateMoviePage()">
+            <button
+              :class="{ is__active: rateMoviePage }"
+              @click="goRateMoviePage()"
+            >
               내 영화
             </button>
             <button
@@ -28,19 +31,19 @@
             </button>
             <button
               :class="{ is__active: likeRatePage }"
-               @click="goLikeRatePage()"
+              @click="goLikeRatePage()"
             >
               좋아요한 평가
             </button>
             <button
               :class="{ is__active: likeArticlePage }"
-               @click="goLikeArticlePage()"
+              @click="goLikeArticlePage()"
             >
               좋아요한 글
             </button>
             <button
               :class="{ is__active: likeCommentPage }"
-               @click="goLikeCommentPage()"
+              @click="goLikeCommentPage()"
             >
               좋아요한 댓글
             </button>
@@ -48,12 +51,12 @@
         </div>
       </div>
       <div class="detail__components">
-        <ProfileRateMovie v-if="rateMoviePage"/>
-        <ProfileAritcle v-if="articlePage"/>
-        <ProfileComment v-if="commentPage"/>
-        <ProfileLikeRate v-if="likeRatePage"/>
-        <ProfileLikeArticle v-if="likeArticlePage"/>
-        <ProfileLikeComment v-if="likeCommentPage"/>
+        <ProfileRateMovie v-if="rateMoviePage" />
+        <ProfileAritcle v-if="articlePage" />
+        <ProfileComment v-if="commentPage" />
+        <ProfileLikeRate v-if="likeRatePage" />
+        <ProfileLikeArticle v-if="likeArticlePage" />
+        <ProfileLikeComment v-if="likeCommentPage" />
       </div>
       <!-- <h2>내가 좋아하는 영화</h2>
       <h3>{{userInfo?.id}}</h3>
@@ -94,7 +97,7 @@ export default {
       likeRatePage: false,
       likeArticlePage: false,
       likeCommentPage: false,
-    }
+    };
   },
   computed: mapState({
     userInfo: (state) => state.userInfo,

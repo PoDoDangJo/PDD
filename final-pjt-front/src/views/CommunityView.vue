@@ -30,9 +30,13 @@ export default {
       }
     },
   },
+  // 커뮤니티 View 생성 시
   created() {
+    // 커뮤니티 화면 이동 (게시판 <-> 게시글 작성)
     this.inToCommunity();
+    // 유저 데이터 가져오기
     this.getUserProfile();
+    // 리뷰 데이터 가져오기
     this.getReviews();
   },
 };

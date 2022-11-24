@@ -96,8 +96,11 @@ export default {
     },
   },
   created() {
+    // 평가 가져오기
     this.getRates();
+    // 관련 영화 가져오기
     this.getSimilarMovie();
+    // 유저 프로필 가져오기
     this.getUserProfile();
   },
 };

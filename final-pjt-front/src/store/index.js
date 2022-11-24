@@ -21,37 +21,43 @@ const TMDB_URL = "https://image.tmdb.org/t/p/original";
 
 export default new Vuex.Store({
   state: {
+    // 추천 영화 리스트
     lastMovies: [],
     popularityMovies: [],
     classicMovies: [],
+    genreMoviesTitle: null, // 랜덤 장르 영화 타이틀
     genreMovies: [],
-    genreMoviesTitle: null,  // 랜덤 장르 영화 타이틀
     directorMovies: [],
     actorMovies: [],
-    allReviews: [],
-    allRates: [],
-    allComments: [],
+    // 관련 영화 리스트
     similarMovies: [],
+    // 검색 영화 리스트
     searchMovies: [],
+    // 모든 리뷰 / 댓글 / 평가
+    allReviews: [],
+    allComments: [],
+    allRates: [],
+    // 유저 데이터
+    userInfo: null,
+    // 모달창 관리를 위한 데이터
     isModal: false,
     movieDetailModalStatus: { isActive: false, movie: null },
     reviewDetailModalStatus: { isActive: false, review: null },
-    createReviewModalStatus: false,
-    loginModalStatus: false,
     signUpModalStatus: false,
+    loginModalStatus: false,
     profileModalStatus: false,
-    token: null,
-    isCommunity: null,
-    userInfo: null,
-    username: null,
+    createReviewModalStatus: false,
+    // 검색 데이터
     searchData: null,
+    // 홈 / 커뮤니티 판단
+    isCommunity: null,
   },
   getters: {
-    // 로그인 했는지 확인
+    // 로그인 했는지 확인 (영화 상세창에서 댓글)
     isLogin(state) {
-      return state.token ? true : false;
+      return state.userInfo ? true : false;
     },
-    // 커뮤니티 뷰인지 확인
+    // 커뮤니티 뷰인지 확인 (게시판 <-> 게시글 작성)
     isCommunity(state) {
       return state.isCommunity ? true : false;
     },
@@ -63,7 +69,7 @@ export default new Vuex.Store({
     },
     // 평가를 할 수 있는 지 확인
     youCanRate(state) {
-      state.userInfo.rating
+      state.userInfo.rating;
     },
   },
   mutations: {
@@ -123,6 +129,10 @@ export default new Vuex.Store({
     // 리뷰 데이터 가져오기
     GET_REVIEWS(state, reviews) {
       state.allReviews = reviews;
+
+      // 리뷰를 삭제했을 경우
+      state.isModal = false;
+      state.reviewDetailModalStatus = { isActive: false, review: null };
     },
     // 영화 평가 생성
     CREATE_MOVIE_RATE(state, rates) {
@@ -131,9 +141,7 @@ export default new Vuex.Store({
     },
     // 리뷰 댓글 생성
     CREATE_REVIEW_COMMENT(state, comments) {
-      state.allComments.push(comments)
-
-      location.reload()
+      state.allComments.push(comments);
     },
     // 리뷰 생성
     CREATE_REVIEWS(state, review) {
@@ -155,15 +163,6 @@ export default new Vuex.Store({
         return review;
       });
     },
-    // 리뷰 삭제
-    DELETE_REVIEW(state, review) {
-      const index = state.allReviews.indexOf(review);
-
-      state.allReviews.splice(index, 1);
-      state.isModal = false;
-
-      state.reviewDetailModalStatus = { isActive: false, review: null };
-    },
     // 회원 가입창 열기
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
@@ -184,27 +183,28 @@ export default new Vuex.Store({
     // 로그인창 닫기
     CLOSE_LOG_IN_MODAL(state) {
       state.isModal = false;
+      // 로그인 모달닫기
       state.loginModalStatus = false;
     },
     // 토큰 저장
     SAVE_TOKEN(state, userdata) {
+      // 로그인 및 회원가입 성공 시 모달창 닫음
       state.isModal = false;
-      state.token = userdata.token;
 
-      state.username = userdata.username;
       state.userInfo = userdata;
+
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
       state.signUpModalStatus = false;
-      // sign up && log in 시 홈으로
-      // router.push({ name: 'HomeView' })
     },
     // 로그아웃
     LOG_OUT(state) {
+      // 토큰과 유저 정보 null로 변경
       state.token = null;
       state.userInfo = null;
+      // local 저장소에서 token 제거
       localStorage.removeItem("token");
-
+      // 새로고침
       location.reload;
     },
     // 프로필창 열기
@@ -236,18 +236,8 @@ export default new Vuex.Store({
     },
     // 댓글 가져오기
     GET_COMMENTS(state, comments) {
-      const review_id = state.reviewDetailModalStatus.review.id
-      state.allComments = comments.map((comment) => {
-        if (comment.review_id == review_id) {
-          return comment
-        }
-      })
+      state.allComments = comments;
     },
-    // 리뷰 댓글 삭제
-    DELETE_REVIEW_COMMENT(state, comment) {
-      const index = state.allComments.indexOf(comment)
-      state.allComments = state.allComments.splice(index, 1)
-    }
   },
   actions: {
     // 최신 영화
@@ -354,10 +344,9 @@ export default new Vuex.Store({
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
-
-          })
-          movieData.push(movies)
-          context.commit("GET_GENRE_MOVIES", movieData)
+          });
+          movieData.push(movies);
+          context.commit("GET_GENRE_MOVIES", movieData);
         })
         .catch((error) => {
           console.log(error);
@@ -374,22 +363,22 @@ export default new Vuex.Store({
           // for (const n = 0; n++)  여기에요 사장님!
           const movieData = [];
           for (let n = 0; n < response.data.length; n++) {
-            if ( n % 2 === 1){
+            if (n % 2 === 1) {
               if (response.data[n].length === 1)
                 movieData.push(response.data[n][0]);
               else {
                 for (let k = 0; k < response.data[n].length; k++) {
-                  movieData.push(response.data[n][k])
+                  movieData.push(response.data[n][k]);
                 }
-                }
+              }
             }
           }
           const movies = movieData.map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
-          })
-          context.commit("GET_DIRECTOR_MOVIES", movies)
+          });
+          context.commit("GET_DIRECTOR_MOVIES", movies);
         })
         .catch((error) => {
           console.log(error);
@@ -404,22 +393,22 @@ export default new Vuex.Store({
         .then((response) => {
           const movieData = [];
           for (let n = 0; n < response.data.length; n++) {
-            if ( n % 2 === 1){
+            if (n % 2 === 1) {
               if (response.data[n].length === 1)
                 movieData.push(response.data[n][0]);
               else {
                 for (let k = 0; k < response.data[n].length; k++) {
-                  movieData.push(response.data[n][k])
+                  movieData.push(response.data[n][k]);
                 }
-                }
+              }
             }
           }
           const movies = movieData.map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
             return movie;
-          })
-          context.commit("GET_ACTOR_MOVIES", movies)
+          });
+          context.commit("GET_ACTOR_MOVIES", movies);
         })
         .catch((error) => {
           console.log(error);
@@ -556,8 +545,20 @@ export default new Vuex.Store({
           Authorization: `Token ${context.state.token}`,
         },
       })
-        .then((response) => {
-          context.commit("DELETE_REVIEW", response.data);
+        .then(() => {
+          axios({
+            method: "get",
+            url: `${API_URL}/api/v2/reviews/`,
+          })
+            .then((response) => {
+              const reviews = response.data;
+              context.commit("GET_REVIEWS", reviews);
+            })
+            .catch((error) => {
+              if (error.data) {
+                console.log(error.data);
+              }
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -605,7 +606,7 @@ export default new Vuex.Store({
         .then((response) => {
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
-          context.actions.getRates
+          context.actions.getRates;
         })
         .catch((error) => {
           console.log(error);
@@ -623,7 +624,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           context.commit("DELETE_MOVIE_RATE", response.data);
-          context.actions.getRates()
+          context.actions.getRates();
         })
         .catch((error) => {
           console.log(error);
@@ -679,11 +680,15 @@ export default new Vuex.Store({
       })
         .then((response) => {
           const token = response.data.key;
-          const userdata = {
-            username: username,
-            token: token,
-          };
-          context.commit("SAVE_TOKEN", userdata);
+          axios({
+            method: "get",
+            url: `${API_URL}/accounts/profile/${username}`,
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }).then((response) => {
+            context.commit("SAVE_TOKEN", response.data);
+          });
         })
         .catch((error) => {
           alert("흠 다시 확인해 주세요");
@@ -743,24 +748,24 @@ export default new Vuex.Store({
         });
     },
     // 댓글
-    getComments(context) {
+    getComments(context, id) {
       axios({
-        method: 'get',
-        url: `${API_URL}/api/v2/comments/`,
+        method: "get",
+        url: `${API_URL}/api/v2/reviews/${id}`,
         headers: {
-          Authorization: `Token ${context.state.token}`
-        }
+          Authorization: `Token ${context.state.token}`,
+        },
       })
-      .then((response) => {
-        this.commit('GET_COMMENTS', response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .then((response) => {
+          this.commit("GET_COMMENTS", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     // 리뷰 댓글 생성
     createReviewComment(context, payload) {
-      console.log(payload)
+      console.log(payload);
       axios({
         method: "post",
         url: `${API_URL}/api/v2/reviews/${payload.review_id}/comments/`,
@@ -781,24 +786,36 @@ export default new Vuex.Store({
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     },
     // 리뷰 댓글 삭제
     deleteReviewComment(context, comment) {
       axios({
-        method: 'delete',
+        method: "delete",
         url: `${API_URL}/api/v2/comments/${comment.id}`,
         headers: {
-          Authorization: `Token ${context.state.token}`
-        }
+          Authorization: `Token ${context.state.token}`,
+        },
       })
-      .then((response) => {
-        context.commit("DELETE_REVIEW_COMMENT", response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    }
+        .then(() => {
+          axios({
+            method: "get",
+            url: `${API_URL}/api/v2/reviews/${comment.id}`,
+          })
+            .then((response) => {
+              const reviews = response.data;
+              context.commit("GET_COMMENTS", reviews);
+            })
+            .catch((error) => {
+              if (error.data) {
+                console.log(error.data);
+              }
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   modules: {
     // accounts, articles, movies
