@@ -68,6 +68,9 @@ export default new Vuex.Store({
     rates(state) {
       return state.allRates;
     },
+    comments(state) {
+      return state.allComments;
+    },
     // 평가를 할 수 있는 지 확인
     youCanRate(state) {
       if (state.allRates) {
@@ -445,7 +448,7 @@ export default new Vuex.Store({
     getUserProfile(context) {
       axios({
         method: "get",
-        url: `${API_URL}/accounts/profile/${context.state.username}/`,
+        url: `${API_URL}/accounts/profile/${context.state.userInfo.username}/`,
         headers: {
           Authorization: `Token ${context.state.token}`,
         },
@@ -490,6 +493,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           const isActive = !this.state.reviewDetailModalStatus.isActive;
+          // 리뷰 정보
           const review = response.data;
 
           const reviewDetailModalStatus = {
@@ -817,6 +821,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           const comments = response.data;
+          console.log(comments);
           context.commit("CREATE_REVIEW_COMMENT", comments);
         })
         .catch((error) => {
@@ -835,7 +840,7 @@ export default new Vuex.Store({
         .then(() => {
           axios({
             method: "get",
-            url: `${API_URL}/api/v2/reviews/${comment.id}`,
+            url: `${API_URL}/api/v2/reviews/${context.state.reviewDetailModalStatus.review.id}`,
           })
             .then((response) => {
               const reviews = response.data;

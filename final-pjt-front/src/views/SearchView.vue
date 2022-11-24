@@ -4,8 +4,9 @@
 
     <div class="search-title">
       <h1>{{ searchData }}</h1>
-      <button @click="reloading">WAVE</button>
     </div>
+
+    <p @click="reloading">WAVE</p>
 
     <div class="search-list">
       <ul class="movie-list">
@@ -83,11 +84,7 @@ export default {
 
 p {
   cursor: pointer;
-}
-
-button {
-  all: unset;
-  cursor: pointer;
+  z-index: 20;
 }
 
 .overlay {

@@ -41,7 +41,7 @@
         </button>
       </div>
       <ReviewCommentItem
-        v-for="comment in comments"
+        v-for="comment of comments"
         :key="comment.id"
         :comment="comment"
       />
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import ReviewCommentItem from "@/components/TheModal/ReviewCommentItem";
 
 export default {
@@ -64,11 +64,11 @@ export default {
     };
   },
   computed: mapState({
+    ...mapGetters(["comments"]),
     review: (state) => state.reviewDetailModalStatus.review,
-    comments: (state) => state.allComments,
   }),
   methods: {
-    ...mapActions(["closeReviewModal", "getReviews"]),
+    ...mapActions(["closeReviewModal"]),
     getComments() {
       this.$store.dispatch("getComments", this.review.id);
     },
@@ -86,10 +86,6 @@ export default {
       this.$store.dispatch("createReviewComment", payload);
       this.reviewComment = null;
     },
-  },
-  created() {
-    // 리뷰에 달린 댓글 가져오기
-    this.getComments();
   },
 };
 </script>
