@@ -89,6 +89,8 @@ def likes(request, review_pk):
             is_liked = True
         context = {
             'is_liked': is_liked,
+            'user_id': request.user.id,
+            'username' : request.user.username,
         }
         return JsonResponse(context)
     context = {}
@@ -106,6 +108,8 @@ def comment_like(request, comment_pk):
             is_liked = True
         context = {
             'is_liked': is_liked,
+            'user_id': request.user.id,
+            'username' : request.user.username,
         }
         return JsonResponse(context)
     context = {}

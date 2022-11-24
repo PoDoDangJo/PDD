@@ -1,0 +1,93 @@
+<template>
+  <div class="detail__similar">
+    <ul>
+      <li  v-for="myComment in myComments" :key="myComment.id" class="movie-card icon">
+        <h3>{{ myComment.content }}</h3><br>
+        <h3>♥{{ myComment.like_users.length }}</h3><br>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions } from "vuex";
+
+export default {
+  name: "DetailSimilar",
+  computed: mapState({
+    myComments: (state) => state.userInfo.community_comment
+  }),
+  methods: {
+    ...mapActions([
+      "getUserProfile",
+    ]),
+    openDetailModal(movie) {
+      this.$store.dispatch("openDetailModal", movie.movie_id);
+    },
+  },
+};
+</script>
+
+<style scoped>
+ul {
+  width: 300%;
+  float: left;
+  display: flex;
+}
+
+.detail__similar {
+  margin: 1vw 2vw;
+  list-style: none;
+  overflow:scroll;
+}
+
+.message {
+  width: 100%;
+  height: calc(100px + 10vw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.no-movie {
+  font-size: calc(8px +0.5vw);
+  text-anchor: end;
+}
+
+li {
+  float: left;
+  list-style: none;
+  min-width: 200px;
+  max-width: 300px;
+  width: calc(100px + 20vw);
+  margin: 1vw;
+}
+
+.movie-card {
+  width: calc(100px + 3vw);
+  min-width: 100px;
+  max-width: 190px;
+  scroll-snap-align: start;
+  cursor: pointer;
+  /* animation */
+  transition: all 0.5s ease-in-out;
+}
+
+/* hover */
+.movie-card:hover {
+  transform: scale(1.1);
+  z-index: 15;
+}
+
+.movie-backdrop {
+  position: relative;
+  width: 100%;
+  border-radius: 1%;
+  overflow: hidden;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
