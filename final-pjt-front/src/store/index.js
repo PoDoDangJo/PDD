@@ -191,7 +191,8 @@ export default new Vuex.Store({
       // 로그인 및 회원가입 성공 시 모달창 닫음
       state.isModal = false;
 
-      state.userInfo = userdata;
+      state.userInfo = userdata.userInfo;
+      state.token = userdata.token;
 
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
@@ -679,6 +680,7 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
+          // 유저 정보 가져오기
           const token = response.data.key;
           axios({
             method: "get",
@@ -687,7 +689,11 @@ export default new Vuex.Store({
               Authorization: `Token ${token}`,
             },
           }).then((response) => {
-            context.commit("SAVE_TOKEN", response.data);
+            const userdata = {
+              userInfo: response.data,
+              token: token,
+            };
+            context.commit("SAVE_TOKEN", userdata);
           });
         })
         .catch((error) => {
