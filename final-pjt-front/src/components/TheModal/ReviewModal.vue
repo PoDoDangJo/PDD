@@ -68,13 +68,15 @@ export default {
     comments: (state) => state.allComments,
   }),
   methods: {
-    ...mapActions(["closeReviewModal", "getComments", "getReviews"]),
+    ...mapActions(["closeReviewModal", "getReviews"]),
+    getComments() {
+      this.$store.dispatch("getComments", this.review.id);
+    },
     updateReview() {
       this.$store.dispatch("updateReview", this.review.id);
     },
     deleteReview() {
       this.$store.dispatch("deleteReview", this.review.id);
-      this.getReviews;
     },
     createReviewComment() {
       const payload = {
@@ -86,6 +88,7 @@ export default {
     },
   },
   created() {
+    // 리뷰에 달린 댓글 가져오기
     this.getComments();
   },
 };

@@ -19,7 +19,7 @@
         justify-content: space-between;
       "
     >
-      <p>{{ created }}</p>
+      <p>{{ createdAt }}</p>
       <button style="all: unset; cursor: pointer" @click="deleteReviewComment">
         삭제
       </button>
@@ -35,7 +35,7 @@ export default {
     comment: Object,
   },
   computed: {
-    created() {
+    createdAt() {
       return this.comment?.created_at.slice(0, 10);
     },
   },
