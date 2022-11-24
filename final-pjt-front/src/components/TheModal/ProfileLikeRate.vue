@@ -1,9 +1,10 @@
 <template>
   <div class="detail__similar">
     <ul>
-      <li  v-for="mylike_comment in mylike_comments" :key="mylike_comment.id" class="movie-card icon">
-        <h3>{{ mylike_comment.content }}</h3><br>
-        <h3>♥{{ mylike_comment.like_users.length }}</h3><br>
+      <li  v-for="myLikeReview in myLikeReviews" :key="myLikeReview.id" class="movie-card icon">
+        <h3>title : {{ myLikeReview.title }}</h3><br>
+        <h4>content : {{ myLikeReview.content }}</h4>
+        <h3>♥{{ myLikeReview.like_users.length }}</h3><br>
       </li>
     </ul>
   </div>
@@ -15,7 +16,7 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    mylike_comments: (state) => state.userInfo.like_comments
+    myLikeReviews: (state) => state.userInfo.like_reviews
   }),
   methods: {
     ...mapActions([
