@@ -3,7 +3,7 @@
     <div v-if="!isLogin" @click="openLogInModal" class="overlay">
       로그인해야 보임
     </div>
-    <div v-if="youCanRate" :class="{ is__blur: !isLogin }">
+    <div v-if="youCanRate" :class="{ is__blur: !isLogin }" :key="youCanRate">
       <div class="comment_info">
         <StarRate class="star__container" @rating="rating" />
         <p class="count-length">{{ commentLength }} / 200</p>
@@ -59,8 +59,7 @@ export default {
     };
   },
   computed: mapState({
-    ...mapGetters(["isLogin", "youCanRate"]),
-    rates: (state) => state.allRates,
+    ...mapGetters(["isLogin", "youCanRate", "rates"]),
     commentLength() {
       return String(this.movieComment).length;
     },

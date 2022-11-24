@@ -68,12 +68,13 @@ export default {
     comments: (state) => state.allComments,
   }),
   methods: {
-    ...mapActions(["closeReviewModal", "getComments"]),
+    ...mapActions(["closeReviewModal", "getComments", "getReviews"]),
     updateReview() {
       this.$store.dispatch("updateReview", this.review.id);
     },
     deleteReview() {
       this.$store.dispatch("deleteReview", this.review.id);
+      this.getReviews;
     },
     createReviewComment() {
       const payload = {

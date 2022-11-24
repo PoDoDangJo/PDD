@@ -1,7 +1,30 @@
 <template>
-  <div>
-    <h1>{{ comment?.content }}</h1>
-    <p>{{ comment?.created_at }}</p>
+  <div style="width: 90%; margin: 0 auto">
+    <div
+      style="
+        width: 100%;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      "
+    >
+      <h1>{{ comment?.content }}</h1>
+      <p>{{ comment?.user_id.username }}</p>
+    </div>
+    <div
+      style="
+        width: 100%;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      "
+    >
+      <p>{{ created }}</p>
+      <button style="all: unset; cursor: pointer" @click="deleteReviewComment">
+        삭제
+      </button>
+    </div>
+    <hr />
   </div>
 </template>
 
@@ -12,9 +35,14 @@ export default {
     comment: Object,
   },
   computed: {
-    // created() {
-    //   return this.comment?.created_at.slice(0, 10);
-    // },
+    created() {
+      return this.comment?.created_at.slice(0, 10);
+    },
+  },
+  methods: {
+    deleteReviewComment() {
+      this.$store.dispatch("deleteReviewComment", this.comment);
+    },
   },
 };
 </script>
