@@ -69,6 +69,10 @@ li {
   max-width: 190px;
   scroll-snap-align: start;
   cursor: pointer;
+  /* 추가 */
+  align-content: center;
+  background-color: rgb(64, 62, 64);
+  border-radius: 20px;
   /* animation */
   transition: all 0.5s ease-in-out;
 }

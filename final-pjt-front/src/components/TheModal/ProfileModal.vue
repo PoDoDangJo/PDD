@@ -4,8 +4,7 @@
 
     <div class="modal-card">
       <div class="profile__info">
-        <!-- <img class="profile" src="@/assets/icons/logo.png" alt="" /> -->
-        <h1 class="profile__info__text">{{ username }}</h1>
+        <h1>{{ username }}</h1>
         <p>처음 만난 날 : {{ userInfo.date_joined.slice(0, 10) }}</p>
       </div>
       <div class="profile-detail">
@@ -15,37 +14,37 @@
               :class="{ is__active: rateMoviePage }"
               @click="goRateMoviePage()"
             >
-              내 영화
+              [내 영화]
             </button>
             <button
               :class="{ is__active: articlePage }"
               @click="goArticlePage()"
             >
-              내 글
+              [내 글]
             </button>
             <button
               :class="{ is__active: commentPage }"
               @click="goCommentPage()"
             >
-              내 댓글
+              [내 댓글]
             </button>
             <button
               :class="{ is__active: likeRatePage }"
               @click="goLikeRatePage()"
             >
-              좋아요한 평가
+               [좋아한 평가]
             </button>
             <button
               :class="{ is__active: likeArticlePage }"
               @click="goLikeArticlePage()"
             >
-              좋아요한 글
+              [좋아한 글]
             </button>
             <button
               :class="{ is__active: likeCommentPage }"
               @click="goLikeCommentPage()"
             >
-              좋아요한 댓글
+              [좋아한 댓글]
             </button>
           </div>
         </div>
@@ -58,14 +57,6 @@
         <ProfileLikeArticle v-if="likeArticlePage" />
         <ProfileLikeComment v-if="likeCommentPage" />
       </div>
-      <!-- <h2>내가 좋아하는 영화</h2>
-      <h3>{{userInfo?.id}}</h3>
-      <h2>내가 좋아하는 영화평가</h2>
-      <h3>{{userInfo?.rating}}</h3> 
-      <h2>내가 좋아하는 글</h2>
-      <h3>{{userInfo?.id}}</h3>
-      <h2>내가 좋아하는 댓글</h2>
-      <h3>{{userInfo?.id}}</h3> -->
     </div>
   </div>
 </template>
@@ -164,12 +155,7 @@ export default {
 .profile__info {
   width: 50%;
   display: inline-block;
-  margin: 0 25%;
-}
-
-.profile__info__text {
-  text-align: center;
-  margin: 20px 0;
+  margin: 0 5%;
 }
 
 .profile {
@@ -180,7 +166,7 @@ export default {
 
 .detail__components__nav {
   position: absolute;
-  top: calc(18vw);
+  top: calc(12vw);
   height: calc(35px + 3vw);
   width: 100%;
   background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
@@ -188,20 +174,19 @@ export default {
 
 .detail__components {
   position: absolute;
-  top: calc(130px + 20vw);
-
+  top: calc(50px + 12vw);
   width: 100%;
 }
 
 .button__container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 
   font-weight: 600;
   margin: 0 2vw;
-  margin-top: 1vw;
+  /* margin-top: 1vw; */
   align-items: center;
-  width: calc(180px + 10vw);
+  /* width: calc(180px + 10vw); */
   min-width: 260px;
   max-width: 800px;
 }
@@ -247,14 +232,14 @@ overlay {
 
 .modal-card {
   position: relative;
-  width: 40%;
+  width: 70%;
 
   /* same */
   min-width: 200px;
   max-width: 500px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: 700px;
+  min-height: 500px;
   z-index: 10;
   border-radius: 5px;
 }
