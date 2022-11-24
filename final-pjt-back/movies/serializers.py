@@ -38,6 +38,19 @@ class MovieListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class MovieDirRecommendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ('id', 'title', 'backdrop_path', 'poster_path')
+        read_only_fields = ('genre_ids','director')
+
+
+class MovieActRecommendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ('id', 'title', 'backdrop_path', 'poster_path',)
+        read_only_fields = ('genre_ids','director')
+
 # class CommentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Comment
