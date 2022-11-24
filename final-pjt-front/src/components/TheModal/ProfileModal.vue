@@ -149,7 +149,7 @@ export default {
 
 <style scoped>
 .profile__info {
-  width: 50%;
+  width: 80%;
   display: inline-block;
   margin: 0 5%;
 }
@@ -162,7 +162,6 @@ export default {
 
 .detail__components__nav {
   position: absolute;
-  top: calc(12vw);
   height: calc(35px + 3vw);
   width: 100%;
   background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
@@ -170,7 +169,7 @@ export default {
 
 .detail__components {
   position: absolute;
-  top: calc(50px + 12vw);
+  top: calc(50px + 4vw);
   width: 100%;
 }
 
@@ -188,10 +187,10 @@ export default {
 }
 
 .button__container > button {
+  width: 100%;
   font-size: calc(10px + 0.5vw);
   cursor: pointer;
   z-index: 1;
-  margin-top: calc(10px + 1vw);
 }
 
 button {
@@ -228,11 +227,10 @@ overlay {
 
 .modal-card {
   position: relative;
-  width: 70%;
-
+  width: 90%;
   /* same */
   min-width: 200px;
-  max-width: 500px;
+  max-width: 800px;
   margin: 30px auto;
   background-color: #141414;
   min-height: 500px;
