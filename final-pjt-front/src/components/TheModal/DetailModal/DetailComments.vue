@@ -11,7 +11,7 @@
       <div class="comment_conainer">
         <textarea
           name="movie_comment"
-          placeholder="영화에 대한 평가는 한 번만 가능합니다."
+          placeholder="영화에 대한 평가를 남겨주세요."
           class="movie_comment"
           maxlength="200"
           v-model="movieComment"
@@ -75,9 +75,11 @@ export default {
         spoiler: this.isSpolier,
       };
       this.$store.dispatch("createMovieRate", payload);
+      // location.reload();
     },
     rating(score) {
-      console.log(score);
+      score;
+      console.log("hi");
     },
   },
 };
@@ -184,7 +186,5 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  border-radius: 0.25rem;
-  border: 0.0625rem solid rgb(0, 0, 0, 0.6);
 }
 </style>

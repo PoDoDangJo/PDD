@@ -64,6 +64,7 @@ export default {
   },
   computed: mapState({
     movie: (state) => state.movieDetailModalStatus.movie,
+    allRates: (state) => state.allRates,
     similarMovieIds() {
       return this.movie.movie_similar.slice(3);
     },

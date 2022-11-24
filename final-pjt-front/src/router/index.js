@@ -1,22 +1,28 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-import HomeView from '@/views/HomeView'
-import CommunityView from '@/views/CommunityView'
-import NotFound404View from '@/views/NotFound404View'
+import HomeView from "@/views/HomeView";
+import CommunityView from "@/views/CommunityView";
+import SearchView from "@/views/SearchView";
+import NotFound404View from "@/views/NotFound404View";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'HomeView',
-    component: HomeView
+    path: "/",
+    name: "HomeView",
+    component: HomeView,
   },
   {
-    path: '/community',
-    name: 'CommunityView',
-    component: CommunityView
+    path: "/community",
+    name: "CommunityView",
+    component: CommunityView,
+  },
+  {
+    path: "/search",
+    name: "SearchView",
+    component: SearchView,
   },
   {
     path: "/404",
@@ -27,12 +33,12 @@ const routes = [
     path: "*",
     redirect: "/404",
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

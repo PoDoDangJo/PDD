@@ -31,6 +31,7 @@ export default new Vuex.Store({
     allReviews: [],
     allRates: [],
     similarMovies: [],
+    searchMovies: [],
     isModal: false,
     movieDetailModalStatus: { isActive: false, movie: null },
     reviewDetailModalStatus: { isActive: false, review: null },
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     isCommunity: null,
     userInfo: null,
     username: null,
+    searchData: null,
   },
   getters: {
     isLogin(state) {
@@ -55,7 +57,7 @@ export default new Vuex.Store({
     },
     youCanRate(state) {
       for (const rate of state.allRates) {
-        if (rate.user_id == state.userInfo.id) {
+        if (rate.user_id.id == state.userInfo.id) {
           return false;
         }
       }
@@ -63,11 +65,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    GET_SEARCH(state, movies) {
-      const hi = state.username;
-      console.log(hi);
-      console.log(movies);
-    },
     GET_LAST_MOVIES(state, movies) {
       state.lastMovies = movies;
     },
@@ -114,7 +111,11 @@ export default new Vuex.Store({
     },
     CREATE_MOVIE_RATE(state, rates) {
       state.allRates = rates;
-      location.reload;
+    },
+
+    DELETE_MOVIE_RATE(state, rate) {
+      const index = state.allRate.indexOf(rate);
+      state.allReviews.splice(index, 1);
     },
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
@@ -136,9 +137,14 @@ export default new Vuex.Store({
     DELETE_REVIEW(state, review) {
       const index = state.allReviews.indexOf(review);
 
-      state.allReviews.splice(index - 1, 1);
+      state.allReviews.splice(index, 1);
       state.isModal = false;
+
       state.reviewDetailModalStatus = { isActive: false, review: null };
+
+      // 게시글 삭제시 본인 다음 인덱스의 글이 안보인다.
+      // 하지만 게시글은 정상적으로 삭제됨 새로고침 시 반영
+      location.reload();
     },
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
@@ -193,6 +199,11 @@ export default new Vuex.Store({
     },
     GET_SIMILAR_MOVIE(state, similarMovies) {
       state.similarMovies = similarMovies;
+    },
+    GET_SEARCH(state, movies) {
+      console.log(movies);
+      state.searchMovies = movies;
+      router.push({ name: "SearchView" });
     },
   },
   actions: {
@@ -291,9 +302,7 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
-
-          const movieData = [response.data[0]]
-
+          const movieData = [response.data[0]];
           const movies = response.data[1].map((movie) => {
             movie.backdrop_path = TMDB_URL + movie.backdrop_path;
             movie.poster_path = TMDB_URL + movie.poster_path;
@@ -440,10 +449,7 @@ export default new Vuex.Store({
         url: `${API_URL}/api/v2/reviews/`,
       })
         .then((response) => {
-          const reviews = response.data.map((review) => {
-            // review.created_at = review.created_at.slice(2, 10)
-            return review;
-          });
+          const reviews = response.data;
           context.commit("GET_REVIEWS", reviews);
         })
         .catch((error) => {
@@ -617,8 +623,25 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
+          console.log(response.data);
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteMovieRate(context, rate_id) {
+      axios({
+        method: "delete",
+        url: `${API_URL}/api/v2/rates/${rate_id}`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+      })
+        .then((response) => {
+          context.commit("DELETE_MOVIE_RATE", response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -703,6 +726,7 @@ export default new Vuex.Store({
       context.commit("IN_TO_COMMUNITY");
     },
     getSearch(context, searchData) {
+      context.state.searchData = searchData;
       axios({
         method: "get",
         url: `${API_URL}/api/v1/movies/search/${searchData}/`,
@@ -711,7 +735,13 @@ export default new Vuex.Store({
           if (response.data.length == 0) {
             alert("일치하는 영화를 찾을 수 없습니다.");
           } else {
-            context.commit("GET_SEARCH", response.data);
+            const movies = response.data.map((movie) => {
+              movie.backdrop_path = TMDB_URL + movie.backdrop_path;
+              movie.poster_path = TMDB_URL + movie.poster_path;
+              return movie;
+            });
+            console.log("hi");
+            context.commit("GET_SEARCH", movies);
           }
         })
         .catch((error) => {

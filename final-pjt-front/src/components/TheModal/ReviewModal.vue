@@ -4,7 +4,7 @@
 
     <div class="modal-card">
       <h1>제목: {{ review?.title }}</h1>
-      <h2>작성자: {{ review?.user_id }}</h2>
+      <h2>작성자: {{ review?.user_id.username }}</h2>
       <p>내용: {{ review?.content }}</p>
 
       <div class="button__box">
@@ -40,6 +40,7 @@ export default {
       this.$store.dispatch("updateReview", this.review.id);
     },
     deleteReview() {
+      console.log(this.review);
       this.$store.dispatch("deleteReview", this.review.id);
     },
   },

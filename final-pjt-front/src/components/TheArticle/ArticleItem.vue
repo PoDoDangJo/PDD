@@ -1,18 +1,22 @@
 <template>
-  <div class="review__card" @click="openReviewModal">
-    <div class="review__id">
-      <h4>{{ review?.id }}</h4>
-      <h4>|</h4>
+  <div>
+    <div class="review__card" @click="openReviewModal">
+      <div class="review__id">
+        <h4>{{ review?.id }}</h4>
+      </div>
+      <div class="review__title">
+        <h4>{{ title }}</h4>
+      </div>
+      <div class="review__create_at">
+        <h4>{{ created }}</h4>
+      </div>
+      <div class="review__username">
+        <h4>{{ review?.user_id.username }}</h4>
+      </div>
     </div>
-    <div class="review__title">
-      <h4>{{ review?.title }}</h4>
-      <h4>|</h4>
+    <div>
+      <hr id="theLine" />
     </div>
-    <div class="review__create_at">
-      <h4>{{ review?.created_at }}</h4>
-      <h4>|</h4>
-    </div>
-    <hr />
   </div>
 </template>
 
@@ -23,6 +27,19 @@ export default {
   name: "ArticleItem",
   props: {
     review: Object,
+  },
+  computed: {
+    created() {
+      return this.review.created_at.slice(0, 10);
+    },
+    title() {
+      console.log(this.review);
+      if (this.review.spoiler) {
+        return "스포일러를 주의하시고 누르세요.";
+      } else {
+        return this.review?.title.slice(0, 10);
+      }
+    },
   },
   methods: {
     ...mapActions(["getComments"]),
@@ -37,21 +54,39 @@ export default {
 </script>
 
 <style scoped>
+.review__card {
+  display: flex;
+  margin: 0;
+}
+
+.review__card * {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: calc(10px + 2vw);
+}
+
 h4 {
   font-size: calc(8px + 1vw);
-  margin: 1vw 2vw;
-  display: inline;
+  margin: 1vw 0 1vw 1vw;
   text-align: start;
 }
 
 .review__id {
-  display: inline;
+  flex: 1;
 }
 
 .review__title {
-  display: inline;
+  flex: 12;
 }
 .review__create_at {
-  display: inline;
+  flex: 3;
+}
+
+.review__username {
+  flex: 2;
+}
+
+#theLine {
 }
 </style>

@@ -8,7 +8,7 @@
           name="article_title"
           placeholder="제목을 입력해주세용."
           class="article"
-          maxlength="100"
+          maxlength="20"
           v-model="aritcleTitle"
           rows="4"
         />
@@ -19,7 +19,7 @@
           name="article_content"
           placeholder="내용을 입력해 주세용."
           class="article"
-          maxlength="1000"
+          maxlength="200"
           v-model="articleContent"
           rows="4"
         />
@@ -49,6 +49,7 @@ export default {
     return {
       aritcleTitle: null,
       articleContent: null,
+      isSpolier: false,
     };
   },
   methods: {
@@ -59,7 +60,7 @@ export default {
       const payload = {
         title: this.aritcleTitle,
         content: this.articleContent,
-        spoiler: 0,
+        spoiler: this.isSpolier,
       };
       this.$store.dispatch("createReview", payload);
     },
