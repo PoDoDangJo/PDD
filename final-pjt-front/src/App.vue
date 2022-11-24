@@ -13,7 +13,7 @@
       v-if="reviewDetailModalStatus.isActive"
       :review="reviewDetailModalStatus.review"
     />
-    <!-- 메인 --> 
+    <!-- 메인 -->
     <main :class="{ is__blur: isModal }">
       <router-view />
     </main>

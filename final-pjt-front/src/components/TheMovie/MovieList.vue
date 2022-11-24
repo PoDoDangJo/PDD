@@ -3,12 +3,37 @@
     <h1 class="movie-category">{{ msg }}</h1>
     <div class="wrapper">
       <section class="slide">
-        <ul class="movie-list">
+        <ul class="movie-list" v-if="sectionIndex == 0">
           <MovieListItem
-            v-for="movie in movies"
+            v-for="movie in movieOne"
             :key="movie.id"
             :movie="movie"
           />
+          <li>
+            <button @click="plusSlides">&#10095;</button>
+          </li>
+        </ul>
+        <ul class="movie-list" v-else-if="sectionIndex == 1">
+          <MovieListItem
+            v-for="movie in movieTwo"
+            :key="movie.id"
+            :movie="movie"
+          />
+
+          <li>
+            <button @click="plusSlides">&#10095;</button>
+          </li>
+        </ul>
+        <ul class="movie-list" v-else>
+          <MovieListItem
+            v-for="movie in movieThree"
+            :key="movie.id"
+            :movie="movie"
+          />
+
+          <li>
+            <button @click="plusSlides">&#10095;</button>
+          </li>
         </ul>
       </section>
     </div>
@@ -27,10 +52,45 @@ export default {
   components: {
     MovieListItem,
   },
+  data() {
+    return {
+      sectionIndex: 0,
+    };
+  },
+  computed: {
+    movieOne() {
+      return this.movies.slice(0, 5);
+    },
+    movieTwo() {
+      return this.movies.slice(5, 10);
+    },
+    movieThree() {
+      return this.movies.slice(10, 15);
+    },
+  },
+  methods: {
+    plusSlides() {
+      this.sectionIndex = this.sectionIndex + 1;
+      if (this.sectionIndex == 3) {
+        this.sectionIndex = 0;
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
+button {
+  all: unset;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(14px + 1vw);
+  margin-left: 2vw;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -75,38 +135,6 @@ $duration: 250ms;
         transform: scale(1.2);
       }
     }
-
-    // a {
-    //   position: absolute;
-    //   color: #fff;
-    //   text-decoration: none;
-    //   font-size: calc(16px + 5vw);
-    //   background: #141414;
-    //   width: 150px;
-    //   margin-left: 2vw;
-    //   text-align: center;
-    //   z-index: 1;
-
-    //   &:nth-of-type(1) {
-    //     top: 0;
-    //     bottom: 0;
-    //     left: 0;
-    //     background: linear-gradient(-90deg, #14141400 0%, #141414 100%);
-    //   }
-    //   &:nth-of-type(2) {
-    //     top: 0;
-    //     bottom: 0;
-    //     right: 0;
-    //     background: linear-gradient(90deg, #14141400 0%, #141414 100%);
-    //   }
-    // }
   }
-}
-
-// Remove the arrow for Mobile
-@media only screen and (max-width: 600px) {
-  // a.arrow__btn {
-  //   display: none;
-  // }
 }
 </style>

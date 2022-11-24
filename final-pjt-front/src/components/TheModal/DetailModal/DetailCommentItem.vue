@@ -105,7 +105,9 @@ export default {
     },
   }),
   methods: {
-    deleteMovieRate() {},
+    deleteMovieRate() {
+      this.$store.dispatch("deleteMovieRate", this.rate.id);
+    },
   },
 };
 </script>

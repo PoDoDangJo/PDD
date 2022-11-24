@@ -70,7 +70,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["closeDetailModal", "getRates"]),
+    ...mapActions(["closeDetailModal", "getRates", "getUserProfile"]),
     goInfoPage() {
       this.infoPage = true;
       this.commentPage = false;
@@ -98,6 +98,7 @@ export default {
   created() {
     this.getRates();
     this.getSimilarMovie();
+    this.getUserProfile();
   },
 };
 </script>

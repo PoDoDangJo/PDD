@@ -1,6 +1,6 @@
 <template>
-  <header class="header__black">
-    <nav class="navbar">
+  <header class="header__black navbar">
+    <nav class="nav">
       <router-link :to="{ name: 'HomeView' }">
         <img class="logo" src="@/assets/icons/logo.png" alt="logo" />
       </router-link>
@@ -19,21 +19,19 @@
         </div>
       </div>
     </nav>
-    <div>
-      <nav class="navbar">
-        <SearchBar class="search" v-if="!isCommunity" />
-        <!-- Token이 없을 경우 -->
-        <div class="nav__text__box" v-if="!isLogin">
-          <button class="nav__text" @click="openLogInModal">로그인</button>
-          <button class="nav__text" @click="openSignUpModal">회원가입</button>
-        </div>
-        <!-- Token이 있는 경우 -->
-        <ul class="nav__text__box" v-else>
-          <button class="nav__text" @click="openProfileModal">프로필</button>
-          <button class="nav__text" @click="logOut">로그아웃</button>
-        </ul>
-      </nav>
-    </div>
+    <nav class="nav">
+      <SearchBar class="search" v-if="!isCommunity" />
+      <!-- Token이 없을 경우 -->
+      <div class="nav__text__box" v-if="!isLogin">
+        <button class="nav__text" @click="openLogInModal">로그인</button>
+        <button class="nav__text" @click="openSignUpModal">회원가입</button>
+      </div>
+      <!-- Token이 있는 경우 -->
+      <ul class="nav__text__box" v-else>
+        <button class="nav__text" @click="openProfileModal">프로필</button>
+        <button class="nav__text" @click="logOut">로그아웃</button>
+      </ul>
+    </nav>
   </header>
 </template>
 
@@ -76,13 +74,6 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.7) 10%,
-    transparent
-  );
-
-  transition: background-color 0.4s;
 }
 .header__black:not(.solid) {
   background-color: transparent;
@@ -100,10 +91,9 @@ ul {
 }
 
 .search {
-  position: fixed;
-  top: calc(10px + 0.5vw);
-  height: 2vw;
-  max-height: 20px;
+  display: flex;
+  align-items: center;
+  height: 100%;
   transition: all 0.4s;
 }
 
@@ -111,8 +101,10 @@ ul {
   transform: scale(1.3);
 }
 
-.navbar {
+.nav {
   display: flex;
+  align-items: center;
+  height: 100%;
   margin-right: 3vw;
 }
 

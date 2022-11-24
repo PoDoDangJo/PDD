@@ -30,6 +30,7 @@ export default new Vuex.Store({
     actorMovies: [],
     allReviews: [],
     allRates: [],
+    allComments: [],
     similarMovies: [],
     searchMovies: [],
     isModal: false,
@@ -46,86 +47,106 @@ export default new Vuex.Store({
     searchData: null,
   },
   getters: {
+    // 로그인 했는지 확인
     isLogin(state) {
       return state.token ? true : false;
     },
+    // 커뮤니티 뷰인지 확인
     isCommunity(state) {
       return state.isCommunity ? true : false;
     },
     reviews(state) {
       return state.allReviews;
     },
+    rates(state) {
+      return state.allRates;
+    },
+    // 평가를 할 수 있는 지 확인
     youCanRate(state) {
-      for (const rate of state.allRates) {
-        if (rate.user_id.id == state.userInfo.id) {
-          return false;
-        }
-      }
-      return true;
+      state.userInfo.rating
     },
   },
   mutations: {
+    // 최신 영화
     GET_LAST_MOVIES(state, movies) {
       state.lastMovies = movies;
     },
+    // 인기 영화
     GET_POPULERITY_MOVIES(state, movies) {
       state.popularityMovies = movies;
     },
+    // 고전 영화
     GET_CLASSIC_MOVIES(state, movies) {
       state.classicMovies = movies;
     },
+    // 장르 영화
     GET_GENRE_MOVIES(state, movieData) {
       state.genreMovies = movieData[1];
       state.genreMoviesTitle = movieData[0];
     },
+    // 감독 영화
     GET_DIRECTOR_MOVIES(state, movies) {
       state.directorMovies = movies;
     },
+    // 배우 영화
     GET_ACTOR_MOVIES(state, movies) {
       state.actorMovies = movies;
     },
+    // 유저 정보
     GET_USER_PROFILE(state, userInfo) {
       state.userInfo = userInfo;
     },
+    // 영화 평가 데이터 가져오기
     GET_RATES(state, rates) {
       state.allRates = rates;
     },
+    // 영화 상세창 열기
     OPEN_DETAIL_MODAL(state, movieDetailModalStatus) {
       state.isModal = true;
       state.movieDetailModalStatus = movieDetailModalStatus;
     },
+    // 영화 상세창 닫기
     CLOSE_DETAIL_MODAL(state, movieDetailModalStatus) {
       state.isModal = false;
       state.movieDetailModalStatus = movieDetailModalStatus;
     },
+    // 리뷰 상세창 토글
     REVIEW_MODAL_TOGGLE(state, reviewDetailModalStatus) {
       state.isModal = !state.isModal;
       state.reviewDetailModalStatus = reviewDetailModalStatus;
     },
+    // 리뷰 생성창 열기
     OPEN_CREATE_REVIEW_MODAL(state) {
       state.isModal = true;
       state.createReviewModalStatus = true;
     },
+    // 리뷰 데이터 가져오기
     GET_REVIEWS(state, reviews) {
       state.allReviews = reviews;
     },
+    // 영화 평가 생성
     CREATE_MOVIE_RATE(state, rates) {
       state.allRates = rates;
+      // location.reload()
     },
+    // 리뷰 댓글 생성
+    CREATE_REVIEW_COMMENT(state, comments) {
+      state.allComments.push(comments)
 
-    DELETE_MOVIE_RATE(state, rate) {
-      const index = state.allRate.indexOf(rate);
-      state.allReviews.splice(index, 1);
+      location.reload()
     },
+    // 리뷰 생성
     CREATE_REVIEWS(state, review) {
       state.allReviews.push(review);
       state.createReviewModalStatus = false;
       state.isModal = false;
     },
+    // 리뷰 생성창 닫기
     CLOSE_CREATE_REVIEW_MODAL(state) {
       state.isModal = false;
       state.createReviewModalStatus = false;
     },
+    // 리뷰 수정
     UPDATE_REVIEW(state, reviewItem) {
       state.allReviews = state.allReviews.reverse().map((review) => {
         if (review.id == reviewItem.id) {
@@ -134,6 +155,7 @@ export default new Vuex.Store({
         return review;
       });
     },
+    // 리뷰 삭제
     DELETE_REVIEW(state, review) {
       const index = state.allReviews.indexOf(review);
 
@@ -141,29 +163,30 @@ export default new Vuex.Store({
       state.isModal = false;
 
       state.reviewDetailModalStatus = { isActive: false, review: null };
-
-      // 게시글 삭제시 본인 다음 인덱스의 글이 안보인다.
-      // 하지만 게시글은 정상적으로 삭제됨 새로고침 시 반영
-      location.reload();
     },
+    // 회원 가입창 열기
     OPEN_SIGN_UP_MODAL(state) {
       state.isModal = true;
       state.signUpModalStatus = true;
       state.loginModalStatus = false;
     },
+    // 회원 가입창 닫기
     CLOSE_SIGN_UP_MODAL(state) {
       state.isModal = false;
       state.signUpModalStatus = false;
     },
+    // 로그인창 열기
     OPEN_LOG_IN_MODAL(state) {
       state.movieDetailModalStatus = { isActive: false, movie: null };
       state.isModal = true;
       state.loginModalStatus = true;
     },
+    // 로그인창 닫기
     CLOSE_LOG_IN_MODAL(state) {
       state.isModal = false;
       state.loginModalStatus = false;
     },
+    // 토큰 저장
     SAVE_TOKEN(state, userdata) {
       state.isModal = false;
       state.token = userdata.token;
@@ -176,6 +199,7 @@ export default new Vuex.Store({
       // sign up && log in 시 홈으로
       // router.push({ name: 'HomeView' })
     },
+    // 로그아웃
     LOG_OUT(state) {
       state.token = null;
       state.userInfo = null;
@@ -183,30 +207,50 @@ export default new Vuex.Store({
 
       location.reload;
     },
+    // 프로필창 열기
     OPEN_PROFILE_MODAL(state) {
       state.isModal = true;
       state.profileModalStatus = true;
     },
+    // 프로필창 닫기
     CLOSE_PROFILE_MODAL(state) {
       state.isModal = false;
       state.profileModalStatus = false;
     },
+    // 홈 화면 이동
     IN_TO_HOME(state) {
       state.isCommunity = false;
     },
+    // 커뮤니티 화면 이동
     IN_TO_COMMUNITY(state) {
       state.isCommunity = true;
     },
+    // 관련 영화
     GET_SIMILAR_MOVIE(state, similarMovies) {
       state.similarMovies = similarMovies;
     },
+    // 검색
     GET_SEARCH(state, movies) {
-      console.log(movies);
       state.searchMovies = movies;
       router.push({ name: "SearchView" });
     },
+    // 댓글 가져오기
+    GET_COMMENTS(state, comments) {
+      const review_id = state.reviewDetailModalStatus.review.id
+      state.allComments = comments.map((comment) => {
+        if (comment.review_id == review_id) {
+          return comment
+        }
+      })
+    },
+    // 리뷰 댓글 삭제
+    DELETE_REVIEW_COMMENT(state, comment) {
+      const index = state.allComments.indexOf(comment)
+      state.allComments = state.allComments.splice(index, 1)
+    }
   },
   actions: {
+    // 최신 영화
     getLastMovies(context) {
       axios({
         method: "get",
@@ -229,6 +273,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 관련 영화
     getSimilarMovie(context, movie_id) {
       axios({
         method: "get",
@@ -250,6 +295,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 인기 영화
     getPopularityMovies(context) {
       axios({
         method: "get",
@@ -272,6 +318,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 고전 영화
     getClassicMovies(context) {
       axios({
         method: "get",
@@ -316,7 +363,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    //
+    // 감독 영화
     getDirectorMovies(context) {
       axios({
         method: "get",
@@ -348,6 +395,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 배우 영화
     getActorMovies(context) {
       axios({
         method: "get",
@@ -377,7 +425,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    //
+    // 리뷰
     getReviews(context) {
       axios({
         method: "get",
@@ -393,6 +441,7 @@ export default new Vuex.Store({
           }
         });
     },
+    // 유저 정보
     getUserProfile(context) {
       axios({
         method: "get",
@@ -408,21 +457,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getComments(context) {
-      axios({
-        method: "get",
-        url: `${API_URL}/api/v2/comments/`,
-        headers: {
-          Authorization: `Token ${context.state.token}`,
-        },
-      })
-        .then((response) => {
-          context.commit("GET_COMMENTS", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // 영화 상세창 열기
     openDetailModal(context, id) {
       axios({
         method: "get",
@@ -441,11 +476,13 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 영화 상세창 닫기
     closeDetailModal(context) {
       context.state.youCanRate = true;
       const movieDetailModalStatus = { isActive: false, movie: null };
       context.commit("CLOSE_DETAIL_MODAL", movieDetailModalStatus);
     },
+    // 리뷰창 열기
     openReviewModal(context, id) {
       axios({
         method: "get",
@@ -465,18 +502,22 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 리뷰창 닫기
     closeReviewModal(context) {
       const isActive = !this.state.reviewDetailModalStatus.isActive;
       const reviewDetailModalStatus = { isActive: isActive, review: null };
 
       context.commit("REVIEW_MODAL_TOGGLE", reviewDetailModalStatus);
     },
+    // 리뷰 생성창 열기
     openCreateReviewModal(context) {
       context.commit("OPEN_CREATE_REVIEW_MODAL");
     },
+    // 리뷰 생성창 닫기
     closeCreateReviewModal(context) {
       context.commit("CLOSE_CREATE_REVIEW_MODAL");
     },
+    // 리뷰 생성
     createReview(context, payload) {
       axios({
         method: "post",
@@ -501,9 +542,11 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 리뷰 수정
     updateReview(context, review) {
       context.commit("UPDATE_REVIEW", review);
     },
+    // 리뷰 삭제
     deleteReview(context, review_id) {
       axios({
         method: "delete",
@@ -520,6 +563,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 평가
     getRates(context) {
       axios({
         method: "get",
@@ -541,6 +585,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 영화 평가 생성
     createMovieRate(context, payload) {
       axios({
         method: "post",
@@ -558,18 +603,19 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
-          console.log(response.data);
           const rates = response.data;
           context.commit("CREATE_MOVIE_RATE", rates);
+          context.actions.getRates
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    // 영화 평가 삭제
     deleteMovieRate(context, rate_id) {
       axios({
         method: "delete",
-        url: `${API_URL}/api/v2/rates/${rate_id}`,
+        url: `${API_URL}/api/v1/rates/${rate_id}/`,
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
           Authorization: `Token ${context.state.token}`,
@@ -577,14 +623,17 @@ export default new Vuex.Store({
       })
         .then((response) => {
           context.commit("DELETE_MOVIE_RATE", response.data);
+          context.actions.getRates()
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    // 회원가입창 열기
     openSignUpModal(context) {
       context.commit("OPEN_SIGN_UP_MODAL");
     },
+    // 회원 가입
     signUp(context, payload) {
       const username = payload.username;
       axios({
@@ -609,12 +658,15 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 회원 가입창 닫기
     closeSignUpModal(context) {
       context.commit("CLOSE_SIGN_UP_MODAL");
     },
+    // 로그인창 열기
     openLogInModal(context) {
       context.commit("OPEN_LOG_IN_MODAL");
     },
+    //로그인
     logIn(context, payload) {
       const username = payload.username;
       axios({
@@ -638,9 +690,11 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 로그인창 닫기
     closeLogInModal(context) {
       context.commit("CLOSE_LOG_IN_MODAL");
     },
+    // 로그아웃
     logOut(context) {
       // CommunityView에 있다면 HomeView로 이동
       if (context.state.isCommunity) {
@@ -648,18 +702,23 @@ export default new Vuex.Store({
       }
       context.commit("LOG_OUT");
     },
+    // 프로필창 열기
     openProfileModal(context) {
       context.commit("OPEN_PROFILE_MODAL");
     },
+    // 프로필창 닫기
     closeProfileModal(context) {
       context.commit("CLOSE_PROFILE_MODAL");
     },
+    // 홈 화면 이동
     inToHome(context) {
       context.commit("IN_TO_HOME");
     },
+    // 커뮤니티 화면 이동
     inToCommunity(context) {
       context.commit("IN_TO_COMMUNITY");
     },
+    // 검색
     getSearch(context, searchData) {
       context.state.searchData = searchData;
       axios({
@@ -683,6 +742,63 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    // 댓글
+    getComments(context) {
+      axios({
+        method: 'get',
+        url: `${API_URL}/api/v2/comments/`,
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+      .then((response) => {
+        this.commit('GET_COMMENTS', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+    // 리뷰 댓글 생성
+    createReviewComment(context, payload) {
+      console.log(payload)
+      axios({
+        method: "post",
+        url: `${API_URL}/api/v2/reviews/${payload.review_id}/comments/`,
+        headers: {
+          // 인증 여부를 확인하기 위한 Token을 담아서 요청
+          Authorization: `Token ${context.state.token}`,
+        },
+        data: {
+          content: payload.content,
+          spoiler: false,
+          review_id: payload.review_id,
+          user_id: context.state.userInfo.id,
+        },
+      })
+        .then((response) => {
+          const comments = response.data;
+          context.commit("CREATE_REVIEW_COMMENT", comments);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
+    // 리뷰 댓글 삭제
+    deleteReviewComment(context, comment) {
+      axios({
+        method: 'delete',
+        url: `${API_URL}/api/v2/comments/${comment.id}`,
+        headers: {
+          Authorization: `Token ${context.state.token}`
+        }
+      })
+      .then((response) => {
+        context.commit("DELETE_REVIEW_COMMENT", response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   },
   modules: {
     // accounts, articles, movies
