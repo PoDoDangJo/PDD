@@ -19,7 +19,7 @@ def profile(request, username):
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 def user_delete(request, username):
     if request.user.is_authenticated:
         request.user.delete()
