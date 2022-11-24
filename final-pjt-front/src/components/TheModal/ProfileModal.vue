@@ -4,7 +4,7 @@
 
     <div class="modal-card">
       <div class="profile__info">
-        <h1>{{ username }}</h1>
+        <h1>{{ userInfo.username }}</h1>
         <p>처음 만난 날 : {{ userInfo.date_joined.slice(0, 10) }}</p>
       </div>
       <div class="profile-detail">
@@ -92,7 +92,6 @@ export default {
   },
   computed: mapState({
     userInfo: (state) => state.userInfo,
-    username: (state) => state.username,
   }),
   methods: {
     ...mapActions(["getUserProfile", "closeProfileModal"]),

@@ -70,6 +70,7 @@ li {
   scroll-snap-align: start;
   cursor: pointer;
   /* 추가 */
+  font-size: 6px;
   align-content: center;
   background-color: rgb(64, 62, 64);
   border-radius: 20px;
