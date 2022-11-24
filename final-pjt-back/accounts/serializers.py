@@ -37,8 +37,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     review = ReviewSerializer(many=True, read_only=True)
     like_comments = CommentSerializer(many=True, read_only=True)
     rating = RatingSerializer(many=True, read_only=True)
+    community_comment = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'profile_image', 'last_login', 'date_joined', 'followings', 'like_rating', 'like_reviews', 'like_comments', 'rating', 'review')
+        fields = ('id', 'email', 'profile_image', 'last_login', 'date_joined', 'followings', 'like_rating', 'like_reviews', 'like_comments', 'rating', 'review', 'community_comment')
         read_only_fields = ('followings',)
