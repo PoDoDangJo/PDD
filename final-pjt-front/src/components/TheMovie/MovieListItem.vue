@@ -36,7 +36,7 @@ li {
   max-width: 300px;
   scroll-snap-align: start;
   cursor: pointer;
-  margin-right: calc(1px + 2vw);
+  margin-right: calc(1px + 3vw);
   /* animation */
   transition: all 0.5s ease-in-out;
   background-color: #141414;

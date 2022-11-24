@@ -39,8 +39,6 @@ export default {
 
 <style scoped>
 .search {
-  width: 100%;
-  position: relative;
   display: flex;
 }
 
@@ -48,7 +46,6 @@ export default {
   width: 100%;
   border-right: none;
   padding: 5px;
-  height: 1vw;
 }
 
 .searchTerm {

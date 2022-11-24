@@ -10,18 +10,18 @@
           class="article"
           maxlength="20"
           v-model="aritcleTitle"
-          rows="4"
+          rows="1"
         />
       </div>
       <br />
       <div class="article_conainer">
         <textarea
           name="article_content"
-          placeholder="내용을 입력해 주세용."
+          placeholder="내용을 입력해 주세요.."
           class="article"
           maxlength="200"
           v-model="articleContent"
-          rows="4"
+          rows="10"
         />
         <div class="spolier__box">
           <input
@@ -36,8 +36,6 @@
           게시글 작성
         </button>
       </div>
-      <br />
-      <div class="articles_conainer"></div>
     </div>
   </div>
 </template>
@@ -69,8 +67,7 @@ export default {
 </script>
 
 <style scoped>
-.modal,
-overlay {
+.modal {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -90,16 +87,23 @@ overlay {
   background-color: black;
 }
 
+h1 {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-top: 1vw;
+  margin-left: 1vw;
+}
 .modal-card {
   position: relative;
-  width: 40%;
+  width: 60%;
 
   /* same */
   min-width: 200px;
   max-width: 500px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: 500px;
+  min-height: 405px;
   z-index: 10;
   border-radius: 5px;
 
@@ -184,6 +188,7 @@ overlay {
   width: 90%;
   padding: 10px;
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
   border-radius: 0.25rem;
   border: 0.0625rem solid rgb(238, 238, 238);

@@ -101,7 +101,7 @@ export default {
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 65%,
-    rgba(0, 0, 0, 0) 85%
+    rgba(0, 0, 0, 0) 100%
   );
 }
 </style>
