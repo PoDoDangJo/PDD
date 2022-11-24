@@ -38,6 +38,7 @@ export default new Vuex.Store({
     allComments: [],
     allRates: [],
     // 유저 데이터
+    token: null,
     userInfo: null,
     // 모달창 관리를 위한 데이터
     isModal: false,
@@ -55,7 +56,7 @@ export default new Vuex.Store({
   getters: {
     // 로그인 했는지 확인 (영화 상세창에서 댓글)
     isLogin(state) {
-      return state.userInfo ? true : false;
+      return state.token ? true : false;
     },
     // 커뮤니티 뷰인지 확인 (게시판 <-> 게시글 작성)
     isCommunity(state) {
@@ -69,7 +70,14 @@ export default new Vuex.Store({
     },
     // 평가를 할 수 있는 지 확인
     youCanRate(state) {
-      state.userInfo.rating;
+      if (state.allRates) {
+        for (const rate of state.allRates) {
+          if (rate.user_id.id == state.userInfo.id) {
+            return false;
+          }
+        }
+      }
+      return true;
     },
   },
   mutations: {
@@ -115,11 +123,13 @@ export default new Vuex.Store({
     CLOSE_DETAIL_MODAL(state, movieDetailModalStatus) {
       state.isModal = false;
       state.movieDetailModalStatus = movieDetailModalStatus;
+      state.allRates = [];
     },
     // 리뷰 상세창 토글
     REVIEW_MODAL_TOGGLE(state, reviewDetailModalStatus) {
       state.isModal = !state.isModal;
       state.reviewDetailModalStatus = reviewDetailModalStatus;
+      state.allComments = [];
     },
     // 리뷰 생성창 열기
     OPEN_CREATE_REVIEW_MODAL(state) {
@@ -191,7 +201,8 @@ export default new Vuex.Store({
       // 로그인 및 회원가입 성공 시 모달창 닫음
       state.isModal = false;
 
-      state.userInfo = userdata;
+      state.userInfo = userdata.userInfo;
+      state.token = userdata.token;
 
       // 로그인 성공시 로그인 및 회원가입 모달 닫기
       state.loginModalStatus = false;
@@ -622,9 +633,28 @@ export default new Vuex.Store({
           Authorization: `Token ${context.state.token}`,
         },
       })
-        .then((response) => {
-          context.commit("DELETE_MOVIE_RATE", response.data);
-          context.actions.getRates();
+        .then(() => {
+          axios({
+            method: "get",
+            url: `${API_URL}/api/v1/rates/`,
+            headers: {
+              Authorization: `Token ${context.state.token}`,
+            },
+          })
+            .then((response) => {
+              console.log(response);
+              const movie_id = context.state.movieDetailModalStatus.movie.id;
+              const rates = response.data.filter((rate) => {
+                if (rate.movie_id == movie_id) {
+                  return rate;
+                }
+              });
+
+              context.commit("GET_RATES", rates);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -679,6 +709,7 @@ export default new Vuex.Store({
         },
       })
         .then((response) => {
+          // 유저 정보 가져오기
           const token = response.data.key;
           axios({
             method: "get",
@@ -687,7 +718,11 @@ export default new Vuex.Store({
               Authorization: `Token ${token}`,
             },
           }).then((response) => {
-            context.commit("SAVE_TOKEN", response.data);
+            const userdata = {
+              userInfo: response.data,
+              token: token,
+            };
+            context.commit("SAVE_TOKEN", userdata);
           });
         })
         .catch((error) => {

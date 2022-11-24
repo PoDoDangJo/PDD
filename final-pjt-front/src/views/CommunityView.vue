@@ -20,7 +20,7 @@ export default {
     MovieSlider,
   },
   methods: {
-    ...mapActions(["getUserProfile", "getReviews"]),
+    ...mapActions(["getReviews"]),
     inToCommunity() {
       // token 없이 CommunityView에 들어간다면 HomeView로 이동
       if (this.$store.state.token) {
@@ -34,8 +34,6 @@ export default {
   created() {
     // 커뮤니티 화면 이동 (게시판 <-> 게시글 작성)
     this.inToCommunity();
-    // 유저 데이터 가져오기
-    this.getUserProfile();
     // 리뷰 데이터 가져오기
     this.getReviews();
   },
