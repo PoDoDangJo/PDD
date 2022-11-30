@@ -5,7 +5,7 @@
       <div class="movie-list">
         <hr />
         <ArticleItem
-          v-for="review in reviews"
+          v-for="review of reviews"
           :key="review.id"
           :review="review"
         />

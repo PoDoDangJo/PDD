@@ -132,7 +132,6 @@ export default new Vuex.Store({
     REVIEW_MODAL_TOGGLE(state, reviewDetailModalStatus) {
       state.isModal = !state.isModal;
       state.reviewDetailModalStatus = reviewDetailModalStatus;
-      state.allComments = [];
     },
     // 리뷰 생성창 열기
     OPEN_CREATE_REVIEW_MODAL(state) {

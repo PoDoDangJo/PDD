@@ -5,14 +5,16 @@
         v-for="myRatingMovie in myRatingMovies"
         :key="myRatingMovie.id"
         class="movie-card icon"
-        @click="openDetailModal(myRatingMovie)"
+        @click="openDetailModal(similarMovie)"
       >
         <img
           class="movie-backdrop"
           :src="`https://image.tmdb.org/t/p/original${myRatingMovie.movie_id.poster_path}`"
           alt="poster"
         /><br />
-        <h3>♥{{ myRatingMovie.like_users.length }}</h3>
+        <!-- <h3>♥ {{ myRatingMovie.like_users.length }}</h3> -->
+        <h3>♥ 2</h3>
+
         <br />
       </li>
     </ul>
@@ -36,6 +38,9 @@ export default {
 </script>
 
 <style scoped>
+h3 {
+  font-size: calc(10px + 0.5vw);
+}
 ul {
   width: 300%;
   float: left;

@@ -39,6 +39,7 @@ export default {
 
 <style scoped>
 .search {
+  width: 90%;
   display: flex;
 }
 
