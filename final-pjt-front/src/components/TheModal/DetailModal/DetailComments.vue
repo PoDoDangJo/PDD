@@ -59,7 +59,7 @@ export default {
     };
   },
   computed: mapState({
-    ...mapGetters(["isLogin", "youCanRate", "rates"]),
+    ...mapGetters(["isLogIn", "youCanRate", "rates"]),
     commentLength() {
       return String(this.movieComment).length;
     },

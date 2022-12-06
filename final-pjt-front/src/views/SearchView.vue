@@ -1,12 +1,13 @@
 <template>
   <div id="content">
+    <TheHeader />
     <div id="canvas"></div>
 
     <div class="search-title">
       <h1>{{ searchData }}</h1>
     </div>
 
-    <p @click="reloading">WAVE</p>
+    <p class="easter-egg" @click="reloading">WAVE</p>
 
     <div class="search-list">
       <ul class="movie-list">
@@ -35,16 +36,19 @@
 </template>
 
 <script>
+import TheHeader from "@/components/TheHeader/TheHeader";
 import { mapState } from "vuex";
 import _ from "lodash";
 
 export default {
   name: "SearchView",
+  components: {
+    TheHeader,
+  },
   computed: mapState({
-    searchData: (state) => state.searchData,
-    searchMovies: (state) => _.sampleSize(state.searchMovies, 5),
+    searchData: (state) => state.movies.searchData,
+    searchMovies: (state) => _.sampleSize(state.movies.searchMovies, 5),
     randomImage() {
-      console.log(this.searchMovies);
       return _.sample(this.searchMovies).backdrop_path;
     },
   }),
@@ -127,5 +131,10 @@ ul {
   align-items: center;
   z-index: 20;
   font-weight: 700;
+}
+
+.easter-egg {
+  z-index: 10;
+  cursor: pointer;
 }
 </style>

@@ -6,7 +6,7 @@
       </router-link>
 
       <!-- Token이 있는 경우 -->
-      <div class="article__nav" v-if="isLogin">
+      <div class="article__nav" v-if="isLogIn">
         <div v-if="!isCommunity">
           <router-link :to="{ name: 'CommunityView' }" class="nav__text">
             게시판
@@ -22,7 +22,7 @@
     <nav class="nav">
       <SearchBar class="search" v-if="!isCommunity" />
       <!-- Token이 없을 경우 -->
-      <div class="nav__text__box" v-if="!isLogin">
+      <div class="nav__text__box" v-if="!isLogIn">
         <button class="nav__text" @click="openLogInModal">로그인</button>
         <button class="nav__text" @click="openSignUpModal">회원가입</button>
       </div>
@@ -45,7 +45,7 @@ export default {
     SearchBar,
   },
   computed: {
-    ...mapGetters(["isLogin", "isCommunity"]),
+    ...mapGetters(["isLogIn", "isCommunity"]),
   },
   methods: {
     ...mapActions([

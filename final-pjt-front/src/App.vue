@@ -41,13 +41,26 @@ export default {
     ProfileModal,
   },
   computed: mapState({
-    isModal: (state) => state.isModal,
-    movieDetailModalStatus: (state) => state.movieDetailModalStatus,
-    reviewDetailModalStatus: (state) => state.reviewDetailModalStatus,
-    loginModalStatus: (state) => state.loginModalStatus,
-    signUpModalStatus: (state) => state.signUpModalStatus,
-    profileModalStatus: (state) => state.profileModalStatus,
-    createReviewModalStatus: (state) => state.createReviewModalStatus,
+    movieDetailModalStatus: (state) => state.movies.movieDetailModalStatus,
+    reviewDetailModalStatus: (state) => state.reviews.reviewDetailModalStatus,
+    loginModalStatus: (state) => state.accounts.loginModalStatus,
+    signUpModalStatus: (state) => state.accounts.signUpModalStatus,
+    profileModalStatus: (state) => state.accounts.profileModalStatus,
+    createReviewModalStatus: (state) => state.reviews.createReviewModalStatus,
+    isModal() {
+      if (
+        this.movieDetailModalStatus.isActive ||
+        this.reviewDetailModalStatus.isActive ||
+        this.loginModalStatus ||
+        this.signUpModalStatus ||
+        this.profileModalStatus ||
+        this.createReviewModalStatus
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   }),
   methods: {
     ...mapActions([

@@ -55,7 +55,7 @@ export default {
     rate: Object,
   },
   computed: mapState({
-    userInfo: (state) => state.userInfo,
+    userInfo: (state) => state.accounts.userInfo,
     // username: (state) => state.username
     starOne() {
       if (this.rate.rate >= 1) {

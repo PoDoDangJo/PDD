@@ -20,9 +20,8 @@ import { mapState } from "vuex";
 import _ from "lodash";
 
 export default {
-  name: "DetailSimilar",
   computed: mapState({
-    similarMovies: (state) => _.sampleSize(state.similarMovies, 4),
+    similarMovies: (state) => _.sampleSize(state.movies.similarMovies, 4),
   }),
   methods: {
     openDetailModal(movie) {

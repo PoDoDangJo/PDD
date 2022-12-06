@@ -63,11 +63,8 @@ export default {
     };
   },
   computed: mapState({
-    movie: (state) => state.movieDetailModalStatus.movie,
-    allRates: (state) => state.allRates,
-    similarMovieIds() {
-      return this.movie.movie_similar.slice(3);
-    },
+    movie: (state) => state.movies.movieDetailModalStatus.movie,
+    allRates: (state) => state.movies.allRates,
   }),
   methods: {
     ...mapActions(["closeDetailModal", "getRates"]),
