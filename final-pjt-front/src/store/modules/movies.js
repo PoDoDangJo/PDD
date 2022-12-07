@@ -2,8 +2,6 @@ import drf from "@/api/drf";
 import axios from "axios";
 import router from "@/router";
 
-import accounts from "./accounts";
-
 const TMDB_URL = "https://image.tmdb.org/t/p/original";
 
 export default {
@@ -30,16 +28,6 @@ export default {
   getters: {
     movieDetail: (state) => state.movieDetailModalStatus.movie,
     similarMovies: (state) => state.similarMovies,
-    isRateActive(state) {
-      if (state.allRates) {
-        for (const rate of state.allRates) {
-          if (rate.user_id.id == accounts.state.userInfo.id) {
-            return false;
-          }
-        }
-      }
-      return true;
-    },
     rates(state) {
       return state.allRates;
     },
@@ -86,6 +74,9 @@ export default {
     // 영화 평가 데이터 가져오기
     GET_RATES(state, rates) {
       state.allRates = rates;
+    },
+    CREATE_MOVIE_RATE(state, rate) {
+      state.allRates.push(rate);
     },
     // 검색
     GET_SEARCH(state, movies) {
@@ -287,10 +278,11 @@ export default {
         method: "get",
         url: drf.movie.rates(),
         headers: {
-          Authorization: `${accounts.getters.authToken}`,
+          Authorization: `${context.rootGetters.authToken}`,
         },
       })
         .then((response) => {
+          // 현재 영화 평가 조회
           const movie_id = context.state.movieDetailModalStatus.movie.id;
           const rates = response.data.filter((rate) => {
             if (rate.movie_id == movie_id) {
@@ -309,23 +301,22 @@ export default {
     createMovieRate(context, payload) {
       axios({
         method: "post",
-        url: `${drf.movie.movieRate(payload.movie_id)}`,
+        url: drf.movie.movieRate(payload.movie_id),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
         data: {
           rate: payload.rate,
           comment: payload.comment,
           spoiler: payload.spoiler,
           movie_id: payload.movie_id,
-          user_id: context.state.userInfo.id,
+          user_id: context.rootState.accounts.userInfo.id,
         },
       })
         .then((response) => {
-          const rates = response.data;
-          context.commit("CREATE_MOVIE_RATE", rates);
-          context.actions.getRates;
+          const rate = response.data;
+          context.commit("CREATE_MOVIE_RATE", rate);
         })
         .catch((error) => {
           console.log(error);
@@ -335,22 +326,22 @@ export default {
     deleteMovieRate(context, rate_id) {
       axios({
         method: "delete",
-        url: `${drf.movie.rateDetail(rate_id)}`,
+        url: drf.movie.rateDetail(rate_id),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: `Token ${context.state.token}`,
+          Authorization: context.rootGetters.token,
         },
       })
         .then(() => {
           axios({
             method: "get",
-            url: `${drf.movie.rates}`,
+            url: drf.movie.rates(),
             headers: {
-              Authorization: `Token ${context.state.token}`,
+              Authorization: context.rootGetters.token,
             },
           })
             .then((response) => {
-              console.log(response);
+              // 현재 영화 평가 조회
               const movie_id = context.state.movieDetailModalStatus.movie.id;
               const rates = response.data.filter((rate) => {
                 if (rate.movie_id == movie_id) {
@@ -361,11 +352,16 @@ export default {
               context.commit("GET_RATES", rates);
             })
             .catch((error) => {
-              console.log(error);
+              if (error.response.status != 404) {
+                console.log(error);
+              }
+              context.state.allRates = [];
             });
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status != 404) {
+            console.log(error);
+          }
         });
     },
     // 검색

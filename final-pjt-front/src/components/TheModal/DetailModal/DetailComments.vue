@@ -3,7 +3,11 @@
     <div v-if="!isLogIn" @click="openLogInModal" class="overlay">
       로그인해야 보임
     </div>
-    <div v-if="youCanRate" :class="{ is__blur: !isLogIn }" :key="youCanRate">
+    <div
+      v-if="isRateActive"
+      :class="{ is__blur: !isLogIn }"
+      :key="isRateActive"
+    >
       <div class="comment_info">
         <StarRate class="star__container" @rating="rating" />
         <p class="count-length">{{ commentLength }} / 200</p>
@@ -40,7 +44,7 @@
 <script>
 import StarRate from "@/components/StarRate";
 import DetailCommentItem from "@/components/TheModal/DetailModal/DetailCommentItem";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "DetailComments",
@@ -59,13 +63,26 @@ export default {
     };
   },
   computed: mapState({
-    ...mapGetters(["isLogIn", "youCanRate", "rates"]),
+    ...mapGetters(["isLogIn", "rates"]),
     commentLength() {
       return String(this.movieComment).length;
     },
+    isRateActive() {
+      if (this.rates) {
+        for (const rate of this.rates) {
+          if (rate.user_id.id == this.$store.state.accounts.userInfo.id) {
+            return false;
+          }
+        }
+      }
+      return true;
+    },
   }),
   methods: {
-    ...mapActions(["openLogInModal"]),
+    openLogInModal() {
+      this.$store.dispatch("openLogInModal");
+      this.$store.dispatch("closeDetailModal");
+    },
     createMovieRate() {
       const payload = {
         movie_id: this.movie.id,
@@ -74,11 +91,9 @@ export default {
         spoiler: this.isSpolier,
       };
       this.$store.dispatch("createMovieRate", payload);
-      // location.reload();
     },
     rating(score) {
       score;
-      console.log("hi");
     },
   },
 };

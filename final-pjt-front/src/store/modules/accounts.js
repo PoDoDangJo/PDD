@@ -37,7 +37,6 @@ export default {
     },
     // 로그인창 열기
     OPEN_LOG_IN_MODAL(state) {
-      state.movieDetailModalStatus = { isActive: false, movie: null };
       state.loginModalStatus = true;
     },
     // 로그인창 닫기
@@ -166,7 +165,8 @@ export default {
               context.commit("SAVE_TOKEN", userdata);
             })
             .catch((error) => {
-              alert(error.response);
+              console.log(error.response);
+              alert("이름과 비밀번호를 확인해 주세요.");
             });
         })
         .catch((error) => {
