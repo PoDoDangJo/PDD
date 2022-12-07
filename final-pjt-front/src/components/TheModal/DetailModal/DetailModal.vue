@@ -129,14 +129,14 @@ export default {
 
 .modal-card {
   position: relative;
-  width: 60%;
+  width: 40%;
 
   /* same */
   min-width: 200px;
   max-width: 800px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: calc(700px + 9vw);
+  min-height: 870px;
   z-index: 10;
   border-radius: 5px;
 

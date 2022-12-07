@@ -113,7 +113,7 @@ export default {
           // 회원가입 성공 시 유저 정보 axios 요청
           axios({
             method: "get",
-            url: drf.accounts.profile(),
+            url: drf.accounts.profile(username),
             headers: {
               Authorization: `Token ${token}`,
             },

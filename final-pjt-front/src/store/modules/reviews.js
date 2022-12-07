@@ -15,7 +15,12 @@ export default {
       return state.allReviews;
     },
     comments(state) {
-      return state.allComments;
+      const comments = state.allComments.filter((comment) => {
+        if (comment.review_id == state.reviewDetailModalStatus.review.id) {
+          return comment;
+        }
+      });
+      return comments;
     },
   },
   mutations: {
@@ -66,26 +71,27 @@ export default {
     getReviews(context) {
       axios({
         method: "get",
-        url: `${drf.reviews.reviews}`,
+        url: drf.reviews.reviews(),
       })
         .then((response) => {
           const reviews = response.data;
           context.commit("GET_REVIEWS", reviews);
         })
         .catch((error) => {
-          if (error.data) {
-            console.log(error.data);
+          if (error.response.status != 404) {
+            console.log(error);
           }
+          context.commit("GET_REVIEWS", []);
         });
     },
     // 리뷰창 열기
     openReviewModal(context, id) {
       axios({
         method: "get",
-        url: `${drf.reviews.reviewDetail(id)}`,
+        url: drf.reviews.reviewDetail(id),
       })
         .then((response) => {
-          const isActive = !this.state.reviewDetailModalStatus.isActive;
+          const isActive = !context.state.reviewDetailModalStatus.isActive;
           // 리뷰 정보
           const review = response.data;
 
@@ -101,7 +107,7 @@ export default {
     },
     // 리뷰창 닫기
     closeReviewModal(context) {
-      const isActive = !this.state.reviewDetailModalStatus.isActive;
+      const isActive = !context.state.reviewDetailModalStatus.isActive;
       const reviewDetailModalStatus = { isActive: isActive, review: null };
 
       context.commit("REVIEW_MODAL_TOGGLE", reviewDetailModalStatus);
@@ -118,17 +124,17 @@ export default {
     createReview(context, payload) {
       axios({
         method: "post",
-        url: `${drf.reviews.reviews}`,
+        url: drf.reviews.reviews(),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
         data: {
           title: payload.title,
           content: payload.content,
           spoiler: payload.spoiler,
           like_users: [],
-          user_id: context.state.userInfo.id,
+          user_id: context.rootState.accounts.userInfo.id,
         },
       })
         .then((response) => {
@@ -147,16 +153,16 @@ export default {
     deleteReview(context, review_id) {
       axios({
         method: "delete",
-        url: `${drf.reviews.reviewDetail(review_id)}`,
+        url: drf.reviews.reviewDetail(review_id),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
       })
         .then(() => {
           axios({
             method: "get",
-            url: `${drf.reviews.reviews}`,
+            url: drf.reviews.reviews(),
           })
             .then((response) => {
               const reviews = response.data;
@@ -170,19 +176,20 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          context.commit("GET_REVIEWS", []);
         });
     },
     // 리뷰 댓글 조회
-    getComments(context, id) {
+    getComments(context) {
       axios({
         method: "get",
-        url: `${drf.reviews.comment(id)}`,
+        url: drf.reviews.comments(),
         headers: {
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
       })
         .then((response) => {
-          this.commit("GET_COMMENTS", response.data);
+          context.commit("GET_COMMENTS", response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -190,19 +197,18 @@ export default {
     },
     // 리뷰 댓글 생성
     createReviewComment(context, payload) {
-      console.log(payload);
       axios({
         method: "post",
-        url: `${drf.reviews.commentsDetail(payload.review_id)}`,
+        url: drf.reviews.commentDetail(payload.review_id),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
         data: {
           content: payload.content,
           spoiler: false,
           review_id: payload.review_id,
-          user_id: context.state.userInfo.id,
+          user_id: context.rootState.accounts.userInfo.id,
         },
       })
         .then((response) => {
@@ -217,26 +223,26 @@ export default {
     deleteReviewComment(context, comment) {
       axios({
         method: "delete",
-        url: `${drf.reviews.comment(comment.id)}`,
+        url: drf.reviews.comment(comment.id),
         headers: {
-          Authorization: `Token ${context.state.token}`,
+          Authorization: `Token ${context.rootState.accounts.token}`,
         },
       })
         .then(() => {
+          // 댓글 조회
           axios({
             method: "get",
-            url: `${drf.reviews.reviewDetail(
-              context.state.reviewDetailModalStatus.review.id
-            )}`,
+            url: drf.reviews.comments(),
+            headers: {
+              Authorization: `Token ${context.rootState.accounts.token}`,
+            },
           })
             .then((response) => {
-              const reviews = response.data;
-              context.commit("GET_COMMENTS", reviews);
+              context.commit("GET_COMMENTS", response.data);
             })
             .catch((error) => {
-              if (error.data) {
-                console.log(error.data);
-              }
+              console.log(error);
+              context.commit("GET_COMMENTS", []);
             });
         })
         .catch((error) => {

@@ -1,9 +1,9 @@
 <template>
   <div class="detail__comments">
-    <div v-if="!isLogin" @click="openLogInModal" class="overlay">
+    <div v-if="!isLogIn" @click="openLogInModal" class="overlay">
       로그인해야 보임
     </div>
-    <div v-if="youCanRate" :class="{ is__blur: !isLogin }" :key="youCanRate">
+    <div v-if="youCanRate" :class="{ is__blur: !isLogIn }" :key="youCanRate">
       <div class="comment_info">
         <StarRate class="star__container" @rating="rating" />
         <p class="count-length">{{ commentLength }} / 200</p>

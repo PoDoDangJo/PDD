@@ -5,13 +5,13 @@
     <div class="modal-card">
       <div class="card-nav">
         <h1>제목: {{ review?.title }}</h1>
-        <h3>{{ review?.user_id.username }}</h3>
+        <h1>{{ review?.user_id.username }}</h1>
       </div>
       <div class="article_conainer">
         <p>{{ review?.content }}</p>
       </div>
 
-      <div class="button__box">
+      <div v-if="isActive" class="button__box">
         <button
           class="btn__hover btn__color"
           type="submit"
@@ -28,8 +28,7 @@
         </button>
       </div>
       <div class="comment_conainer">
-        <textarea
-          name="comment_content"
+        <input
           placeholder="댓글을 달아주세요."
           class="review-comment"
           maxlength="20"
@@ -40,11 +39,13 @@
           댓글
         </button>
       </div>
-      <ReviewCommentItem
-        v-for="comment of comments"
-        :key="comment.id"
-        :comment="comment"
-      />
+      <div class="review-comments">
+        <ReviewCommentItem
+          v-for="comment of comments"
+          :key="comment.id"
+          :comment="comment"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -65,13 +66,17 @@ export default {
   },
   computed: mapState({
     ...mapGetters(["comments"]),
-    review: (state) => state.reviewDetailModalStatus.review,
+    review: (state) => state.reviews.reviewDetailModalStatus.review,
+    isActive() {
+      if (this.review.user_id.id == this.$store.state.accounts.userInfo.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   }),
   methods: {
-    ...mapActions(["closeReviewModal"]),
-    getComments() {
-      this.$store.dispatch("getComments", this.review.id);
-    },
+    ...mapActions(["closeReviewModal", "getComments"]),
     updateReview() {
       this.$store.dispatch("updateReview", this.review.id);
     },
@@ -87,10 +92,16 @@ export default {
       this.reviewComment = null;
     },
   },
+  created() {
+    this.getComments();
+  },
 };
 </script>
 
 <style scoped>
+.review-comment {
+  overflow: scroll;
+}
 .create-comment {
   all: unset;
   color: #141414;
@@ -98,7 +109,6 @@ export default {
 }
 .review-comment {
   border: none;
-
   outline: none;
   min-width: 200px;
   max-width: 800px;
@@ -109,14 +119,15 @@ export default {
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: calc(20px + 2vw) auto;
   border-radius: 0.25rem;
   border: 0.0625rem solid rgb(238, 238, 238);
   background-color: #fff;
 }
 .card-nav {
-  overflow: scroll;
   width: 90%;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -126,7 +137,7 @@ export default {
 p {
   width: 100%;
   color: #141414;
-  font-size: calc(8px + 0.5vw);
+  font-size: calc(14px + 0.5vw);
 }
 .modal {
   width: 100%;
@@ -135,6 +146,7 @@ p {
   left: 0;
   top: 0;
   z-index: 10;
+  overflow: scroll;
 }
 
 .overlay {
@@ -151,7 +163,7 @@ p {
 h1 {
   display: flex;
   align-items: center;
-  font-size: calc(12px + 0.5vw);
+  font-size: calc(20px + 0.5vw);
 }
 .modal-card {
   position: relative;
@@ -162,7 +174,7 @@ h1 {
   max-width: 800px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: 800px;
+  min-height: 500px;
   z-index: 10;
   border-radius: 5px;
 }
@@ -171,7 +183,7 @@ h1 {
   word-break: break-all;
   overflow: scroll;
   width: 90%;
-  height: 200px;
+  height: 100px;
   padding: 10px;
   display: flex;
   margin: 0 auto;
@@ -181,44 +193,10 @@ h1 {
   background-color: #fff;
 }
 
-.modal-card-back-drop {
-  position: relative;
-  width: 100%;
-
-  /* same */
-  min-width: 200px;
-  left: 0;
-  top: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 1) 65%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-.modal-card-title {
-  position: fixed;
-  z-index: 2;
-
-  margin: 1vw;
-  font-size: calc(12px + 1vw);
-  text-shadow: 1vw 1vw 1vw #141414;
-
-  cursor: default;
-
-  border-radius: 5px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
 .button__box {
-  width: 50px;
+  width: calc(50px + 2vw);
   position: absolute;
-  margin: 0.5vw 1.5vw;
+  margin: 1vw 1.5vw;
   right: calc(10px + 1vw);
   display: flex;
   justify-content: space-between;
@@ -226,25 +204,10 @@ h1 {
 
 .btn__hover {
   all: unset;
+  cursor: pointer;
 }
-
-.btn__hover:hover {
-  color: 100% 0;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
-.btn__hover.btn__color {
-  color: linear-gradient(
-    to right,
-    #a261f5,
-    #614af2,
-    #a261f5,
-    #dddcfb,
-    #a261f5,
-    #614af2,
-    #a261f5
-  );
+.review-comments {
+  position: relative;
+  bottom: 30px;
 }
 </style>

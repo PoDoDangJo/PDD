@@ -21,7 +21,7 @@ import { mapState } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    mylike_comments: (state) => state.userInfo.like_comments,
+    mylike_comments: (state) => state.accounts.userInfo.like_comments,
   }),
   methods: {
     openDetailModal(movie) {

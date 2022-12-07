@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" id="modal-container">
+  <div class="modal">
     <div class="overlay" @click="closeProfileModal"></div>
 
     <div class="modal-card">
@@ -8,45 +8,60 @@
         <p>처음 만난 날 : {{ userInfo.date_joined.slice(0, 10) }}</p>
       </div>
       <div class="profile-detail">
-        <div class="detail__components__nav">
-          <div class="button__container">
-            <button
-              :class="{ is__active: rateMoviePage }"
-              @click="goRateMoviePage()"
-            >
-              [내 영화]
-            </button>
-            <button
-              :class="{ is__active: articlePage }"
-              @click="goArticlePage()"
-            >
-              [내 글]
-            </button>
-            <button
-              :class="{ is__active: commentPage }"
-              @click="goCommentPage()"
-            >
-              [내 댓글]
-            </button>
-            <button
-              :class="{ is__active: likeRatePage }"
-              @click="goLikeRatePage()"
-            >
-              [좋아한 평가]
-            </button>
-            <button
-              :class="{ is__active: likeArticlePage }"
-              @click="goLikeArticlePage()"
-            >
-              [좋아한 글]
-            </button>
-            <button
-              :class="{ is__active: likeCommentPage }"
-              @click="goLikeCommentPage()"
-            >
-              [좋아한 댓글]
-            </button>
+        <div class="dropdown">
+          <div class="select">
+            <span>Select Gender</span>
           </div>
+          <ul class="dropdown-menu">
+            <li>
+              <button
+                :class="{ is__active: rateMoviePage }"
+                @click="goRateMoviePage()"
+              >
+                영화
+              </button>
+            </li>
+            <li>
+              <button
+                :class="{ is__active: articlePage }"
+                @click="goArticlePage()"
+              >
+                글
+              </button>
+            </li>
+            <li>
+              <button
+                :class="{ is__active: commentPage }"
+                @click="goCommentPage()"
+              >
+                댓글
+              </button>
+            </li>
+            <li>
+              <button
+                :class="{ is__active: likeRatePage }"
+                @click="goLikeRatePage()"
+              >
+                좋아한 평가
+              </button>
+            </li>
+            <li>
+              <button
+                :class="{ is__active: likeArticlePage }"
+                @click="goLikeArticlePage()"
+              >
+                좋아한 글
+              </button>
+            </li>
+            <li>
+              <button
+                :class="{ is__active: likeCommentPage }"
+                @click="goLikeCommentPage()"
+              >
+                좋아한 댓글
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="detail__components">
@@ -91,7 +106,7 @@ export default {
     };
   },
   computed: mapState({
-    userInfo: (state) => state.userInfo,
+    userInfo: (state) => state.accounts.userInfo,
   }),
   methods: {
     ...mapActions(["closeProfileModal"]),
@@ -148,16 +163,13 @@ export default {
 </script>
 
 <style scoped>
+.profile-detail {
+  margin: 0 2vw;
+}
 .profile__info {
   width: 80%;
   display: inline-block;
   margin: 0 5%;
-}
-
-.profile {
-  margin: 10px 10%;
-  width: 80%;
-  border-radius: 70%;
 }
 
 .detail__components__nav {
@@ -204,8 +216,7 @@ button {
 }
 
 /* 아래는 기본 */
-.modal,
-overlay {
+.modal {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -233,70 +244,81 @@ overlay {
   max-width: 800px;
   margin: 30px auto;
   background-color: #141414;
-  min-height: 500px;
+  min-height: 750px;
   z-index: 10;
   border-radius: 5px;
 }
 
-.modal-card-back-drop {
+/*Styling Selectbox*/
+.dropdown {
+  width: 200px;
+  display: inline-block;
+  background-color: #141414;
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgb(204, 204, 204);
+  transition: all 0.5s ease;
   position: relative;
+  font-size: 14px;
+  color: #dddcfb;
+  height: 100%;
+  text-align: left;
+  margin-left: 1vw;
+}
+.dropdown .select {
+  cursor: pointer;
+  display: block;
+  padding: 10px;
+}
+.dropdown .select > i {
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  float: right;
+  line-height: 20px;
+}
+.dropdown:hover {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+}
+.dropdown:active {
+  background-color: #f8f8f8;
+}
+.dropdown.active:hover,
+.dropdown.active {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+  border-radius: 2px 2px 0 0;
+  background-color: #f8f8f8;
+}
+.dropdown.active .select > i {
+  transform: rotate(-90deg);
+}
+.dropdown .dropdown-menu {
+  position: absolute;
+  background-color: #fff;
   width: 100%;
-
-  /* same */
-  min-width: 200px;
   left: 0;
-  top: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 1) 65%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-.modal-card-title {
-  position: fixed;
-  z-index: 2;
-
-  margin: 1vw;
-  font-size: calc(12px + 1vw);
-  text-shadow: 1vw 1vw 1vw #141414;
-
-  cursor: default;
-
-  border-radius: 5px;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-}
-
-.modal-card-title:hover {
-  background-position: 100% 0;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.6s ease-in-out;
-  transition: all 0.8s ease-in-out;
-  color: linear-gradient(
-    to right,
-    #a261f5,
-    #614af2,
-    #a261f5,
-    #dddcfb,
-    #a261f5,
-    #614af2,
-    #a261f5
-  );
-}
-
-.modal-card-overview {
-  margin: 1vw;
-  font-size: calc(4px + 0.7vw);
-  text-align: justify;
+  margin-top: 1px;
+  box-shadow: 0 1px 2px rgb(204, 204, 204);
+  border-radius: 0 1px 2px 2px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  display: none;
+  max-height: 144px;
+  overflow-y: auto;
+  z-index: 9;
+}
+.dropdown .dropdown-menu li {
+  padding: 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.dropdown .dropdown-menu {
+  padding: 0;
+  list-style: none;
+}
+.dropdown .dropdown-menu li:hover {
+  background-color: #f2f2f2;
+}
+.dropdown .dropdown-menu li:active {
+  background-color: #e2e2e2;
 }
 </style>

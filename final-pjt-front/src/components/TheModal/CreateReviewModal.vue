@@ -2,7 +2,7 @@
   <div class="modal" id="modal-container">
     <div class="overlay" @click="closeCreateReviewModal"></div>
     <div class="modal-card">
-      <h1>게시글 작성!</h1>
+      <h1>게시글 작성</h1>
       <div class="article_conainer">
         <textarea
           name="article_title"

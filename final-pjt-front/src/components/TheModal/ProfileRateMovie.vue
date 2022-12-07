@@ -27,7 +27,7 @@ import { mapState } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myRatingMovies: (state) => state.userInfo.rating,
+    myRatingMovies: (state) => state.accounts.userInfo.rating,
   }),
   methods: {
     openDetailModal(movie) {

@@ -22,7 +22,7 @@ import { mapState } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myLikeReviews: (state) => state.userInfo.like_reviews,
+    myLikeReviews: (state) => state.accounts.userInfo.like_reviews,
   }),
   methods: {
     openDetailModal(movie) {

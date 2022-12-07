@@ -21,17 +21,17 @@ import { mapState } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myArticles: (state) => state.userInfo.review,
+    myArticles: (state) => state.accounts.userInfo.review,
   }),
   methods: {
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);
     },
   },
-  created () {
+  created() {
     // this.$store.dispatch('getUserProfile')
-    console.log(this.$store.state.userInfo)
-  }
+    console.log(this.$store.state.accounts.userInfo);
+  },
 };
 </script>
 

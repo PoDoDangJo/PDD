@@ -21,7 +21,7 @@ import _ from "lodash";
 
 export default {
   computed: mapState({
-    similarMovies: (state) => _.sampleSize(state.movies.similarMovies, 4),
+    similarMovies: (state) => _.sampleSize(state.movies.similarMovies, 3),
   }),
   methods: {
     openDetailModal(movie) {

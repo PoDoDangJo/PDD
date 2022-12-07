@@ -46,9 +46,9 @@ export default {
     // 게시글 상세 페이지 조회 및 수정, 삭제
     reviewDetail: (review_pk) => V2 + REVIEWS + `${review_pk}/`,
     // 모든 게시글 댓글 조회
-    rates: () => V2 + COMMENTS,
+    comments: () => V2 + COMMENTS,
     // 게시판 상세글 댓글 생성
-    commentsDetail: (review_pk) => V2 + REVIEWS + `${review_pk}/` + COMMENTS,
+    commentDetail: (review_pk) => V2 + REVIEWS + `${review_pk}/` + COMMENTS,
     // 게시판 상세글 댓글 조회, 수정 및 삭제
     comment: (comment_pk) => V2 + COMMENTS + `${comment_pk}/`,
   },

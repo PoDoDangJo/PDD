@@ -98,7 +98,7 @@ export default {
     getLastMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("new")}`,
+        url: drf.movie.moviesCategory("new"),
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -117,7 +117,7 @@ export default {
     getSimilarMovie(context, movie_id) {
       axios({
         method: "get",
-        url: `${drf.movie.movies}similar/${movie_id}`,
+        url: drf.movie.movies() + "similar/" + `${movie_id}`,
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -140,7 +140,7 @@ export default {
     getPopularityMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("popularity")}`,
+        url: drf.movie.moviesCategory("popularity"),
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -159,7 +159,7 @@ export default {
     getClassicMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("classic")}`,
+        url: drf.movie.moviesCategory("classic"),
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -178,7 +178,7 @@ export default {
     getGenreMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("random_genre")}`,
+        url: drf.movie.moviesCategory("random_genre"),
       })
         .then((response) => {
           // 이미지를 불러오기 위한 URL 추가 작업
@@ -199,7 +199,7 @@ export default {
     getDirectorMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("popular_director")}`,
+        url: drf.movie.moviesCategory("popular_director"),
       })
         .then((response) => {
           const movieData = [];
@@ -230,7 +230,7 @@ export default {
     getActorMovies(context) {
       axios({
         method: "get",
-        url: `${drf.movie.moviesCategory("popular_actor")}`,
+        url: drf.movie.moviesCategory("popular_actor"),
       })
         .then((response) => {
           const movieData = [];
@@ -261,7 +261,7 @@ export default {
     openDetailModal(context, id) {
       axios({
         method: "get",
-        url: `${drf.movie.movieDetail(id)}`,
+        url: drf.movie.movieDetail(id),
       })
         .then((response) => {
           let movie = response.data;
@@ -285,7 +285,7 @@ export default {
     getRates(context) {
       axios({
         method: "get",
-        url: `${drf.movie.rates}`,
+        url: drf.movie.rates(),
         headers: {
           Authorization: `${accounts.getters.authToken}`,
         },
@@ -300,7 +300,9 @@ export default {
           context.commit("GET_RATES", rates);
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status != 404) {
+            console.log(error);
+          }
         });
     },
     // 영화 평가 생성
