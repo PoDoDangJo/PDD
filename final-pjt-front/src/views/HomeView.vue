@@ -37,13 +37,13 @@ export default {
     TheFooter,
   },
   computed: mapState({
-    lastMovies: (state) => state.lastMovies,
-    popularityMovies: (state) => state.popularityMovies,
-    classicMovies: (state) => state.classicMovies,
-    genreMovies: (state) => state.genreMovies,
-    genreMoviesTitle: (state) => state.genreMoviesTitle,
-    directorMovies: (state) => state.directorMovies,
-    actorMovies: (state) => state.actorMovies,
+    lastMovies: (state) => state.movies.lastMovies,
+    popularityMovies: (state) => state.movies.popularityMovies,
+    classicMovies: (state) => state.movies.classicMovies,
+    genreMovies: (state) => state.movies.genreMovies,
+    genreMoviesTitle: (state) => state.movies.genreMoviesTitle,
+    directorMovies: (state) => state.movies.directorMovies,
+    actorMovies: (state) => state.movies.actorMovies,
   }),
   methods: {
     inToHome() {

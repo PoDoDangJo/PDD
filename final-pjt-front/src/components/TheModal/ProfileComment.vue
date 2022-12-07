@@ -21,7 +21,7 @@ import { mapState } from "vuex";
 export default {
   name: "DetailSimilar",
   computed: mapState({
-    myComments: (state) => state.userInfo.community_comment,
+    myComments: (state) => state.accounts.userInfo.community_comment,
   }),
   methods: {
     openDetailModal(movie) {

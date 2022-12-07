@@ -1,28 +1,29 @@
 <template>
   <div id="content">
+    <div class="search-main">
+      <TheHeader />
+
+      <div class="search-title">
+        <h1>{{ searchData }}</h1>
+      </div>
+
+      <div class="search-list">
+        <ul class="movie-list">
+          <img
+            id="card"
+            v-for="movie in searchMovies"
+            :key="movie.id"
+            :src="`${movie.poster_path}`"
+            @click="openDetailModal(movie.id)"
+          />
+        </ul>
+      </div>
+    </div>
+
     <div id="canvas"></div>
-
-    <div class="search-title">
-      <h1>{{ searchData }}</h1>
-    </div>
-
-    <p @click="reloading">WAVE</p>
-
-    <div class="search-list">
-      <ul class="movie-list">
-        <img
-          id="card"
-          v-for="movie in searchMovies"
-          :key="movie.id"
-          :src="`${movie.poster_path}`"
-          @click="openDetailModal(movie.id)"
-        />
-      </ul>
-    </div>
 
     <div class="overlay"></div>
     <div id="water-ripples">
-      <div class="go-home"></div>
       <img
         class="backImages"
         :src="`https://image.tmdb.org/t/p/original/${randomImage}`"
@@ -35,16 +36,19 @@
 </template>
 
 <script>
+import TheHeader from "@/components/TheHeader/TheHeader";
 import { mapState } from "vuex";
 import _ from "lodash";
 
 export default {
   name: "SearchView",
+  components: {
+    TheHeader,
+  },
   computed: mapState({
-    searchData: (state) => state.searchData,
-    searchMovies: (state) => _.sampleSize(state.searchMovies, 5),
+    searchData: (state) => state.movies.searchData,
+    searchMovies: (state) => _.sampleSize(state.movies.searchMovies, 5),
     randomImage() {
-      console.log(this.searchMovies);
       return _.sample(this.searchMovies).backdrop_path;
     },
   }),
@@ -64,27 +68,23 @@ export default {
 </script>
 
 <style scoped>
+.search-main {
+  position: fixed;
+  z-index: 20;
+}
+
 #card {
   width: calc(100px + 5vw);
   border-radius: 5px;
   position: relative;
-  top: calc(100px + 15vw);
   margin: 2vw;
   border: 2px solid #fff;
   cursor: pointer;
+  transition: all 0.5s ease-in-out;
 }
-
-.go-home {
-  height: 200px;
-  z-index: 10;
-  margin: auto auto;
-  align-items: center;
-  opacity: 1;
-}
-
-p {
-  cursor: pointer;
-  z-index: 20;
+#card:hover {
+  transform: scale(1.2);
+  z-index: 11;
 }
 
 .overlay {
@@ -102,11 +102,11 @@ ul {
   margin: 0;
 }
 .search-list {
-  position: absolute;
+  position: fixed;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   z-index: 20;
 }
 
@@ -117,15 +117,12 @@ ul {
 }
 
 .search-title {
-  width: 90%;
-  height: 200px;
-  left: calc(10px + 1vw);
-  font-size: calc(10px + 2vw);
-  display: flex;
-  position: fixed;
-  justify-content: space-between;
+  left: 2vw;
+  top: 3vw;
+  font-size: calc(10px + 1.5vw);
+  position: relative;
   align-items: center;
   z-index: 20;
-  font-weight: 700;
+  font-weight: 600;
 }
 </style>

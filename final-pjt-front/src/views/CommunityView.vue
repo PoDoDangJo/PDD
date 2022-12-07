@@ -23,7 +23,7 @@ export default {
     ...mapActions(["getReviews"]),
     inToCommunity() {
       // token 없이 CommunityView에 들어간다면 HomeView로 이동
-      if (this.$store.state.token) {
+      if (this.$store.state.accounts.token) {
         this.$store.dispatch("inToCommunity");
       } else {
         this.$router.push({ name: "HomeView" });

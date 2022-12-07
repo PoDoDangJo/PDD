@@ -53,7 +53,7 @@ import { mapState } from "vuex";
 export default {
   name: "DetailInfo",
   computed: mapState({
-    movie: (state) => state.movieDetailModalStatus.movie,
+    movie: (state) => state.movies.movieDetailModalStatus.movie,
     directorProfile() {
       if (this.movie.director[0].profile_path) {
         const directorProfile = {

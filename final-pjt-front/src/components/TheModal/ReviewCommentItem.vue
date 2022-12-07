@@ -8,7 +8,7 @@
         justify-content: space-between;
       "
     >
-      <h1>{{ comment?.content }}</h1>
+      <h3>{{ comment?.content }}</h3>
       <p>{{ comment?.user_id.username }}</p>
     </div>
     <div
@@ -20,7 +20,11 @@
       "
     >
       <p>{{ createdAt }}</p>
-      <button style="all: unset; cursor: pointer" @click="deleteReviewComment">
+      <button
+        v-if="isActive"
+        style="all: unset; cursor: pointer"
+        @click="deleteReviewComment"
+      >
         삭제
       </button>
     </div>
@@ -37,6 +41,13 @@ export default {
   computed: {
     createdAt() {
       return this.comment?.created_at.slice(0, 10);
+    },
+    isActive() {
+      if (this.comment.user_id.id == this.$store.state.accounts.userInfo.id) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {

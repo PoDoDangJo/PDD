@@ -1,15 +1,29 @@
-$(function() {
+/*Navbar Background*/
+$(function () {
   var header = $(".navbar");
 
-  $(window).scroll(function() {    
-      var scroll = $(window).scrollTop();
-      if (scroll >= 900) {
-          header.addClass("scrolled");
-      } else {
-          header.removeClass("scrolled");
-      }
+  $(window).scroll(function () {
+    var scroll = $(window).scrollTop();
+    if (scroll >= 10) {
+      header.addClass("scrolled");
+    } else {
+      header.removeClass("scrolled");
+    }
   });
+});
 
+/*Dropdown Menu*/
+$(".dropdown").click(function () {
+  $(this).attr("tabindex", 1).focus();
+  $(this).toggleClass("active");
+  $(this).find(".dropdown-menu").slideToggle(300);
+});
+$(".dropdown").focusout(function () {
+  $(this).removeClass("active");
+  $(this).find(".dropdown-menu").slideUp(300);
+});
+$(".dropdown .dropdown-menu li").click(function () {
+  $(this).parents(".dropdown").find("span").text($(this).text());
 });
 
 class Ripples {
@@ -827,11 +841,13 @@ class RipplesScene {
 
     this.scenePlane = this.curtains.addPlane(this.sceneElement, params);
 
+    // if the plane has been created
     if (this.scenePlane) {
       const canvas = document.createElement("canvas");
 
       canvas.setAttribute("data-sampler", "titleTexture");
       canvas.style.display = "none";
+
       this.scenePlane.loadCanvas(canvas);
 
       this.scenePlane
@@ -851,11 +867,11 @@ class RipplesScene {
           }
         })
         .onReady(() => {
-          
+          // create a texture that will hold our flowmap
           this.scenePlane.createTexture({
             sampler: "uRippleTexture",
             fromTexture: rippleTexture, // set it based on our ripples plane's texture
-          })
+          });
         })
         .onAfterResize(() => {
           curtainsBBox = this.curtains.getBoundingRect();
@@ -872,76 +888,12 @@ class RipplesScene {
 
 window.addEventListener("load", () => {
   const rippleScene = new RipplesScene({
-    viscosity: 4,
-    speed: 4,
-    size: 1,
+    viscosity: 7.5,
+    speed: 5,
+    size: 1.25,
 
     displacementStrength: 1.5,
-    lightIntensity: 2,
-    shadowIntensity: 2,
+    lightIntensity: 5,
+    shadowIntensity: 2.5,
   });
 });
-
-// // card mouse interaction
-// $(function () {
-//   boxRollovers();
-// });
-
-// function boxRollovers() {
-//   $selector = $("li");
-//   XAngle = 0;
-//   YAngle = 0;
-//   Z = 50;
-
-//   $selector.on("mousemove", function (e) {
-//     var $this = $(this);
-//     var XRel = e.pageX - $this.offset().left;
-//     var YRel = e.pageY - $this.offset().top;
-//     var width = $this.width();
-
-//     YAngle = -(0.5 - XRel / width) * 40;
-//     XAngle = (0.5 - YRel / width) * 40;
-//     updateView($this.children(".icon"));
-//   });
-
-//   $selector.on("mouseleave", function () {
-//     oLayer = $(this).children(".icon");
-//     oLayer.css({
-//       transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
-//       transition: "all 150ms linear 0s",
-//       "-webkit-transition": "all 150ms linear 0s",
-//     });
-//     oLayer.find("strong").css({
-//       transform: "perspective(525px) translateZ(0) rotateX(0deg) rotateY(0deg)",
-//       transition: "all 150ms linear 0s",
-//       "-webkit-transition": "all 150ms linear 0s",
-//     });
-//   });
-// }
-
-// function updateView(oLayer) {
-//   oLayer.css({
-//     transform:
-//       "perspective(525px) translateZ(" +
-//       Z +
-//       "px) rotateX(" +
-//       XAngle +
-//       "deg) rotateY(" +
-//       YAngle +
-//       "deg)",
-//     transition: "none",
-//     "-webkit-transition": "none",
-//   });
-//   oLayer.find("strong").css({
-//     transform:
-//       "perspective(525px) translateZ(" +
-//       Z +
-//       "px) rotateX(" +
-//       XAngle / 0.66 +
-//       "deg) rotateY(" +
-//       YAngle / 0.66 +
-//       "deg)",
-//     transition: "none",
-//     "-webkit-transition": "none",
-//   });
-// }
