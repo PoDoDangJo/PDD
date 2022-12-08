@@ -64,7 +64,14 @@ export default {
     },
     // 영화 상세창 열기
     OPEN_DETAIL_MODAL(state, movieDetailModalStatus) {
-      state.movieDetailModalStatus = movieDetailModalStatus;
+      // 관련 영화를 통해 올 경우 Modal 다시 띄우기
+      state.movieDetailModalStatus = { isActive: false, movie: null };
+
+      const delayTime = 0; // 0 second
+
+      setTimeout(function () {
+        state.movieDetailModalStatus = movieDetailModalStatus;
+      }, delayTime);
     },
     // 영화 상세창 닫기
     CLOSE_DETAIL_MODAL(state, movieDetailModalStatus) {

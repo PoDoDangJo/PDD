@@ -109,7 +109,7 @@ export default {
     userInfo: (state) => state.accounts.userInfo,
   }),
   methods: {
-    ...mapActions(["closeProfileModal"]),
+    ...mapActions(["closeProfileModal", "getUserProfile"]),
     goRateMoviePage() {
       this.rateMoviePage = true;
       this.articlePage = false;
@@ -159,12 +159,16 @@ export default {
       this.likeCommentPage = true;
     },
   },
+  created() {
+    console.log(this.userInfo);
+    this.getUserProfile(this.userInfo.username);
+  },
 };
 </script>
 
 <style scoped>
 .profile-detail {
-  margin: 0 2vw;
+  margin: 0 1vw;
 }
 .profile__info {
   width: 80%;
