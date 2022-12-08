@@ -169,6 +169,7 @@ export default {
               context.commit("GET_REVIEWS", reviews);
             })
             .catch((error) => {
+              context.commit("GET_REVIEWS", []);
               if (error.data) {
                 console.log(error.data);
               }
@@ -176,7 +177,6 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          context.commit("GET_REVIEWS", []);
         });
     },
     // 리뷰 댓글 조회

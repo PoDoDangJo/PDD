@@ -77,9 +77,10 @@ export default {
   actions: {
     // 유저 정보
     getUserProfile(context, username) {
+      console.log(context.getters.authToken);
       axios({
         method: "get",
-        url: `${drf.accounts.profile}${username}/`,
+        url: drf.accounts.profile(username),
         headers: {
           Authorization: context.getters.authToken,
         },
@@ -150,6 +151,7 @@ export default {
         .then((response) => {
           const token = response.data.key;
           // 로그인 성공 시 유저 정보 axios 요청
+
           axios({
             method: "get",
             url: drf.accounts.profile(username),
