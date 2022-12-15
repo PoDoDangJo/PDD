@@ -10,56 +10,35 @@
       <div class="profile-detail">
         <div class="dropdown">
           <div class="select">
-            <span>Select Gender</span>
+            <span>카테고리 선택</span>
           </div>
           <ul class="dropdown-menu">
-            <li>
-              <button
-                :class="{ is__active: rateMoviePage }"
-                @click="goRateMoviePage()"
-              >
-                영화
-              </button>
+            <li
+              :class="{ is__active: rateMoviePage }"
+              @click="goRateMoviePage()"
+            >
+              영화
             </li>
-            <li>
-              <button
-                :class="{ is__active: articlePage }"
-                @click="goArticlePage()"
-              >
-                글
-              </button>
+            <li :class="{ is__active: articlePage }" @click="goArticlePage()">
+              글
             </li>
-            <li>
-              <button
-                :class="{ is__active: commentPage }"
-                @click="goCommentPage()"
-              >
-                댓글
-              </button>
+            <li :class="{ is__active: commentPage }" @click="goCommentPage()">
+              댓글
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeRatePage }"
-                @click="goLikeRatePage()"
-              >
-                좋아한 평가
-              </button>
+            <li :class="{ is__active: likeRatePage }" @click="goLikeRatePage()">
+              좋아한 평가
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeArticlePage }"
-                @click="goLikeArticlePage()"
-              >
-                좋아한 글
-              </button>
+            <li
+              :class="{ is__active: likeArticlePage }"
+              @click="goLikeArticlePage()"
+            >
+              좋아한 글
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeCommentPage }"
-                @click="goLikeCommentPage()"
-              >
-                좋아한 댓글
-              </button>
+            <li
+              :class="{ is__active: likeCommentPage }"
+              @click="goLikeCommentPage()"
+            >
+              좋아한 댓글
             </li>
           </ul>
         </div>
@@ -121,8 +100,10 @@ export default {
     };
   },
   computed: mapState({
-    username: (state) => state.accounts.userInfo.username,
-    userInfo: (state) => state.accounts.curUserInfo,
+    userInfo: (state) => state.accounts.userInfo,
+    username() {
+      return this.userInfo.username;
+    },
   }),
   methods: {
     ...mapActions(["closeProfileModal", "getUserProfile"]),
@@ -190,15 +171,12 @@ export default {
   display: inline-block;
   margin: 0 2vw;
 }
+.profile__info > h1 {
+  color: #8d7fe8;
+}
 .detail__components {
   position: relative;
   width: 100%;
-}
-
-button {
-  all: unset;
-  text-align: center;
-  color: #dddcfb;
 }
 
 .is__active {
@@ -237,77 +215,5 @@ button {
   min-height: 750px;
   z-index: 10;
   border-radius: 5px;
-}
-
-/*Styling Selectbox*/
-.dropdown {
-  width: 200px;
-  display: inline-block;
-  background-color: #141414;
-  border-radius: 2px;
-  box-shadow: 0 0 2px rgb(204, 204, 204);
-  transition: all 0.5s ease;
-  position: relative;
-  font-size: 14px;
-  color: #dddcfb;
-  height: 100%;
-  text-align: left;
-}
-.dropdown .select {
-  cursor: pointer;
-  display: block;
-  padding: 10px;
-}
-.dropdown .select > i {
-  font-size: 13px;
-  color: #888;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  float: right;
-  line-height: 20px;
-}
-.dropdown:hover {
-  box-shadow: 0 0 4px rgb(204, 204, 204);
-}
-.dropdown:active {
-  background-color: #f8f8f8;
-}
-.dropdown.active:hover,
-.dropdown.active {
-  box-shadow: 0 0 4px rgb(204, 204, 204);
-  border-radius: 2px 2px 0 0;
-  background-color: #f8f8f8;
-}
-.dropdown.active .select > i {
-  transform: rotate(-90deg);
-}
-.dropdown .dropdown-menu {
-  position: absolute;
-  background-color: #fff;
-  width: 100%;
-  left: 0;
-  margin-top: 1px;
-  box-shadow: 0 1px 2px rgb(204, 204, 204);
-  border-radius: 0 1px 2px 2px;
-  overflow: hidden;
-  display: none;
-  max-height: 144px;
-  overflow-y: auto;
-  z-index: 9;
-}
-.dropdown .dropdown-menu li {
-  padding: 10px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-}
-.dropdown .dropdown-menu {
-  padding: 0;
-  list-style: none;
-}
-.dropdown .dropdown-menu li:hover {
-  background-color: #f2f2f2;
-}
-.dropdown .dropdown-menu li:active {
-  background-color: #e2e2e2;
 }
 </style>

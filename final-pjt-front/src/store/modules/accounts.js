@@ -68,6 +68,7 @@ export default {
     // 프로필창 열기
     OPEN_PROFILE_MODAL(state) {
       state.profileModalStatus = true;
+      location.reload();
     },
     // 프로필창 닫기
     CLOSE_PROFILE_MODAL(state) {

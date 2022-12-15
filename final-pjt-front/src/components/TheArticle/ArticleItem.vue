@@ -66,7 +66,7 @@ export default {
 }
 
 h4 {
-  font-size: calc(8px + 1vw);
+  font-size: calc(8px + 80%);
   margin: 1vw 0 1vw 1vw;
   text-align: start;
 }
@@ -84,8 +84,5 @@ h4 {
 
 .review__username {
   flex: 2;
-}
-
-#theLine {
 }
 </style>

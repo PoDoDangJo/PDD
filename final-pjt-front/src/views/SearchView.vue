@@ -118,5 +118,6 @@ ul {
   align-items: center;
   z-index: 20;
   font-weight: 600;
+  text-shadow: 2px 2px 10px #000;
 }
 </style>
