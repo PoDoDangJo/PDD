@@ -2,7 +2,7 @@
   <div>
     <div class="review__card" @click="openReviewModal">
       <div class="review__id">
-        <h4>{{ review?.id }}</h4>
+        <h4>{{ index }}</h4>
       </div>
       <div class="review__title">
         <h4>{{ title }}</h4>
@@ -21,12 +21,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ArticleItem",
   props: {
     review: Object,
   },
-  computed: {
+  computed: mapState({
+    reviews: (state) => state.reviews.allReviews,
+    index() {
+      return this.reviews.indexOf(this.review) + 1;
+    },
     created() {
       return this.review.created_at.slice(0, 10);
     },
@@ -37,7 +43,7 @@ export default {
         return this.review?.title.slice(0, 10);
       }
     },
-  },
+  }),
   methods: {
     openReviewModal() {
       this.$store.dispatch("openReviewModal", this.review.id);

@@ -65,12 +65,27 @@
         </div>
       </div>
       <div class="detail__components">
-        <ProfileRateMovie v-if="rateMoviePage" />
-        <ProfileAritcle v-if="articlePage" />
-        <ProfileComment v-if="commentPage" />
-        <ProfileLikeRate v-if="likeRatePage" />
-        <ProfileLikeArticle v-if="likeArticlePage" />
-        <ProfileLikeComment v-if="likeCommentPage" />
+        <ProfileRateMovie
+          v-if="rateMoviePage"
+          :myRatingMovies="userInfo.rating"
+        />
+        <ProfileAritcle v-if="articlePage" :review="userInfo.review" />
+        <ProfileComment
+          v-if="commentPage"
+          :community_comment="userInfo.community_comment"
+        />
+        <ProfileLikeRate
+          v-if="likeRatePage"
+          :like_rating="userInfo.like_rating"
+        />
+        <ProfileLikeArticle
+          v-if="likeArticlePage"
+          :like_reviews="userInfo.like_reviews"
+        />
+        <ProfileLikeComment
+          v-if="likeCommentPage"
+          :like_comments="userInfo.like_comments"
+        />
       </div>
     </div>
   </div>
@@ -106,7 +121,8 @@ export default {
     };
   },
   computed: mapState({
-    userInfo: (state) => state.accounts.userInfo,
+    username: (state) => state.accounts.userInfo.username,
+    userInfo: (state) => state.accounts.curUserInfo,
   }),
   methods: {
     ...mapActions(["closeProfileModal", "getUserProfile"]),
@@ -160,53 +176,23 @@ export default {
     },
   },
   created() {
-    console.log(this.userInfo);
-    this.getUserProfile(this.userInfo.username);
+    this.getUserProfile(this.username);
   },
 };
 </script>
 
 <style scoped>
 .profile-detail {
-  margin: 0 1vw;
+  margin: 0 2vw;
 }
 .profile__info {
   width: 80%;
   display: inline-block;
-  margin: 0 5%;
-}
-
-.detail__components__nav {
-  position: absolute;
-  height: calc(35px + 3vw);
-  width: 100%;
-  background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
-}
-
-.detail__components {
-  position: absolute;
-  top: calc(50px + 4vw);
-  width: 100%;
-}
-
-.button__container {
-  display: flex;
-  justify-content: center;
-
-  font-weight: 600;
   margin: 0 2vw;
-  /* margin-top: 1vw; */
-  align-items: center;
-  /* width: calc(180px + 10vw); */
-  min-width: 260px;
-  max-width: 800px;
 }
-
-.button__container > button {
+.detail__components {
+  position: relative;
   width: 100%;
-  font-size: calc(10px + 0.5vw);
-  cursor: pointer;
-  z-index: 1;
 }
 
 button {
@@ -266,7 +252,6 @@ button {
   color: #dddcfb;
   height: 100%;
   text-align: left;
-  margin-left: 1vw;
 }
 .dropdown .select {
   cursor: pointer;

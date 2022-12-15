@@ -77,7 +77,6 @@ export default {
   actions: {
     // 유저 정보
     getUserProfile(context, username) {
-      console.log(context.getters.authToken);
       axios({
         method: "get",
         url: drf.accounts.profile(username),
@@ -181,10 +180,8 @@ export default {
     },
     // 로그아웃
     logOut(context) {
-      // CommunityView에 있다면 HomeView로 이동
-      if (context.state.isCommunity) {
-        router.push({ name: "HomeView" });
-      }
+      // HomeView로 이동
+      router.push({ name: "HomeView" });
       context.commit("LOG_OUT");
     },
     // 프로필창 열기

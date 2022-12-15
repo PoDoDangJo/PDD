@@ -53,15 +53,9 @@ export default {
     },
   }),
   methods: {
-    goToHome() {
-      this.$router.push({ name: "HomeView" });
-      location.reload;
-    },
     openDetailModal(id) {
+      console.log(this.randomImage);
       this.$store.dispatch("openDetailModal", id);
-    },
-    reloading() {
-      location.reload();
     },
   },
 };

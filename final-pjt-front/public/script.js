@@ -4,7 +4,7 @@ $(function () {
 
   $(window).scroll(function () {
     var scroll = $(window).scrollTop();
-    if (scroll >= 10) {
+    if (scroll >= 400) {
       header.addClass("scrolled");
     } else {
       header.removeClass("scrolled");

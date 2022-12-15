@@ -48,12 +48,9 @@ hr:after {
 }
 
 .article__list {
-  /* background-image: linear-gradient(to bottom, #14141400 0%, #141414 40%); */
-  position: absolute;
-  top: 40vw;
+  position: relative;
+  margin-top: 2vw;
   width: 100%;
-  transform: translate3d(0em, 0px, 0px);
-  z-index: 2;
 }
 
 .movie-list {
