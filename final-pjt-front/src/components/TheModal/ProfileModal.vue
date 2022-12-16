@@ -46,24 +46,24 @@
       <div class="detail__components">
         <ProfileRateMovie
           v-if="rateMoviePage"
-          :myRatingMovies="userInfo.rating"
+          :myRatingMovies="curUserInfo.rating"
         />
-        <ProfileAritcle v-if="articlePage" :review="userInfo.review" />
+        <ProfileAritcle v-if="articlePage" :review="curUserInfo.review" />
         <ProfileComment
           v-if="commentPage"
-          :community_comment="userInfo.community_comment"
+          :community_comment="curUserInfo.community_comment"
         />
         <ProfileLikeRate
           v-if="likeRatePage"
-          :like_rating="userInfo.like_rating"
+          :like_rating="curUserInfo.like_rating"
         />
         <ProfileLikeArticle
           v-if="likeArticlePage"
-          :like_reviews="userInfo.like_reviews"
+          :like_reviews="curUserInfo.like_reviews"
         />
         <ProfileLikeComment
           v-if="likeCommentPage"
-          :like_comments="userInfo.like_comments"
+          :like_comments="curUserInfo.like_comments"
         />
       </div>
       <div

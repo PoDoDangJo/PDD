@@ -54,7 +54,6 @@ export default {
   }),
   methods: {
     openDetailModal(id) {
-      console.log(this.randomImage);
       this.$store.dispatch("openDetailModal", id);
     },
   },

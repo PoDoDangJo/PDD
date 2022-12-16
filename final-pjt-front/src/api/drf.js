@@ -43,6 +43,8 @@ export default {
     rateDetail: (rate_pk) => V1 + RATES + `${rate_pk}/`,
     // 영화 추천
     moviesCategory: (category) => V1 + MOVIES + `${category}/`,
+    // 영화 평가 좋아요
+    rateLikes: (rate_pk) => V1 + RATES + `${rate_pk}/` + "likes/",
   },
   reviews: {
     // 게시글 전체 조회 및 글 작성

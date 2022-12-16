@@ -33,7 +33,13 @@
           ><i class="rating__icon fa fa-star"></i
         ></label>
       </span>
-      <!-- <span>{{ username }}</span> -->
+      <div>
+        <span>{{ rate.user_id.username }}</span>
+        <span class="rate-like-button" @click="likesMovieRate">
+          <div v-if="isLikes">{{ rate.like_users.length }} ❤️</div>
+          <div v-else>{{ rate.like_users.length }} 🤍</div>
+        </span>
+      </div>
     </div>
     <p :class="{ spoiler: rate?.spoiler }">{{ rate?.comment }}</p>
     <div class="movie-comment-footer">
@@ -56,7 +62,15 @@ export default {
   },
   computed: mapState({
     userInfo: (state) => state.accounts.userInfo,
-    // username: (state) => state.username
+    curUserInfo: (state) => state.accounts.curUserInfo,
+    isLikes() {
+      console.log(this.rate);
+      if (this.rate.like_users.includes(this.userInfo.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     starOne() {
       if (this.rate.rate >= 1) {
         return true;
@@ -108,11 +122,27 @@ export default {
     deleteMovieRate() {
       this.$store.dispatch("deleteMovieRate", this.rate.id);
     },
+    likesMovieRate() {
+      this.$store.dispatch("likesMovieRate", this.rate.id);
+    },
   },
 };
 </script>
 
 <style>
+#full-stars-example {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rate-like-button {
+  display: flex;
+  position: absolute;
+  right: 2vw;
+  margin-top: 5px;
+  padding-right: 10px;
+}
+
 .movie-comment {
   display: inline;
   margin: 0;
