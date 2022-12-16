@@ -1,13 +1,10 @@
 <template>
   <div class="detail__similar">
-    <div class="movie-list">
-      <hr />
-      <ArticleItem
-        v-for="review of myArticles"
-        :key="review.id"
-        :review="review"
-      />
-    </div>
+    <ArticleItem
+      v-for="review of myArticles"
+      :key="review.id"
+      :review="review"
+    />
   </div>
 </template>
 

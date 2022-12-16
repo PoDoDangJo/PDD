@@ -66,6 +66,13 @@
           :like_comments="userInfo.like_comments"
         />
       </div>
+      <div
+        class="delete-button"
+        v-if="userInfo.username == curUserInfo.username"
+        @click="deleteAccounts"
+      >
+        회원탈퇴
+      </div>
     </div>
   </div>
 </template>
@@ -101,8 +108,9 @@ export default {
   },
   computed: mapState({
     userInfo: (state) => state.accounts.userInfo,
+    curUserInfo: (state) => state.accounts.curUserInfo,
     username() {
-      return this.userInfo.username;
+      return this.curUserInfo.username;
     },
   }),
   methods: {
@@ -155,6 +163,7 @@ export default {
       this.likeArticlePage = false;
       this.likeCommentPage = true;
     },
+    deleteAccounts() {},
   },
   created() {
     this.getUserProfile(this.username);
@@ -181,6 +190,7 @@ export default {
 
 .is__active {
   color: #614af2;
+  background-color: #242424;
 }
 
 /* 아래는 기본 */
@@ -215,5 +225,19 @@ export default {
   min-height: 750px;
   z-index: 10;
   border-radius: 5px;
+}
+
+.delete-button {
+  position: absolute;
+  bottom: 2vw;
+  right: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  border: 1px solid #8d7fe8;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
 }
 </style>
