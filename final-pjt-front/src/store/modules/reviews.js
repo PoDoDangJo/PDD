@@ -249,5 +249,36 @@ export default {
           console.log(error);
         });
     },
+    likesArticleComment(context, comment_id) {
+      axios({
+        method: "post",
+        url: drf.reviews.commentLikes(comment_id),
+        headers: {
+          Authorization: context.rootGetters.authToken,
+        },
+      })
+        .then(() => {
+          // 댓글 조회
+          axios({
+            method: "get",
+            url: drf.reviews.comments(),
+            headers: {
+              Authorization: `Token ${context.rootState.accounts.token}`,
+            },
+          })
+            .then((response) => {
+              context.commit("GET_COMMENTS", response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+              context.commit("GET_COMMENTS", []);
+            });
+        })
+        .catch((error) => {
+          if (error.response.status != 404) {
+            console.log(error);
+          }
+        });
+    },
   },
 };

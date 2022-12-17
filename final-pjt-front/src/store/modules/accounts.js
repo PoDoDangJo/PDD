@@ -65,6 +65,16 @@ export default {
       // 새로고침
       location.reload;
     },
+    // 회원탈퇴
+    DELETE_ACCOUNTS(state) {
+      // 토큰과 유저 정보 null로 변경
+      state.token = null;
+      state.userInfo = null;
+      // local 저장소에서 token 제거
+      localStorage.removeItem("token");
+      // 새로고침
+      location.reload;
+    },
     // 프로필창 열기
     OPEN_PROFILE_MODAL(state) {
       state.profileModalStatus = true;
@@ -184,6 +194,24 @@ export default {
       // HomeView로 이동
       router.push({ name: "HomeView" });
       context.commit("LOG_OUT");
+    },
+    deleteAccounts(context, username) {
+      axios({
+        method: "delete",
+        url: drf.accounts.delete(username),
+        headers: {
+          Authorization: context.getters.authToken,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          router.push({ name: "HomeView" });
+          context.commit("DELETE_ACCOUNTS");
+        })
+        .catch((error) => {
+          console.log("hi");
+          alert(error.response.data.non_field_errors);
+        });
     },
     // 프로필창 열기
     openProfileModal(context) {

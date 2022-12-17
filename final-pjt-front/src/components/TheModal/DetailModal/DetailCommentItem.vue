@@ -64,7 +64,6 @@ export default {
     userInfo: (state) => state.accounts.userInfo,
     curUserInfo: (state) => state.accounts.curUserInfo,
     isLikes() {
-      console.log(this.rate);
       if (this.rate.like_users.includes(this.userInfo.id)) {
         return true;
       } else {
@@ -168,6 +167,10 @@ export default {
 
 .rate-delete-button {
   font-size: calc(6px + 0.5vw);
+  cursor: pointer;
+}
+
+.rate-like-button {
   cursor: pointer;
 }
 </style>

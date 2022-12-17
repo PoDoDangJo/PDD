@@ -5,7 +5,7 @@
     <div class="modal-card">
       <div class="card-nav">
         <h1>제목: {{ review?.title }}</h1>
-        <h1 @click="openProfileModal" style="cursor: pointer">
+        <h1 class="username" @click="openProfileModal">
           {{ review?.user_id.username }}
         </h1>
       </div>
@@ -49,6 +49,12 @@
         />
       </div>
     </div>
+
+    <div
+      class="heart"
+      :class="{ is_active: isLike }"
+      @click="clickLikeButton"
+    ></div>
   </div>
 </template>
 
@@ -64,6 +70,7 @@ export default {
   data() {
     return {
       reviewComment: null,
+      isLike: false,
     };
   },
   computed: mapState({
@@ -93,6 +100,9 @@ export default {
       this.$store.dispatch("createReviewComment", payload);
       this.reviewComment = null;
     },
+    clickLikeButton() {
+      this.isLike = !this.isLike;
+    },
   },
   created() {
     this.getComments();
@@ -101,6 +111,15 @@ export default {
 </script>
 
 <style scoped>
+.username {
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+.username:hover {
+  color: #614af2;
+}
+
 .review-comment {
   overflow: scroll;
 }

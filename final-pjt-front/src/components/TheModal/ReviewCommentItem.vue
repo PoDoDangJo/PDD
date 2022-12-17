@@ -9,7 +9,13 @@
       "
     >
       <h3>{{ comment?.content }}</h3>
-      <p>{{ comment?.user_id.username }}</p>
+      <div class="comment-container">
+        <span>{{ comment?.user_id.username }}</span>
+        <span class="comment-like-button" @click="likesArticleComment">
+          <div v-if="isLikes">{{ comment.like_users.length }} ❤️</div>
+          <div v-else>{{ comment.like_users.length }} 🤍</div>
+        </span>
+      </div>
     </div>
     <div
       style="
@@ -33,12 +39,15 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ReviewCommentItem",
   props: {
     comment: Object,
   },
-  computed: {
+  computed: mapState({
+    userInfo: (state) => state.accounts.userInfo,
     createdAt() {
       return this.comment?.created_at.slice(0, 10);
     },
@@ -49,13 +58,31 @@ export default {
         return false;
       }
     },
-  },
+    isLikes() {
+      if (this.comment.like_users.includes(this.userInfo.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  }),
   methods: {
     deleteReviewComment() {
       this.$store.dispatch("deleteReviewComment", this.comment);
+    },
+    likesArticleComment() {
+      this.$store.dispatch("likesArticleComment", this.comment.id);
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.comment-like-button {
+  display: flex;
+  position: absolute;
+  right: 2vw;
+  margin-top: 5px;
+  cursor: pointer;
+}
+</style>

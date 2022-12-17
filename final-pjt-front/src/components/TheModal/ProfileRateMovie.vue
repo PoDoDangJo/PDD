@@ -7,13 +7,13 @@
         class="movie-card icon"
         @click="openDetailModal(myRatingMovie)"
       >
+        <!-- <h3>♥ {{ myRatingMovie.like_users.length }}</h3> -->
+        <h3>♥ {{ myRatingMovie.like_users.length }}</h3>
         <img
           class="movie-backdrop"
           :src="`https://image.tmdb.org/t/p/original${myRatingMovie.movie_id.poster_path}`"
           alt="poster"
         />
-        <!-- <h3>♥ {{ myRatingMovie.like_users.length }}</h3> -->
-        <h3>♥ 2</h3>
       </li>
     </ul>
   </div>

@@ -56,6 +56,7 @@ export default {
 .review__card {
   display: flex;
   margin: 0;
+  cursor: pointer;
 }
 
 .review__card * {

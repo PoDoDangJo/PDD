@@ -4,8 +4,8 @@
 
     <div class="modal-card">
       <div class="profile__info">
-        <h1>{{ userInfo.username }}</h1>
-        <p>처음 만난 날 : {{ userInfo.date_joined.slice(0, 10) }}</p>
+        <h1>{{ curUserInfo.username }}</h1>
+        <p>처음 만난 날 : {{ curUserInfo.date_joined.slice(0, 10) }}</p>
       </div>
       <div class="profile-detail">
         <div class="dropdown">
@@ -13,30 +13,27 @@
             <span>카테고리 선택</span>
           </div>
           <ul class="dropdown-menu">
-            <li
-              :class="{ is__active: rateMoviePage }"
-              @click="goRateMoviePage()"
-            >
+            <li :class="{ is__active: rateMoviePage }" @click="goRateMoviePage">
               영화
             </li>
-            <li :class="{ is__active: articlePage }" @click="goArticlePage()">
+            <li :class="{ is__active: articlePage }" @click="goArticlePage">
               글
             </li>
-            <li :class="{ is__active: commentPage }" @click="goCommentPage()">
+            <li :class="{ is__active: commentPage }" @click="goCommentPage">
               댓글
             </li>
-            <li :class="{ is__active: likeRatePage }" @click="goLikeRatePage()">
+            <li :class="{ is__active: likeRatePage }" @click="goLikeRatePage">
               좋아한 평가
             </li>
             <li
               :class="{ is__active: likeArticlePage }"
-              @click="goLikeArticlePage()"
+              @click="goLikeArticlePage"
             >
               좋아한 글
             </li>
             <li
               :class="{ is__active: likeCommentPage }"
-              @click="goLikeCommentPage()"
+              @click="goLikeCommentPage"
             >
               좋아한 댓글
             </li>
@@ -110,7 +107,7 @@ export default {
     userInfo: (state) => state.accounts.userInfo,
     curUserInfo: (state) => state.accounts.curUserInfo,
     username() {
-      return this.curUserInfo.username;
+      return this.userInfo.username;
     },
   }),
   methods: {
@@ -163,7 +160,14 @@ export default {
       this.likeArticlePage = false;
       this.likeCommentPage = true;
     },
-    deleteAccounts() {},
+    deleteAccounts() {
+      if (confirm("이 선택은 되돌릴 수 없습니다.") == true) {
+        this.$store.dispatch("deleteAccounts", this.username);
+        this.closeProfileModal();
+      } else {
+        return false;
+      }
+    },
   },
   created() {
     this.getUserProfile(this.username);

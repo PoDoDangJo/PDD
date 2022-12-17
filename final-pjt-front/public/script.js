@@ -13,7 +13,6 @@ $(document).ready(function () {
 
   /* Dropdown Menu */
   $(".dropdown").click(function () {
-    console.log(this);
     $(this).attr("tabindex", 1).focus();
     $(this).toggleClass("active");
     $(this).find(".dropdown-menu").slideToggle(300);
