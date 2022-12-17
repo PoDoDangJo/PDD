@@ -1,7 +1,7 @@
 <template>
   <div class="review-comments">
     <ReviewCommentItem
-      v-for="comment of mylike_comments"
+      v-for="comment of like_comments"
       :key="comment.id"
       :comment="comment"
     />
@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import ReviewCommentItem from "./ReviewCommentItem.vue";
 
 export default {
@@ -17,9 +16,9 @@ export default {
   components: {
     ReviewCommentItem,
   },
-  computed: mapState({
-    mylike_comments: (state) => state.accounts.curUserInfo.like_comments,
-  }),
+  props: {
+    like_comments: Array,
+  },
 };
 </script>
 

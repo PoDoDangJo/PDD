@@ -1,28 +1,24 @@
 <template>
   <div class="detail__similar">
-    <ul>
-      <li
-        v-for="myLike_review in myLike_reviews"
-        :key="myLike_review.id"
-        class="movie-card icon"
-      >
-        <h3>{{ myLike_review.content }}</h3>
-        <br />
-        <h3>♥{{ myLike_review.like_users.length }}</h3>
-        <br />
-      </li>
-    </ul>
+    <ArticleItem
+      v-for="review of like_reviews"
+      :key="review.id"
+      :review="review"
+    />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import ArticleItem from "../TheArticle/ArticleItem.vue";
 
 export default {
   name: "DetailSimilar",
-  computed: mapState({
-    myLike_reviews: (state) => state.accounts.userInfo.like_reviews,
-  }),
+  components: {
+    ArticleItem,
+  },
+  props: {
+    like_reviews: Array,
+  },
   methods: {
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);

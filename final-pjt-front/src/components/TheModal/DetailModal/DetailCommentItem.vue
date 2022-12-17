@@ -33,7 +33,7 @@
           ><i class="rating__icon fa fa-star"></i
         ></label>
       </span>
-      <div>
+      <div class="right-rate-nav">
         <span>{{ rate.user_id.username }}</span>
         <span class="rate-like-button" @click="likesMovieRate">
           <div v-if="isLikes">{{ rate.like_users.length }} ❤️</div>
@@ -108,9 +108,8 @@ export default {
     created() {
       return this.rate.created_at.slice(0, 10);
     },
-
     checkRate() {
-      if (this.rate.user_id.id == this.userInfo.id) {
+      if (this.rate.user_id == this.userInfo.id) {
         return true;
       } else {
         return false;
@@ -134,17 +133,20 @@ export default {
   justify-content: space-between;
 }
 
+.right-rate-nav {
+  display: inline-block;
+}
+
 .rate-like-button {
   display: flex;
-  position: absolute;
-  right: 2vw;
+  position: relative;
+  justify-content: end;
   margin-top: 5px;
-  padding-right: 10px;
 }
 
 .movie-comment {
-  display: inline;
-  margin: 0;
+  display: block;
+  margin: 10px 0;
   height: calc(100px + 1vw);
 }
 

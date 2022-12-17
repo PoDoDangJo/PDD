@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 90%; margin: 0 auto">
+  <div style="width: 92%; margin: 0 auto">
     <div
       style="
         width: 100%;
@@ -9,7 +9,7 @@
       "
     >
       <h3>{{ comment?.content }}</h3>
-      <div class="comment-container">
+      <div class="right-comment-nav">
         <span>{{ comment?.user_id.username }}</span>
         <span class="comment-like-button" @click="likesArticleComment">
           <div v-if="isLikes">{{ comment.like_users.length }} ❤️</div>
@@ -79,10 +79,13 @@ export default {
 
 <style>
 .comment-like-button {
+  position: relative;
   display: flex;
-  position: absolute;
-  right: 2vw;
+  justify-content: end;
   margin-top: 5px;
-  cursor: pointer;
+}
+
+.right-comment-nav {
+  display: block;
 }
 </style>

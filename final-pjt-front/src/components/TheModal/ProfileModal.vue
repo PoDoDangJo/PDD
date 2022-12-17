@@ -14,13 +14,13 @@
           </div>
           <ul class="dropdown-menu">
             <li :class="{ is__active: rateMoviePage }" @click="goRateMoviePage">
-              영화
+              평가한 영화
             </li>
             <li :class="{ is__active: articlePage }" @click="goArticlePage">
-              글
+              내 글
             </li>
             <li :class="{ is__active: commentPage }" @click="goCommentPage">
-              댓글
+              내 댓글
             </li>
             <li :class="{ is__active: likeRatePage }" @click="goLikeRatePage">
               좋아한 평가
@@ -45,14 +45,14 @@
           v-if="rateMoviePage"
           :myRatingMovies="curUserInfo.rating"
         />
-        <ProfileAritcle v-if="articlePage" :review="curUserInfo.review" />
+        <ProfileAritcle v-if="articlePage" :reviews="curUserInfo.review" />
         <ProfileComment
           v-if="commentPage"
-          :community_comment="curUserInfo.community_comment"
+          :community_comments="curUserInfo.community_comment"
         />
         <ProfileLikeRate
           v-if="likeRatePage"
-          :like_rating="curUserInfo.like_rating"
+          :like_rates="curUserInfo.like_rating"
         />
         <ProfileLikeArticle
           v-if="likeArticlePage"

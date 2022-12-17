@@ -35,9 +35,19 @@ export default {
     // 리뷰 데이터 가져오기
     GET_REVIEWS(state, reviews) {
       state.allReviews = reviews;
-
-      // 리뷰를 삭제했을 경우
+    },
+    // 리뷰를 삭제했을 경우
+    DELETE_REVIEWS(state) {
       state.reviewDetailModalStatus = { isActive: false, review: null };
+    },
+    LIKES_ARTICLE(state, review) {
+      state.reviewDetailModalStatus = { isActive: false, review: null };
+      const delayZero = 0; //1 second
+
+      setTimeout(function () {
+        //your code to be executed after 0 second
+        state.reviewDetailModalStatus = { isActive: true, review: review };
+      }, delayZero);
     },
     // 리뷰 댓글 생성
     CREATE_REVIEW_COMMENT(state, comments) {
@@ -167,6 +177,7 @@ export default {
             .then((response) => {
               const reviews = response.data;
               context.commit("GET_REVIEWS", reviews);
+              context.commit("DELETE_REVIEWS");
             })
             .catch((error) => {
               context.commit("GET_REVIEWS", []);
@@ -177,6 +188,44 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+    // 리뷰 좋아요
+    likesArticle(context, review_id) {
+      axios({
+        method: "post",
+        url: drf.reviews.reviewLikes(review_id),
+        headers: {
+          Authorization: context.rootGetters.authToken,
+        },
+      })
+        .then(() => {
+          // 리뷰 조회
+          axios({
+            method: "get",
+            url: drf.reviews.reviews(),
+          })
+            .then((response) => {
+              const reviews = response.data;
+              context.commit("GET_REVIEWS", reviews);
+
+              // const review = response.data.filter((review) => {
+              //   if (review.id == review_id) {
+              //     return review;
+              //   }
+              // });
+              // context.commit("LIKES_ARTICLE", review[0]);
+            })
+            .catch((error) => {
+              if (error.data) {
+                console.log(error.data);
+              }
+            });
+        })
+        .catch((error) => {
+          if (error.response.status != 404) {
+            console.log(error);
+          }
         });
     },
     // 리뷰 댓글 조회

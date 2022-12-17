@@ -1,15 +1,10 @@
 <template>
   <div class="detail__similar">
-    <ArticleItem
-      v-for="review of myArticles"
-      :key="review.id"
-      :review="review"
-    />
+    <ArticleItem v-for="review of reviews" :key="review.id" :review="review" />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 import ArticleItem from "../TheArticle/ArticleItem.vue";
 
 export default {
@@ -17,9 +12,9 @@ export default {
   components: {
     ArticleItem,
   },
-  computed: mapState({
-    myArticles: (state) => state.accounts.userInfo.review,
-  }),
+  props: {
+    reviews: Array,
+  },
   methods: {
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);
