@@ -169,4 +169,8 @@ export default {
   font-size: calc(6px + 0.5vw);
   cursor: pointer;
 }
+
+.rate-like-button {
+  cursor: pointer;
+}
 </style>

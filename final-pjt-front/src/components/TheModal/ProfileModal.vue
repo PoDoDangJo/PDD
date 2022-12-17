@@ -161,9 +161,12 @@ export default {
       this.likeCommentPage = true;
     },
     deleteAccounts() {
-      alert("이 선택은 되돌릴 수 없습니다.");
-      this.$store.dispatch("deleteAccounts", this.username);
-      this.closeProfileModal();
+      if (confirm("이 선택은 되돌릴 수 없습니다.") == true) {
+        this.$store.dispatch("deleteAccounts", this.username);
+        this.closeProfileModal();
+      } else {
+        return false;
+      }
     },
   },
   created() {
