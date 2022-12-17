@@ -336,7 +336,7 @@ export default {
         url: drf.movie.rateDetail(rate_id),
         headers: {
           // 인증 여부를 확인하기 위한 Token을 담아서 요청
-          Authorization: context.rootGetters.token,
+          Authorization: context.rootGetters.authToken,
         },
       })
         .then(() => {
@@ -344,7 +344,7 @@ export default {
             method: "get",
             url: drf.movie.rates(),
             headers: {
-              Authorization: context.rootGetters.token,
+              Authorization: context.rootGetters.authToken,
             },
           })
             .then((response) => {
@@ -371,12 +371,51 @@ export default {
           }
         });
     },
+    likesMovieRate(context, rate_id) {
+      axios({
+        method: "post",
+        url: drf.movie.rateLikes(rate_id),
+        headers: {
+          Authorization: context.rootGetters.authToken,
+        },
+      })
+        .then(() => {
+          axios({
+            method: "get",
+            url: drf.movie.rates(),
+            headers: {
+              Authorization: context.rootGetters.authToken,
+            },
+          })
+            .then((response) => {
+              // 현재 영화 평가 조회
+              const movie_id = context.state.movieDetailModalStatus.movie.id;
+              const rates = response.data.filter((rate) => {
+                if (rate.movie_id == movie_id) {
+                  return rate;
+                }
+              });
+              context.commit("GET_RATES", rates);
+            })
+            .catch((error) => {
+              if (error.response.status != 404) {
+                console.log(error);
+              }
+              context.state.allRates = [];
+            });
+        })
+        .catch((error) => {
+          if (error.response.status != 404) {
+            console.log(error);
+          }
+        });
+    },
     // 검색
     getSearch(context, searchData) {
       context.state.searchData = searchData;
       axios({
         method: "get",
-        url: `${drf.movie.movieSearch(searchData)}`,
+        url: drf.movie.movieSearch(searchData),
       })
         .then((response) => {
           if (response.data.length == 0) {

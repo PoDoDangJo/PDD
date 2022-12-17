@@ -1,25 +1,22 @@
 <template>
   <div class="detail__similar">
-    <ul>
-      <li
-        v-for="myArticle in myArticles"
-        :key="myArticle.id"
-        class="movie-card icon"
-      >
-        <h3>{{ myArticle.title }}</h3>
-        <br />
-        <h3>♥{{ myArticle.like_users.length }}</h3>
-        <br />
-      </li>
-    </ul>
+    <ArticleItem
+      v-for="review of myArticles"
+      :key="review.id"
+      :review="review"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import ArticleItem from "../TheArticle/ArticleItem.vue";
 
 export default {
   name: "DetailSimilar",
+  components: {
+    ArticleItem,
+  },
   computed: mapState({
     myArticles: (state) => state.accounts.userInfo.review,
   }),
@@ -29,7 +26,6 @@ export default {
     },
   },
   created() {
-    // this.$store.dispatch('getUserProfile')
     console.log(this.$store.state.accounts.userInfo);
   },
 };

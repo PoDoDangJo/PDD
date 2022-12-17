@@ -6,10 +6,7 @@
       <MovieList :msg="'최근 개봉 영화'" :movies="lastMovies" />
       <MovieList :msg="'인기 영화'" :movies="popularityMovies" />
       <MovieList :msg="'고전 명작'" :movies="classicMovies" />
-      <MovieList
-        :msg="`${genreMoviesTitle} 장르는 어떠세용?`"
-        :movies="genreMovies"
-      />
+      <MovieList :msg="`${genreMoviesTitle} 장르`" :movies="genreMovies" />
       <MovieList :msg="'인기 감독들의 명작'" :movies="directorMovies" />
       <MovieList :msg="'인기 배우들의 명작'" :movies="actorMovies" />
     </div>
@@ -57,8 +54,13 @@ export default {
 </script>
 
 <style scoped>
+.slider__list {
+  position: relative;
+  margin-top: 2vw;
+  width: 100%;
+}
 .footer-container {
-  height: 350px;
-  margin-bottom: 50px;
+  height: 250px;
+  margin-bottom: 100px;
 }
 </style>

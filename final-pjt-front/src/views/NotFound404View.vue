@@ -9,8 +9,8 @@
       </div>
       <img
         class="backImages"
-        :src="require(`@/assets/images/${movies}`)"
-        alt="Photo by David Pisnoy on Unsplash"
+        :src="`https://image.tmdb.org/t/p/original/${randomImage}`"
+        alt=""
         crossorigin
         data-sampler="planeTexture"
       />
@@ -19,15 +19,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import _ from "lodash";
+
 export default {
   name: "NotFound404View",
-  data() {
-    return {
-      movies: "black-adam.webp",
-    };
-  },
+  computed: mapState({
+    searchMovies: (state) => _.sampleSize(state.movies.lastMovies, 5),
+    randomImage() {
+      return _.sample(this.searchMovies).backdrop_path;
+    },
+  }),
   methods: {
     goToHome() {
+      console.log(this.backDropPath);
       this.$router.push({ name: "HomeView" });
       location.reload;
     },
@@ -47,6 +52,7 @@ h1 {
   justify-content: flex-start;
   align-items: flex-start;
   opacity: 1;
+  text-shadow: 1px 1px 5px #000;
 }
 
 p {

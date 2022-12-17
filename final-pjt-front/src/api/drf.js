@@ -1,3 +1,5 @@
+import accounts from "@/store/modules/accounts";
+
 // accoounts urls
 const V0 = "http://localhost:8000/";
 // movies urls
@@ -23,6 +25,8 @@ export default {
     profile: (username) => V0 + ACCOUNTS + "profile/" + `${username}/`,
     // 곧 구현할 기능
     // passwordChange: () => V0 + ACCOUNTS + "password/change"
+    // 회원탈퇴
+    delete: (username) => V0 + accounts + "delete/" + `${username}/`,
   },
   movie: {
     // 영화 정보 조회
@@ -39,6 +43,8 @@ export default {
     rateDetail: (rate_pk) => V1 + RATES + `${rate_pk}/`,
     // 영화 추천
     moviesCategory: (category) => V1 + MOVIES + `${category}/`,
+    // 영화 평가 좋아요
+    rateLikes: (rate_pk) => V1 + RATES + `${rate_pk}/` + "likes/",
   },
   reviews: {
     // 게시글 전체 조회 및 글 작성

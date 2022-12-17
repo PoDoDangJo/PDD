@@ -5,7 +5,9 @@
     <div class="modal-card">
       <div class="card-nav">
         <h1>제목: {{ review?.title }}</h1>
-        <h1>{{ review?.user_id.username }}</h1>
+        <h1 @click="openProfileModal" style="cursor: pointer">
+          {{ review?.user_id.username }}
+        </h1>
       </div>
       <div class="article_conainer">
         <p>{{ review?.content }}</p>
@@ -76,7 +78,7 @@ export default {
     },
   }),
   methods: {
-    ...mapActions(["closeReviewModal", "getComments"]),
+    ...mapActions(["closeReviewModal", "getComments", "openProfileModal"]),
     updateReview() {
       this.$store.dispatch("updateReview", this.review.id);
     },

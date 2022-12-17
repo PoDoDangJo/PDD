@@ -53,15 +53,8 @@ export default {
     },
   }),
   methods: {
-    goToHome() {
-      this.$router.push({ name: "HomeView" });
-      location.reload;
-    },
     openDetailModal(id) {
       this.$store.dispatch("openDetailModal", id);
-    },
-    reloading() {
-      location.reload();
     },
   },
 };
@@ -124,5 +117,6 @@ ul {
   align-items: center;
   z-index: 20;
   font-weight: 600;
+  text-shadow: 2px 2px 10px #000;
 }
 </style>

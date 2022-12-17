@@ -21,12 +21,12 @@ export default {
   data() {
     return {
       movies: [
+        "avatar-the-way-of-water.webp",
         "black-adam.webp",
         "black-panther.webp",
         "everything-everywhere-all-at-once.jpeg",
-        "Hobbit.jpg",
       ],
-      slideIndex: 1,
+      slideIndex: 2,
     };
   },
   methods: {

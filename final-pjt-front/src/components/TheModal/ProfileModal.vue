@@ -10,67 +10,68 @@
       <div class="profile-detail">
         <div class="dropdown">
           <div class="select">
-            <span>Select Gender</span>
+            <span>카테고리 선택</span>
           </div>
           <ul class="dropdown-menu">
-            <li>
-              <button
-                :class="{ is__active: rateMoviePage }"
-                @click="goRateMoviePage()"
-              >
-                영화
-              </button>
+            <li
+              :class="{ is__active: rateMoviePage }"
+              @click="goRateMoviePage()"
+            >
+              영화
             </li>
-            <li>
-              <button
-                :class="{ is__active: articlePage }"
-                @click="goArticlePage()"
-              >
-                글
-              </button>
+            <li :class="{ is__active: articlePage }" @click="goArticlePage()">
+              글
             </li>
-            <li>
-              <button
-                :class="{ is__active: commentPage }"
-                @click="goCommentPage()"
-              >
-                댓글
-              </button>
+            <li :class="{ is__active: commentPage }" @click="goCommentPage()">
+              댓글
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeRatePage }"
-                @click="goLikeRatePage()"
-              >
-                좋아한 평가
-              </button>
+            <li :class="{ is__active: likeRatePage }" @click="goLikeRatePage()">
+              좋아한 평가
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeArticlePage }"
-                @click="goLikeArticlePage()"
-              >
-                좋아한 글
-              </button>
+            <li
+              :class="{ is__active: likeArticlePage }"
+              @click="goLikeArticlePage()"
+            >
+              좋아한 글
             </li>
-            <li>
-              <button
-                :class="{ is__active: likeCommentPage }"
-                @click="goLikeCommentPage()"
-              >
-                좋아한 댓글
-              </button>
+            <li
+              :class="{ is__active: likeCommentPage }"
+              @click="goLikeCommentPage()"
+            >
+              좋아한 댓글
             </li>
           </ul>
         </div>
       </div>
       <div class="detail__components">
-        <ProfileRateMovie v-if="rateMoviePage" />
-        <ProfileAritcle v-if="articlePage" />
-        <ProfileComment v-if="commentPage" />
-        <ProfileLikeRate v-if="likeRatePage" />
-        <ProfileLikeArticle v-if="likeArticlePage" />
-        <ProfileLikeComment v-if="likeCommentPage" />
+        <ProfileRateMovie
+          v-if="rateMoviePage"
+          :myRatingMovies="curUserInfo.rating"
+        />
+        <ProfileAritcle v-if="articlePage" :review="curUserInfo.review" />
+        <ProfileComment
+          v-if="commentPage"
+          :community_comment="curUserInfo.community_comment"
+        />
+        <ProfileLikeRate
+          v-if="likeRatePage"
+          :like_rating="curUserInfo.like_rating"
+        />
+        <ProfileLikeArticle
+          v-if="likeArticlePage"
+          :like_reviews="curUserInfo.like_reviews"
+        />
+        <ProfileLikeComment
+          v-if="likeCommentPage"
+          :like_comments="curUserInfo.like_comments"
+        />
+      </div>
+      <div
+        class="delete-button"
+        v-if="userInfo.username == curUserInfo.username"
+        @click="deleteAccounts"
+      >
+        회원탈퇴
       </div>
     </div>
   </div>
@@ -107,6 +108,10 @@ export default {
   },
   computed: mapState({
     userInfo: (state) => state.accounts.userInfo,
+    curUserInfo: (state) => state.accounts.curUserInfo,
+    username() {
+      return this.curUserInfo.username;
+    },
   }),
   methods: {
     ...mapActions(["closeProfileModal", "getUserProfile"]),
@@ -158,65 +163,34 @@ export default {
       this.likeArticlePage = false;
       this.likeCommentPage = true;
     },
+    deleteAccounts() {},
   },
   created() {
-    console.log(this.userInfo);
-    this.getUserProfile(this.userInfo.username);
+    this.getUserProfile(this.username);
   },
 };
 </script>
 
 <style scoped>
 .profile-detail {
-  margin: 0 1vw;
+  margin: 0 2vw;
 }
 .profile__info {
   width: 80%;
   display: inline-block;
-  margin: 0 5%;
-}
-
-.detail__components__nav {
-  position: absolute;
-  height: calc(35px + 3vw);
-  width: 100%;
-  background-image: linear-gradient(to bottom, #141414 90%, #14141400 100%);
-}
-
-.detail__components {
-  position: absolute;
-  top: calc(50px + 4vw);
-  width: 100%;
-}
-
-.button__container {
-  display: flex;
-  justify-content: center;
-
-  font-weight: 600;
   margin: 0 2vw;
-  /* margin-top: 1vw; */
-  align-items: center;
-  /* width: calc(180px + 10vw); */
-  min-width: 260px;
-  max-width: 800px;
 }
-
-.button__container > button {
+.profile__info > h1 {
+  color: #8d7fe8;
+}
+.detail__components {
+  position: relative;
   width: 100%;
-  font-size: calc(10px + 0.5vw);
-  cursor: pointer;
-  z-index: 1;
-}
-
-button {
-  all: unset;
-  text-align: center;
-  color: #dddcfb;
 }
 
 .is__active {
   color: #614af2;
+  background-color: #242424;
 }
 
 /* 아래는 기본 */
@@ -253,76 +227,17 @@ button {
   border-radius: 5px;
 }
 
-/*Styling Selectbox*/
-.dropdown {
-  width: 200px;
-  display: inline-block;
-  background-color: #141414;
-  border-radius: 2px;
-  box-shadow: 0 0 2px rgb(204, 204, 204);
-  transition: all 0.5s ease;
-  position: relative;
-  font-size: 14px;
-  color: #dddcfb;
-  height: 100%;
-  text-align: left;
-  margin-left: 1vw;
-}
-.dropdown .select {
-  cursor: pointer;
-  display: block;
-  padding: 10px;
-}
-.dropdown .select > i {
-  font-size: 13px;
-  color: #888;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  float: right;
-  line-height: 20px;
-}
-.dropdown:hover {
-  box-shadow: 0 0 4px rgb(204, 204, 204);
-}
-.dropdown:active {
-  background-color: #f8f8f8;
-}
-.dropdown.active:hover,
-.dropdown.active {
-  box-shadow: 0 0 4px rgb(204, 204, 204);
-  border-radius: 2px 2px 0 0;
-  background-color: #f8f8f8;
-}
-.dropdown.active .select > i {
-  transform: rotate(-90deg);
-}
-.dropdown .dropdown-menu {
+.delete-button {
   position: absolute;
-  background-color: #fff;
-  width: 100%;
-  left: 0;
-  margin-top: 1px;
-  box-shadow: 0 1px 2px rgb(204, 204, 204);
-  border-radius: 0 1px 2px 2px;
-  overflow: hidden;
-  display: none;
-  max-height: 144px;
-  overflow-y: auto;
-  z-index: 9;
-}
-.dropdown .dropdown-menu li {
+  bottom: 2vw;
+  right: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  border: 1px solid #8d7fe8;
+  border-radius: 5px;
   padding: 10px;
-  transition: all 0.2s ease-in-out;
   cursor: pointer;
-}
-.dropdown .dropdown-menu {
-  padding: 0;
-  list-style: none;
-}
-.dropdown .dropdown-menu li:hover {
-  background-color: #f2f2f2;
-}
-.dropdown .dropdown-menu li:active {
-  background-color: #e2e2e2;
 }
 </style>

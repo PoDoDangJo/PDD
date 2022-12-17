@@ -5,33 +5,30 @@
         v-for="myRatingMovie in myRatingMovies"
         :key="myRatingMovie.id"
         class="movie-card icon"
-        @click="openDetailModal(similarMovie)"
+        @click="openDetailModal(myRatingMovie)"
       >
         <img
           class="movie-backdrop"
           :src="`https://image.tmdb.org/t/p/original${myRatingMovie.movie_id.poster_path}`"
           alt="poster"
-        /><br />
+        />
         <!-- <h3>♥ {{ myRatingMovie.like_users.length }}</h3> -->
         <h3>♥ 2</h3>
-
-        <br />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   name: "DetailSimilar",
-  computed: mapState({
-    myRatingMovies: (state) => state.accounts.userInfo.rating,
-  }),
+  props: {
+    myRatingMovies: Array,
+  },
   methods: {
     openDetailModal(movie) {
-      this.$store.dispatch("openDetailModal", movie.movie_id);
+      console.log(movie.movie_id);
+      this.$store.dispatch("openDetailModal", movie.movie_id.id);
     },
   },
 };
@@ -41,14 +38,15 @@ export default {
 h3 {
   font-size: calc(10px + 0.5vw);
 }
+
 ul {
-  width: 300%;
+  width: 100%;
   float: left;
   display: flex;
 }
 
 .detail__similar {
-  margin: 1vw 2vw;
+  margin: 1vw 1vw;
   list-style: none;
   overflow: scroll;
 }
@@ -94,12 +92,10 @@ li {
   max-width: 190px;
   scroll-snap-align: start;
   cursor: pointer;
-  /* animation */
-  transition: all 0.5s ease-in-out;
 }
 
 /* hover */
-.movie-card:hover {
+.movie-backdrop:hover {
   transform: scale(1.1);
   z-index: 15;
 }
@@ -109,6 +105,8 @@ li {
   width: 100%;
   border-radius: 1%;
   overflow: hidden;
+  /* animation */
+  transition: all 0.5s ease-in-out;
 }
 
 ul {
