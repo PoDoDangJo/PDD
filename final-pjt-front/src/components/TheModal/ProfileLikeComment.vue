@@ -1,33 +1,25 @@
 <template>
-  <div class="detail__similar">
-    <ul>
-      <li
-        v-for="mylike_comment in mylike_comments"
-        :key="mylike_comment.id"
-        class="movie-card icon"
-      >
-        <h3>{{ mylike_comment.content }}</h3>
-        <br />
-        <h3>♥{{ mylike_comment.like_users.length }}</h3>
-        <br />
-      </li>
-    </ul>
+  <div class="review-comments">
+    <ReviewCommentItem
+      v-for="comment of mylike_comments"
+      :key="comment.id"
+      :comment="comment"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import ReviewCommentItem from "./ReviewCommentItem.vue";
 
 export default {
   name: "DetailSimilar",
-  computed: mapState({
-    mylike_comments: (state) => state.accounts.userInfo.like_comments,
-  }),
-  methods: {
-    openDetailModal(movie) {
-      this.$store.dispatch("openDetailModal", movie.movie_id);
-    },
+  components: {
+    ReviewCommentItem,
   },
+  computed: mapState({
+    mylike_comments: (state) => state.accounts.curUserInfo.like_comments,
+  }),
 };
 </script>
 

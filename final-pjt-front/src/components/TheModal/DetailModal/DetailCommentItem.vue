@@ -64,7 +64,6 @@ export default {
     userInfo: (state) => state.accounts.userInfo,
     curUserInfo: (state) => state.accounts.curUserInfo,
     isLikes() {
-      console.log(this.rate);
       if (this.rate.like_users.includes(this.userInfo.id)) {
         return true;
       } else {

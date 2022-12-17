@@ -1,5 +1,3 @@
-import accounts from "@/store/modules/accounts";
-
 // accoounts urls
 const V0 = "http://localhost:8000/";
 // movies urls
@@ -26,7 +24,7 @@ export default {
     // 곧 구현할 기능
     // passwordChange: () => V0 + ACCOUNTS + "password/change"
     // 회원탈퇴
-    delete: (username) => V0 + accounts + "delete/" + `${username}/`,
+    delete: (username) => V0 + ACCOUNTS + "delete/" + `${username}/`,
   },
   movie: {
     // 영화 정보 조회
@@ -51,11 +49,15 @@ export default {
     reviews: () => V2 + REVIEWS,
     // 게시글 상세 페이지 조회 및 수정, 삭제
     reviewDetail: (review_pk) => V2 + REVIEWS + `${review_pk}/`,
+    // 게시글 좋아요
+    reviewLikes: (review_pk) => V2 + REVIEWS + `${review_pk}/` + "likes/",
     // 모든 게시글 댓글 조회
     comments: () => V2 + COMMENTS,
     // 게시판 상세글 댓글 생성
     commentDetail: (review_pk) => V2 + REVIEWS + `${review_pk}/` + COMMENTS,
     // 게시판 상세글 댓글 조회, 수정 및 삭제
     comment: (comment_pk) => V2 + COMMENTS + `${comment_pk}/`,
+    // 게시글 댓글 좋아요
+    commentLikes: (comment_pk) => V2 + COMMENTS + `${comment_pk}/` + "likes/",
   },
 };
