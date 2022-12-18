@@ -1,7 +1,7 @@
 <template>
   <div class="review-comments">
     <ReviewCommentItem
-      v-for="comment of myComments"
+      v-for="comment of community_comments"
       :key="comment.id"
       :comment="comment"
     />
@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import ReviewCommentItem from "./ReviewCommentItem.vue";
 
 export default {
@@ -17,9 +16,9 @@ export default {
   components: {
     ReviewCommentItem,
   },
-  computed: mapState({
-    myComments: (state) => state.accounts.curUserInfo.community_comment,
-  }),
+  props: {
+    community_comments: Array,
+  },
   methods: {
     openDetailModal(movie) {
       this.$store.dispatch("openDetailModal", movie.movie_id);

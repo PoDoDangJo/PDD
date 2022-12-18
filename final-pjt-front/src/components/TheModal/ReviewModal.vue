@@ -53,7 +53,7 @@
     <div
       class="heart"
       :class="{ is_active: isLike }"
-      @click="clickLikeButton"
+      @click="likesArticle"
     ></div>
   </div>
 </template>
@@ -70,14 +70,21 @@ export default {
   data() {
     return {
       reviewComment: null,
-      isLike: false,
     };
   },
   computed: mapState({
     ...mapGetters(["comments"]),
+    userInfo: (state) => state.accounts.userInfo,
     review: (state) => state.reviews.reviewDetailModalStatus.review,
     isActive() {
       if (this.review.user_id.id == this.$store.state.accounts.userInfo.id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isLike() {
+      if (this.review.like_users.includes(this.userInfo.id)) {
         return true;
       } else {
         return false;
@@ -100,8 +107,8 @@ export default {
       this.$store.dispatch("createReviewComment", payload);
       this.reviewComment = null;
     },
-    clickLikeButton() {
-      this.isLike = !this.isLike;
+    likesArticle() {
+      this.$store.dispatch("likesArticle", this.review.id);
     },
   },
   created() {
@@ -161,6 +168,7 @@ p {
   font-size: calc(14px + 0.5vw);
 }
 .modal {
+  display: flex;
   width: 100%;
   height: 100%;
   position: fixed;
